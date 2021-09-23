@@ -20,30 +20,25 @@ import static java.util.stream.Collectors.*;
 public class Application {
     public static void main(String[] args) throws IOException {
         int serverPort = 8000;
-        HttpServer httpServer = HttpServer.create(new InetSocketAddress(serverPort), 0);
-        httpServer.createContext("/api/fdrc", (exchange -> {
-            String respText = "Hello!";
+        try {
+            HttpServer httpServer = HttpServer.create(new InetSocketAddress(serverPort), 0);
+            httpServer.createContext("/api/fdrc", (exchange -> {
+                String respText = "Hello!";
 
-            byte[] reqBody  =  exchange.getRequestBody().readAllBytes();
-            String rawReq = new String(reqBody);
-            respText = CallFDRC(rawReq);
-
-//            Map<String, List<String>> params = splitQuery(exchange.getRequestURI().getRawQuery());
-//            String noNameText = "Anonymous";
-//            String name = params.getOrDefault("name", List.of(noNameText)).stream().findFirst().orElse(noNameText);
-//            respText = String.format("Hello %s!", name);
-//
-//            respText = rawReq;
-
-
-            exchange.sendResponseHeaders(200, respText.getBytes().length);
-            OutputStream outputStream = exchange.getResponseBody();
-            outputStream.write(respText.getBytes());
-            outputStream.flush();
-            exchange.close();
-            }));
-        httpServer.setExecutor(null); // creates a default executor
-        httpServer.start();
+                byte[] reqBody  =  exchange.getRequestBody().readAllBytes();
+                String rawReq = new String(reqBody);
+                respText = CallFDRC(rawReq);
+                exchange.sendResponseHeaders(200, respText.getBytes().length);
+                OutputStream outputStream = exchange.getResponseBody();
+                outputStream.write(respText.getBytes());
+                outputStream.flush();
+                exchange.close();
+                }));
+            httpServer.setExecutor(null); // creates a default executor
+            httpServer.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     static Map<String, List<String>> splitQuery(String query){
