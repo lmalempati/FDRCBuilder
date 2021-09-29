@@ -1,29 +1,54 @@
-package fdrc.common;
+package fdrc.base;
 
-import fdrc.base.CardInfo;
-import fdrc.proxy.PymtTypeType;
-import fdrc.proxy.TxnTypeType;
-import fdrc.xml.TransactionType;
+public class Request {
+    // no param constructor
+    public Request(){} // without this, de-serialilization expects all fields to be present!
+    // card grp
+    public String acctNum;
+    public String cardExpiryDate;
+    public String cardType;
+    public String ccvInd;
+    public String ccvData;
+    public String track2Data;
+    public String avsResultCode;
+    public OrigAuthInfo origAuthInfo;
 
-import java.io.Serializable;
+    // AddtlAmtGrp
+    public AddtlAmtInfo addtlAmtInfo;
+    //EMV grp
+    public byte[] emvData;
+    public String cardSeqNum;
+    // PINGrp
+     public byte[] pinData;
+     public byte[] keySerialNumData;
 
-public class Request implements Serializable {
-    public CardInfo cardInfo;
     // common grp
     public String posCondCode;
-    public String POSEntryMode;
+    public String posEntryMode;
     public String pymtType;
     public String industrytype;
     public String stan;
     public String refNum;
     public String orderNum;
     public String txnType;
+    public String reversalInd;
     public String termCatCode;
     public String termEntryCapablt;
     public Double txnAmt;
     public String txnCrncy;
     public String termLocInd;
     public String cardCaptCap;
+
+    // VisaGrp
+    public String aci;
+    public String visaBID;
+    public String visaAUAR;
+    public String taxAmtCapablt;
+    public String transID;
+    public String cardLevelResult;
+    // MC grp
+    public String finAuthInd;
+    public String banknetData;
     // config
     public String tppID;
     public String termID;
@@ -34,8 +59,6 @@ public class Request implements Serializable {
     public String MobileInd;
     public String DfrdAuthInd;
 
-    // AddtlAmtGrp
-    public String partAuthrztnApprvlCapablt;
 
     // TAGrp - Transarmor group
     public String sctyLvl;
@@ -47,11 +70,6 @@ public class Request implements Serializable {
     public String token;
     // EcommGrp
     public String custSvcPhoneNumber;
-    // VisaGrp
-    public String aci;
-    public String visaBID;
-    public String visaAUAR;
-    public String taxAmtCapablt;
 
     //CustInfoGrp
     public String avsBillingAddr;
@@ -64,11 +82,4 @@ public class Request implements Serializable {
     public String merchState;
     public String merchPostalCode;
 }
-
-//    public static void main(String[] args) {
-//        if (EnumEngineEntryMethod.Keyed == Enum.valueOf(EnumEngineEntryMethod.class, "Keyed")) {
-//            System.out.println("matched");
-//        }
-//    }
-
 

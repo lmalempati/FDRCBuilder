@@ -3,87 +3,72 @@ package fdrc.client;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import java.io.InvalidObjectException;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.List;
 
-import fdrc.common.BuildRequest;
-import fdrc.common.Request;
+import fdrc.common.FiServRequest;
+import fdrc.base.Request;
 import fdrc.proxy.*;
 
-/* The below code will prepare Credit Sale transaction request object populating various
- * transaction parameters. The parameter values used below are test data and should not used for
- * actual real-time authorization.
- * */
 public class CreditRequest implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    /* This class is generated from XSD file */
     GMFMessageVariants gmfmv = new GMFMessageVariants();
     /* This class is generated from XSD file */
     CreditRequestDetails creditReqDtl = new CreditRequestDetails();
-    BuildRequest prepareRequest = new BuildRequest();
+    FiServRequest fiServRequest = null;
 
-    public CreditRequest(Request request) {
-		/* Assigning value to the objects
-		 * This class CommonGrp is generated from XSD file.
-		 * Transaction elements inside this common group will be present to all transactions.
-		/* Common Group */
-        /*
-         * Assign the Common Group object to the property of CreditSaleRequest
-         * object
-         */
-        creditReqDtl.setCommonGrp(prepareRequest.getCommonGrp(request));
+    public CreditRequest(final Request request) {
+        try {
+            fiServRequest = new FiServRequest(request);
+        } catch (InvalidObjectException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        try {
+            OrigAuthGrp origAuthGrp = fiServRequest.getOrigAuthGrp();
+            creditReqDtl.setOrigAuthGrp(origAuthGrp);
 
-        creditReqDtl.setAltMerchNameAndAddrGrp(prepareRequest.getAltMerchNameAndAddrGrp(request));
+            creditReqDtl.setCommonGrp(fiServRequest.getCommonGrp());
 
-        creditReqDtl.setCardGrp(prepareRequest.getCardGrp(request));
+            creditReqDtl.setAltMerchNameAndAddrGrp(fiServRequest.getAltMerchNameAndAddrGrp());
 
-        creditReqDtl.setVisaGrp(prepareRequest.getVisaGrp());
-        /* Addtl Amount Group */
-        /*  Populate values for Addtl Amount Group */
-        AddtlAmtGrp addAmtGrp = new AddtlAmtGrp();
-        /* An identifier used to indicate whether or not the
-         * terminal/software can support partial authorization approvals.  */
-        addAmtGrp.setPartAuthrztnApprvlCapablt("1");
+            creditReqDtl.setCardGrp(fiServRequest.getCardGrp());
+            // CardTypeType.valueOf(request.cardInfo.cardType.toUpperCase())
+            switch (CardTypeType.fromValue(request.cardType)) {
+                case VISA:
+                    creditReqDtl.setVisaGrp(fiServRequest.getVisaGrp());
+                    break;
+                case MASTER_CARD:
+                    creditReqDtl.setMCGrp(fiServRequest.getMasterCardGrp());
+                    break;
+            }
 
-        /*
-         * Getting the reference object of the AddtlAmtGrp list and add the
-         * AddtlAmtGrp object to the list
-         */
-        List<AddtlAmtGrp> addtlAmtGr = creditReqDtl.getAddtlAmtGrp();
-        addtlAmtGr.add(addAmtGrp);
+            /* Addtl Amount Group
+             * Getting the reference object of the AddtlAmtGrp list and add the
+             * AddtlAmtGrp object to the list
+             */
+            List<AddtlAmtGrp> addtlAmtGr = creditReqDtl.getAddtlAmtGrp();
+            if (request.addtlAmtInfo != null) {
+                List<AddtlAmtGrp> addlGrps = fiServRequest.getAddtlAmtGrp();
+                for (AddtlAmtGrp grp : addlGrps
+                ) {
+                    addtlAmtGr.add(grp);
+                }
+            }
+            /* ECommerce Group */
+            creditReqDtl.setEcommGrp(fiServRequest.getEcommGrp());
 
-
-//
-//		/*
-//		 * Assign the Visa Group object to the property of CreditSaleRequest
-//		 * object
-//		 */
-//		creditReqDtl.setVisaGrp(visaGrp);
-
-
-        /* This class is generated from XSD file */
-        /* ECommerce Group */
-        /* Populate values for ECommerce Group */
-
-        /*
-         * Assign the ECommerce Group object to the property of CreditSaleRequest
-         * object
-         */
-
-        creditReqDtl.setEcommGrp(prepareRequest.getEcommGrp());
-
-        /* This class is generated from XSD file.*/
-        /* CustInfoGrp Group */
-
-        /*
-         * Assign the CustInfoGrp Group object to the property of CreditSaleRequest
-         * object
-         */
-        creditReqDtl.setCustInfoGrp(prepareRequest.getCustInfoGrp(request));
-        /* Add the credit request object to GMF message variant object */
-        gmfmv.setCreditRequest(creditReqDtl);
+            /* CustInfoGrp Group
+             * Assign the CustInfoGrp Group object to the property of CreditSaleRequest object */
+            creditReqDtl.setCustInfoGrp(fiServRequest.getCustInfoGrp());
+            /* Add the credit request object to GMF message variant object */
+            gmfmv.setCreditRequest(creditReqDtl);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e.getMessage());
+        }catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     /* Generate Client Ref Number in the format <STAN>|<TPPID>, right justified and left padded with "0" */

@@ -1036,5 +1036,4 @@ public class CreditRequestDetails {
     public void setRestGrp(RestGrp value) {
         this.restGrp = value;
     }
-
 }

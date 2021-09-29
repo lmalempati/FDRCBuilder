@@ -1,6 +1,6 @@
 package fdrc.http;
 
-import fdrc.client.Constants;
+import fdrc.base.Constants;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -53,12 +53,7 @@ public class HTTPPostHandler {
         /* Create the instance of ReqClientIDType that is a class generated from the Rapid connect Transaction
          * Service Schema file [rc.xsd]*/
         ReqClientIDType reqClientIDType = new ReqClientIDType();
-        /* Set the App parameter value*/
         reqClientIDType.setApp("RAPIDCONNECTSRS");
-        /* Set the Auth parameter value*/
-//		reqClientIDType.setAuth(TestConst.HTTP_AUTHID);
-
-//		reqClientIDType.setAuth("XXXXX0000000000|00000000");
         reqClientIDType.setAuth(String.format("%s%s|%s", Constants.REQUEST_GROUPID, Constants.REQUEST_MERCHID, Constants.REQUEST_TERMID ));
         /* Set the clientRef value*/
         reqClientIDType.setClientRef(clientRef); //give value later

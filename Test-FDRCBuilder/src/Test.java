@@ -1,7 +1,7 @@
 import fdrc.base.CardInfo;
+import fdrc.base.Request;
 import fdrc.client.Client;
 import fdrc.client.TransactionData;
-import fdrc.common.Request;
 import fdrc.proxy.TxnTypeType;
 
 public class Test {
@@ -11,8 +11,7 @@ public class Test {
         Request request = new Request();
         request.txnType = "AUTHORIZATION";
         CardInfo cardInfo = new CardInfo();
-        request.cardInfo= cardInfo;
 //        request.un
-        client.Call(request);
+        client.Call("");
     }
 }

@@ -53,14 +53,8 @@ public class Application {
 
     static String CallFDRC(String json){
         Client client = new Client();
-        return client.ProcessRequest(json);
+        return client.Call(json);
         }
 
-//    private static String decode(final String s) {
-//        try {
-//            if (s == null ? null : URLDecoder.decode(s, Charset.defaultCharset());
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
-//    }
+
 }

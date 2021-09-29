@@ -1,26 +1,28 @@
 {
   "cardInfo": {
-    "acctNum": "4005571702222222",
+    "acctNum": "5405001111111165",
     "cardExpiryDate": "20251231",
-    "cardType": "Visa",
+    "cardType": "Master_Card",
     "ccvInd": "Prvded",
     "ccvData": "123",
-    "track2Data": null
+    "track2Data": null,
+    "avsResultCode": null /*this is given in TC but error when send */
+
   },
-  "posCondCode": null,
-  "POSEntryMode": null,
+  "posCondCode": "08",
+  "posEntryMode": "010",
   "pymtType": "Credit",
   "industrytype": "Moto",
   "stan": null,
   "refNum": null,
   "orderNum": null,
-  "txnType": "Sale",
-  "termCatCode": null,
-  "termEntryCapablt": null,
-  "txnAmt": "645.22",
+  "txnType": "Authorization",
+  "termCatCode": "00",
+  "termEntryCapablt": "00",
+  "txnAmt": "82.82",
   "txnCrncy": "840",
-  "termLocInd": null,
-  "cardCaptCap": null,
+  "termLocInd": "0",
+  "cardCaptCap": "1",
   "tppID": null,
   "termID": null,
   "merchID": null,
@@ -29,7 +31,11 @@
   "DigWltProgType": null,
   "MobileInd": null,
   "DfrdAuthInd": null,
-  "partAuthrztnApprvlCapablt": null,
+  "addtlAmtInfo":{
+    "partAuthrztnApprvlCapablt": "1",
+    "firstAuthAmt":null,
+    "totalAuthAmt":null
+  },
   "sctyLvl": null,
   "encrptType": null,
   "encrptTrgt": null,
@@ -38,15 +44,15 @@
   "tknType": null,
   "token": null,
   "custSvcPhoneNumber": null,
-  "aci": null,
-  "visaBID": null,
-  "visaAUAR": null,
-  "taxAmtCapablt": null,
+  "mcInfo": {
+   "finAuthInd": "1"
+  },
+
   "avsBillingAddr": "1307 Broad Hollow Road",
   "avsBillingPostalCode": "11747",
-  "merchName": "SMITH HARDWARE",
-  "merchAddr": "1307 Walt Whitman Road",
-  "merchCity": "Melville",
-  "merchState": "NY",
-  "merchPostalCode": "11747"
+  "merchName": null,
+  "merchAddr": null,
+  "merchCity": null,
+  "merchState": null,
+  "merchPostalCode": null
 }
