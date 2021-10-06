@@ -3,11 +3,18 @@ package fdrc.utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fdrc.Exceptions.InvalidNumber;
+import fdrc.base.Response;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class Utils {
@@ -50,7 +57,7 @@ public class Utils {
         if (amount == null || !pattern.matcher(amount.toString()).matches()) {
             throw new InvalidNumber("Invalid amount.");
         }
-        return String.format("0"+ "%.0f", new BigDecimal(amount).multiply(new BigDecimal(100)));
+        return String.format("0" + "%.0f", new BigDecimal(amount).multiply(new BigDecimal(100)));
     }
 
     public static <T> T valueOrNothing(T tClass) {
@@ -64,7 +71,7 @@ public class Utils {
 //            String s1 =gson.toJson(tClass);
 //            String s2 =gson.toJson(obj);
 
-            return gson.toJson(obj).equals(gson.toJson(tClass)) ?  null : tClass;
+            return gson.toJson(obj).equals(gson.toJson(tClass)) ? null : tClass;
             //            return obj.equals(tClass) ? null : tClass;
 //             return Objects.equals(obj, tClass) ? null : tClass;
 //             obj.hashCode() = tClass.hashCode();
@@ -82,6 +89,7 @@ public class Utils {
         }
         return tClass;
     }
+
 
     public static void main(String[] args) {
 //        String s = null;

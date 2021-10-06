@@ -20,12 +20,11 @@ public class FiServRequest { // todo name
     private final Request request;
     public static final BigDecimal BD_ZERO = new BigDecimal(0);
 
-    public FiServRequest(Request requestPassedIn) throws InvalidObjectException {
-        if (requestPassedIn == null) {
-            throw new InvalidObjectException("Request object is empty.");
-        }
+    public FiServRequest(Request requestPassedIn){
+        // request alrady checked for null
         this.request = requestPassedIn;
     }
+
     public CommonGrp getCommonGrp() {
         CommonGrp cmnGrp = new CommonGrp();
         /* The payment type of the transaction. */
@@ -124,7 +123,8 @@ public class FiServRequest { // todo name
                 cardGrp.setCardType(CardTypeType.fromValue(request.cardType));
             if (Utils.isNotNullOrEmpty(request.avsResultCode))
                 cardGrp.setAVSResultCode(request.avsResultCode);
-//        cardGrp.setCCVResultCode(CCVResultCodeType.MATCH);
+            if (Utils.isNotNullOrEmpty(request.ccvResultCode))
+                cardGrp.setCCVResultCode(CCVResultCodeType.fromValue(request.ccvResultCode));
             cardGrp.setTrack2Data(request.track2Data);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -161,6 +161,23 @@ public class FiServRequest { // todo name
         if (Utils.isNotNullOrEmpty(request.banknetData))
             mcGrp.setBanknetData(request.banknetData); // as per
         return Utils.valueOrNothing(mcGrp);
+    }
+
+    public DSGrp getDiscoverGrp() {
+        DSGrp dsGrp = new DSGrp();
+        if (Utils.isNotNullOrEmpty(request.discProcCode))
+            dsGrp.setDiscProcCode(request.discProcCode);
+        if (Utils.isNotNullOrEmpty(request.discPOSEntry))
+            dsGrp.setDiscPOSEntry(request.discPOSEntry);
+        if (Utils.isNotNullOrEmpty(request.discRespCode))
+            dsGrp.setDiscRespCode(request.discRespCode);
+        if (Utils.isNotNullOrEmpty(request.discPOSData))
+            dsGrp.setDiscPOSData(request.discPOSData);
+        if (Utils.isNotNullOrEmpty(request.discTransQualifier))
+            dsGrp.setDiscTransQualifier(request.discTransQualifier);
+        if (Utils.isNotNullOrEmpty(request.discNRID))
+            dsGrp.setDiscNRID(request.discNRID);
+        return Utils.valueOrNothing(dsGrp);
     }
 
     public AltMerchNameAndAddrGrp getAltMerchNameAndAddrGrp() {
@@ -202,38 +219,37 @@ public class FiServRequest { // todo name
     }
 
     public OrigAuthGrp getOrigAuthGrp() {
-        if (request.origAuthInfo == null) return null;
         OrigAuthGrp origAuthGrp = new OrigAuthGrp();
-        if (Utils.isNotNullOrEmpty(request.origAuthInfo.origAuthID))
-            origAuthGrp.setOrigAuthID(request.origAuthInfo.origAuthID);
-        if (Utils.isNotNullOrEmpty(request.origAuthInfo.origSTAN))
-            origAuthGrp.setOrigSTAN(request.origAuthInfo.origSTAN);
-        if (Utils.isNotNullOrEmpty(request.origAuthInfo.origRespCode))
-            origAuthGrp.setOrigRespCode(request.origAuthInfo.origRespCode);
-        if (Utils.isNotNullOrEmpty(request.origAuthInfo.origLocalDateTime))
-            origAuthGrp.setOrigLocalDateTime(request.origAuthInfo.origLocalDateTime);
-        if (Utils.isNotNullOrEmpty(request.origAuthInfo.origTranDateTime))
-            origAuthGrp.setOrigTranDateTime(request.origAuthInfo.origTranDateTime);
+        if (Utils.isNotNullOrEmpty(request.origAuthID))
+            origAuthGrp.setOrigAuthID(request.origAuthID);
+        if (Utils.isNotNullOrEmpty(request.origSTAN))
+            origAuthGrp.setOrigSTAN(request.origSTAN);
+        if (Utils.isNotNullOrEmpty(request.origRespCode))
+            origAuthGrp.setOrigRespCode(request.origRespCode);
+        if (Utils.isNotNullOrEmpty(request.origLocalDateTime))
+            origAuthGrp.setOrigLocalDateTime(request.origLocalDateTime);
+        if (Utils.isNotNullOrEmpty(request.origTranDateTime))
+            origAuthGrp.setOrigTranDateTime(request.origTranDateTime);
         return Utils.valueOrNothing(origAuthGrp);
     }
 
     public List<AddtlAmtGrp> getAddtlAmtGrp() {
 //        if (request.addtlAmtInfo == null) return null;
         List<AddtlAmtGrp> list = new ArrayList<>();
-        if (Utils.isNotNullOrEmpty(request.addtlAmtInfo.firstAuthAmt))
-            if (!request.addtlAmtInfo.firstAuthAmt.equals(BD_ZERO))
-                list.add(getAddtlAmtGrp(request, request.addtlAmtInfo.firstAuthAmt, AddAmtTypeType.FIRST_AUTH_AMT));
-        if (Utils.isNotNullOrEmpty(request.addtlAmtInfo.firstAuthAmt))
-            if (!request.addtlAmtInfo.totalAuthAmt.equals(BD_ZERO))
-                list.add(getAddtlAmtGrp(request, request.addtlAmtInfo.totalAuthAmt, AddAmtTypeType.TOTAL_AUTH_AMT));
-        if (Utils.isNotNullOrEmpty(request.addtlAmtInfo.partAuthrztnApprvlCapablt)) {
-            if (EnumAllowPartialAuth.valueOf(String.valueOf(request.addtlAmtInfo.partAuthrztnApprvlCapablt)) != EnumAllowPartialAuth.NotSet) {
+        if (Utils.isNotNullOrEmpty(request.firstAuthAmt))
+            if (!request.firstAuthAmt.equals(BD_ZERO))
+                list.add(getAddtlAmtGrp(request, request.firstAuthAmt, AddAmtTypeType.FIRST_AUTH_AMT));
+        if (Utils.isNotNullOrEmpty(request.firstAuthAmt))
+            if (!request.totalAuthAmt.equals(BD_ZERO))
+                list.add(getAddtlAmtGrp(request, request.totalAuthAmt, AddAmtTypeType.TOTAL_AUTH_AMT));
+        if (Utils.isNotNullOrEmpty(request.partAuthrztnApprvlCapablt)) {
+            if (EnumAllowPartialAuth.fromValue (request.partAuthrztnApprvlCapablt) != EnumAllowPartialAuth.NotSet) {
                 AddtlAmtGrp addtlAmtGrp = new AddtlAmtGrp();
-                addtlAmtGrp.setPartAuthrztnApprvlCapablt(String.valueOf(request.addtlAmtInfo.partAuthrztnApprvlCapablt));
+                addtlAmtGrp.setPartAuthrztnApprvlCapablt(String.valueOf(request.partAuthrztnApprvlCapablt));
                 list.add(addtlAmtGrp);
             }
         }
-        return list;
+        return Utils.valueOrNothing(list);
     }
 
     AddtlAmtGrp getAddtlAmtGrp(final Request request, BigDecimal val, AddAmtTypeType type) {
@@ -242,6 +258,13 @@ public class FiServRequest { // todo name
         addtlAmtGrp.setAddAmt(Utils.formatAmount(val.toString()));
         addtlAmtGrp.setAddAmtCrncy(request.txnCrncy);
         return addtlAmtGrp;
+    }
+
+    public PINGrp getPinGrp(){
+        PINGrp pinGrp = new PINGrp();
+        pinGrp.setPINData(String.valueOf(request.pinData));
+        pinGrp.setKeySerialNumData(String.valueOf(request.keySerialNumData));
+        return pinGrp;
     }
 
     protected String getXmlPayload() {
