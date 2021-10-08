@@ -11,7 +11,6 @@ import fdrc.base.Request;
 import fdrc.common.Serialization;
 import fdrc.http.HTTPPostHandler;
 import fdrc.proxy.*;
-//import fdrc.proxy.*;
 public class CreditRequest implements Serializable, IRequestProcessor {
 
     GMFMessageVariants gmfmv = new GMFMessageVariants();
