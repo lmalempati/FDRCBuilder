@@ -43,18 +43,18 @@ public class ValidateRequest {
     }
 
     public static void main(String[] args) throws IllegalArgumentException {
-        EnumIndustryType.EnumIndustrytype ind = EnumIndustryType.EnumIndustrytype.none;
+        EnumIndustryType ind = EnumIndustryType.none;
         try {
-            ind = (EnumIndustryType.EnumIndustrytype) ToEnum(ind, "autorental");
+            ind = (EnumIndustryType) ToEnum(ind, "autorental");
         } catch (Exception e) {
 //            e.printStackTrace();
             //throw new IllegalArgumentException(e.getMessage());
         }
         System.out.println(ToEnum(ind, "autorental"));
-        EnumIndustryType.EnumIndustrytype type1 = EnumIndustryType.EnumIndustrytype.none;
-        System.out.println(Enum.valueOf(EnumIndustryType.EnumIndustrytype.class, "autorental"));
-        System.out.println(Enum.valueOf(EnumIndustryType.EnumIndustrytype.class, "autorental"));
-        EnumIndustryType.EnumIndustrytype type = EnumIndustryType.EnumIndustrytype.valueOf("autorental");
+        EnumIndustryType type1 = EnumIndustryType.none;
+        System.out.println(Enum.valueOf(EnumIndustryType.class, "autorental"));
+        System.out.println(Enum.valueOf(EnumIndustryType.class, "autorental"));
+        EnumIndustryType type = EnumIndustryType.valueOf("autorental");
 
 //        EnumEngineEntryMethod.values()
 
