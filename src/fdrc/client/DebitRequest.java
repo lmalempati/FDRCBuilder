@@ -1,13 +1,15 @@
 package fdrc.client;
 
+import fdrc.base.IRequestProcessor;
 import fdrc.base.Request;
+import fdrc.base.Response;
 import fdrc.common.FiServRequest;
 import fdrc.proxy.*;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class DebitRequest implements Serializable {
+public class DebitRequest implements Serializable, IRequestProcessor {
     GMFMessageVariants gmfmv = new GMFMessageVariants();
     FiServRequest fiServRequest = null;
     DebitRequestDetails debitReqDtl = new DebitRequestDetails();
@@ -35,5 +37,10 @@ public class DebitRequest implements Serializable {
         } catch (Exception e) {
             return e.getMessage();
         }
+    }
+
+    @Override
+    public Response processRequest(Request request) {
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 package fdrc.client;
 
+import fdrc.base.IRequestProcessor;
 import fdrc.base.Request;
 import fdrc.base.Response;
 import fdrc.common.ValidateRequest;
@@ -10,18 +11,19 @@ public class Client {
     // this is called by POS router service
     public String Call(String json){
         Request request = JsonBuilder.getRequestFromJsonString(json);
-        Response response = ProcessRequest(request);
+        Response response = processRequest(request);
         return response.responseRaw;
 //        return null; // todo, return response
     }
 
     public static void main(String[] args) {
         Client client = new Client();
-        client.ProcessRequest(null);
+        client.processRequest(null);
     }
 
-    public Response ProcessRequest(Request request){
+    public Response processRequest(Request request){
         Response resposne = null;
+        IRequestProcessor requestProcessor = null;
         //todo: temp code, to remove in prod: begin
         if (request == null)
             request = JsonBuilder.getRequestFromJson("payload.json");
@@ -34,11 +36,13 @@ public class Client {
         // todo: introduce an interface and implement it by each request class such as credit, debit, EBT
         switch (PymtTypeType.fromValue(request.pymtType)){
             case CREDIT:
-                resposne = processCreditRequest(request);
+                requestProcessor = new CreditRequest();
+                resposne = requestProcessor.processRequest(request);
                 break;
                 // todo:
             case DEBIT:
-                resposne = processDebitRequest();
+                requestProcessor = new DebitRequest();
+                resposne = requestProcessor.processRequest(request);
                 break;
         }
         return resposne;

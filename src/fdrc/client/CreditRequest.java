@@ -4,14 +4,15 @@ import javax.xml.ws.http.HTTPException;
 import java.io.Serializable;
 import java.util.List;
 
+import fdrc.base.IRequestProcessor;
 import fdrc.base.Response;
 import fdrc.common.FiServRequest;
 import fdrc.base.Request;
 import fdrc.common.Serialization;
 import fdrc.http.HTTPPostHandler;
 import fdrc.proxy.*;
-
-public class CreditRequest implements Serializable {
+//import fdrc.proxy.*;
+public class CreditRequest implements Serializable, IRequestProcessor {
 
     GMFMessageVariants gmfmv = new GMFMessageVariants();
     /* This class is generated from XSD file */
@@ -74,6 +75,7 @@ public class CreditRequest implements Serializable {
     }
 
     /*Transaction response in XML format received from Data wire */
+    @Override
     public Response processRequest(Request request) {
         String requestString = "";
         String responseString = "";

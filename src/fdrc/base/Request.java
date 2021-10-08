@@ -23,7 +23,7 @@ public class Request {
     public BigDecimal firstAuthAmt;
     public BigDecimal totalAuthAmt;
     //EMV grp
-    public  String emvData; // byte[]
+    public String emvData; // byte[]
     public String cardSeqNum;
     // PINGrp
      public String pinData; // byte[]
@@ -90,5 +90,7 @@ public class Request {
     public String merchCity;
     public String merchState;
     public String merchPostalCode;
+    public String addtlAmtType;
+    public String addtlAmt;
 }
 

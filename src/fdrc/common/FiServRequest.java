@@ -20,7 +20,7 @@ public class FiServRequest { // todo name
     private final Request request;
     public static final BigDecimal BD_ZERO = new BigDecimal(0);
 
-    public FiServRequest(Request requestPassedIn){
+    public FiServRequest(Request requestPassedIn) {
         // request alrady checked for null
         this.request = requestPassedIn;
     }
@@ -160,6 +160,10 @@ public class FiServRequest { // todo name
             mcGrp.setFinAuthInd(String.valueOf(request.finAuthInd));
         if (Utils.isNotNullOrEmpty(request.banknetData))
             mcGrp.setBanknetData(request.banknetData); // as per
+
+        if (Utils.isNotNullOrEmpty(request.addtlAmtType) && Utils.isNotNullOrEmpty(request.addtlAmtType.split(",")[0]))
+            if (!request.addtlAmt.split(",")[0].equals(BD_ZERO) && (AddAmtTypeType.fromValue(request.addtlAmtType.split(",")[0]) == AddAmtTypeType.HLTCARE))
+                mcGrp.setMCMSDI(MCMSDIType.HEALTHCARE);
         return Utils.valueOrNothing(mcGrp);
     }
 
@@ -239,11 +243,21 @@ public class FiServRequest { // todo name
         if (Utils.isNotNullOrEmpty(request.firstAuthAmt))
             if (!request.firstAuthAmt.equals(BD_ZERO))
                 list.add(getAddtlAmtGrp(request, request.firstAuthAmt, AddAmtTypeType.FIRST_AUTH_AMT));
+
         if (Utils.isNotNullOrEmpty(request.firstAuthAmt))
             if (!request.totalAuthAmt.equals(BD_ZERO))
                 list.add(getAddtlAmtGrp(request, request.totalAuthAmt, AddAmtTypeType.TOTAL_AUTH_AMT));
+
+        if (Utils.isNotNullOrEmpty(request.addtlAmtType) && Utils.isNotNullOrEmpty(request.addtlAmtType.split(",")[0]))
+            if (!request.addtlAmt.split(",")[0].equals(BD_ZERO) && (AddAmtTypeType.fromValue(request.addtlAmtType.split(",")[0]) == AddAmtTypeType.HLTCARE))
+                list.add(getAddtlAmtGrp(request, new BigDecimal(request.addtlAmt.split(",")[0]), AddAmtTypeType.HLTCARE));
+
+        if (Utils.isNotNullOrEmpty(request.addtlAmtType) && Utils.isNotNullOrEmpty(request.addtlAmtType.split(",")[1]))
+            if (!request.addtlAmt.split(",")[1].equals(BD_ZERO) && (AddAmtTypeType.fromValue(request.addtlAmtType.split(",")[1]) == AddAmtTypeType.RX))
+                list.add(getAddtlAmtGrp(request, new BigDecimal(request.addtlAmt.split(",")[1]), AddAmtTypeType.RX));
+
         if (Utils.isNotNullOrEmpty(request.partAuthrztnApprvlCapablt)) {
-            if (EnumAllowPartialAuth.fromValue (request.partAuthrztnApprvlCapablt) != EnumAllowPartialAuth.NotSet) {
+            if (EnumAllowPartialAuth.fromValue(request.partAuthrztnApprvlCapablt) != EnumAllowPartialAuth.NotSet) {
                 AddtlAmtGrp addtlAmtGrp = new AddtlAmtGrp();
                 addtlAmtGrp.setPartAuthrztnApprvlCapablt(String.valueOf(request.partAuthrztnApprvlCapablt));
                 list.add(addtlAmtGrp);
@@ -260,7 +274,7 @@ public class FiServRequest { // todo name
         return addtlAmtGrp;
     }
 
-    public PINGrp getPinGrp(){
+    public PINGrp getPinGrp() {
         PINGrp pinGrp = new PINGrp();
         pinGrp.setPINData(String.valueOf(request.pinData));
         pinGrp.setKeySerialNumData(String.valueOf(request.keySerialNumData));
