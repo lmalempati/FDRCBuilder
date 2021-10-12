@@ -8,6 +8,7 @@ import fdrc.base.IRequestProcessor;
 import fdrc.base.Response;
 import fdrc.common.FiServRequest;
 import fdrc.base.Request;
+import fdrc.common.RequestUtils;
 import fdrc.common.Serialization;
 import fdrc.http.HTTPPostHandler;
 import fdrc.proxy.*;
@@ -22,8 +23,8 @@ public class CreditRequest implements Serializable, IRequestProcessor {
         String errorMsg = "";
         FiServRequest fiServRequest = new FiServRequest(request);
         try {
-            OrigAuthGrp origAuthGrp = fiServRequest.getOrigAuthGrp();
-            creditReqDtl.setOrigAuthGrp(origAuthGrp);
+//            OrigAuthGrp origAuthGrp = fiServRequest.getOrigAuthGrp();
+            creditReqDtl.setOrigAuthGrp(fiServRequest.getOrigAuthGrp());
 
             creditReqDtl.setCommonGrp(fiServRequest.getCommonGrp());
 
@@ -83,12 +84,12 @@ public class CreditRequest implements Serializable, IRequestProcessor {
         if (error != "")
             return new Response(error);
 
-        requestString = getXMLData();
-        requestString = requestString.replaceAll("gmfMessageVariants", "GMF");
+        requestString = RequestUtils.getXMLData(gmfmv);
+//        requestString = requestString.replaceAll("gmfMessageVariants", "GMF");
         System.out.println("GMF Credit Request == " + requestString);
 
         /*Generate Client Ref Number in the format <STAN>|<TPPID>, right justified and left padded with "0" */
-        String clientRef = getClientRef();
+        String clientRef = RequestUtils.getClientRef();
         try {
             //Send data using HTTP POST protocol
             // todo: set any exception to Resposne.errorMsg
@@ -96,7 +97,8 @@ public class CreditRequest implements Serializable, IRequestProcessor {
             response = getResponse(responseString);
             response.responseRaw = responseString;
         } catch (HTTPException e) {
-            System.out.println("HTTP Exception: " + e);
+            System.out.println("HTTP Exception: " + e);// todo remove / handle it
+            response.errorMsg = e.getMessage();
         }
         System.out.println("Successful HTTP POST Credit response: " + "\n" + responseString + "\n");
         return response;
@@ -113,9 +115,9 @@ public class CreditRequest implements Serializable, IRequestProcessor {
         return clientRef;
     }
 
-    private String getXMLData() {
+    private String getXMLData(GMFMessageVariants gmfMessageVariants) {
         Serialization serialization = new Serialization();
-        return serialization.GetXMLData(gmfmv);
+        return serialization.GetXMLData(gmfMessageVariants);
     }
 
     private Response getResponse(String xml) {
@@ -126,10 +128,21 @@ public class CreditRequest implements Serializable, IRequestProcessor {
         response.addtlRespData = gmfMessageVariants.getCreditResponse().getRespGrp().getAddtlRespData();
 
         response.origAuthID = gmfMessageVariants.getCreditResponse().getRespGrp().getAuthID();
-        response.origSTAN = gmfMessageVariants.getCreditResponse().getCommonGrp().getSTAN();
+        response.origSTAN = gmfMessageVariants.getCreditResponse().getCommonGrp().getSTAN();//?
         response.origLocalDateTime = gmfMessageVariants.getCreditResponse().getCommonGrp().getLocalDateTime();
         response.origTranDateTime = gmfMessageVariants.getCreditResponse().getCommonGrp().getTrnmsnDateTime();
         response.origRespCode = gmfMessageVariants.getCreditResponse().getRespGrp().getRespCode();
+        response.refNum = gmfMessageVariants.getCreditResponse().getCommonGrp().getRefNum();
+        response.orderNum = gmfMessageVariants.getCreditResponse().getCommonGrp().getOrderNum();
+        if (gmfMessageVariants.getCreditResponse().getMCGrp() != null) {
+            response.banknetData = gmfMessageVariants.getCreditResponse().getMCGrp().getBanknetData();
+        }
+        if (gmfMessageVariants.getCreditResponse().getDSGrp() != null) {
+            response.discNRID = gmfMessageVariants.getCreditResponse().getDSGrp().getDiscNRID();
+            response.discTransQualifier = gmfMessageVariants.getCreditResponse().getDSGrp().getDiscTransQualifier();
+        }
+
+
         return response;
     }
 

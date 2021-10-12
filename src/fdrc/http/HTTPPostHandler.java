@@ -1,6 +1,7 @@
 package fdrc.http;
 
 import fdrc.base.Constants;
+import fdrc.common.RequestUtils;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -54,11 +55,11 @@ public class HTTPPostHandler {
          * Service Schema file [rc.xsd]*/
         ReqClientIDType reqClientIDType = new ReqClientIDType();
         reqClientIDType.setApp("RAPIDCONNECTSRS");
-        reqClientIDType.setAuth(String.format("%s%s|%s", Constants.REQUEST_GROUPID, Constants.REQUEST_MERCHID, Constants.REQUEST_TERMID ));
+        reqClientIDType.setAuth(String.format("%s%s|%s", Constants.REQUEST_GROUPID, RequestUtils.merchantID, Constants.REQUEST_TERMID ));
         /* Set the clientRef value*/
         reqClientIDType.setClientRef(clientRef); //give value later
         /* Set the DID value*/
-        reqClientIDType.setDID(Constants.HTTP_DID);
+        reqClientIDType.setDID(RequestUtils.mapMidToDID());//  Constants.HTTP_DID
 
         /*Assign ReqClientID object value to transaction request*/
         gmfTransactionRequest.setReqClientID(reqClientIDType);
@@ -88,15 +89,13 @@ public class HTTPPostHandler {
             e.printStackTrace();
         }
 
-        /* URL that will consume the transaction request.*/
-        final String postURL = "https://stg.dw.us.fdcnet.biz/rc";
         /*Instantiate the POST method*/
-        final PostMethod post = new PostMethod(postURL);
+        final PostMethod post = new PostMethod(Constants.SRS_URL);
         /*Instantiate the HTTP client*/
         final HttpClient httpclient = new HttpClient();
         /*Set various parameters of HTTP requet header*/
         post.setRequestHeader("User-Agent", "TRR-Formatter");
-        post.setRequestHeader("Host", postURL);
+        post.setRequestHeader("Host", Constants.SRS_URL);
         post.setRequestHeader("Connection", "Keep-Alive");
         post.setRequestHeader("Cache-Control", "no-cache");
         post.setRequestHeader("Content-Length",
