@@ -92,5 +92,7 @@ public class Request {
     public String merchPostalCode;
     public String addtlAmtType;
     public String addtlAmt;
+    //todo: temporary
+    public String merchantMID;
 }
 

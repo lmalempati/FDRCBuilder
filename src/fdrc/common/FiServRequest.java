@@ -33,16 +33,14 @@ public class FiServRequest { // todo name
         if (Utils.isNotNullOrEmpty(request.reversalInd))
             cmnGrp.setReversalInd(ReversalIndType.fromValue(request.reversalInd));
         /* The type of transaction being performed. */
-//        cmnGrp.setTxnType(TxnTypeType.AUTHORIZATION);
         cmnGrp.setTxnType(TxnTypeType.fromValue(request.txnType)); //TxnTypeType.SALE
         /* The local date and time in which the transaction was performed. */
-        //cmnGrp.setLocalDateTime("20210914153400");
         cmnGrp.setLocalDateTime(Utils.getLocalDateTime());
         /* The transmission date and time of the transaction (in GMT/UCT). */
         cmnGrp.setTrnmsnDateTime(Utils.getUTCDateTime());
         /* A number assigned by the merchant to uniquely reference the transaction.
          * This number must be unique within a day per Merchant ID per Terminal ID. */
-        cmnGrp.setSTAN(Utils.getSTAN()); // "100003"
+        cmnGrp.setSTAN(Utils.getSTAN());
         /* A number assigned by the merchant to uniquely reference a set of transactions. */
         if (Utils.isNotNullOrEmpty(request.refNum))
             cmnGrp.setRefNum(request.refNum); // "20200101012"
@@ -61,7 +59,12 @@ public class FiServRequest { // todo name
         cmnGrp.setTermID(Constants.REQUEST_TERMID); // ToDo, get from req
 
         /* A unique ID assigned by Fiserv, to identify the Merchant. */
-        cmnGrp.setMerchID(Constants.REQUEST_MERCHID); // ToDo, get from req
+        if (Utils.isNotNullOrEmpty(request.merchantMID)) {
+            cmnGrp.setMerchID(request.merchantMID); // ToDo, get from req
+            RequestUtils.merchantID = request.merchantMID;
+        } else {
+            cmnGrp.setMerchID(Constants.REQUEST_MERCHID); // ToDo, get from req
+        }
 
         /* An identifier used to indicate the terminal’s account number entry mode
          * and authentication capability via the Point-of-Service. */
@@ -88,7 +91,8 @@ public class FiServRequest { // todo name
         /* Indicates Group ID. */
         cmnGrp.setGroupID(Constants.REQUEST_GROUPID);
 //        cmnGrp.setPLPOSDebitFlg("1");
-        cmnGrp.setMerchCatCode(request.merchCatCode); //"5967"
+        if (Utils.isNotNullOrEmpty(request.merchCatCode))
+            cmnGrp.setMerchCatCode(request.merchCatCode);
 //        } catch (IllegalArgumentException e) {
 //            throw new RuntimeException(e.getMessage());
 //        } catch (Exception e) {
@@ -223,6 +227,8 @@ public class FiServRequest { // todo name
     }
 
     public OrigAuthGrp getOrigAuthGrp() {
+        // check if origAuthGrp is required
+        if (!RequestUtils.origAuthGrpRequired(request.txnType)) return null;
         OrigAuthGrp origAuthGrp = new OrigAuthGrp();
         if (Utils.isNotNullOrEmpty(request.origAuthID))
             origAuthGrp.setOrigAuthID(request.origAuthID);
@@ -274,11 +280,17 @@ public class FiServRequest { // todo name
         return addtlAmtGrp;
     }
 
-    public PINGrp getPinGrp() {
+    public PINGrp getPINGrp() {
         PINGrp pinGrp = new PINGrp();
         pinGrp.setPINData(String.valueOf(request.pinData));
         pinGrp.setKeySerialNumData(String.valueOf(request.keySerialNumData));
         return pinGrp;
+    }
+
+    public EbtGrp getEBTGrp(){
+        EbtGrp ebtGrp = new EbtGrp();
+        ebtGrp.setEBTType(EBTTypeType.EBT_CASH);
+        return ebtGrp;
     }
 
     protected String getXmlPayload() {

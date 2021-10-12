@@ -6,6 +6,7 @@ import fdrc.base.Response;
 import fdrc.common.ValidateRequest;
 import fdrc.proxy.PymtTypeType;
 import fdrc.utils.JsonBuilder;
+import org.gradle.wrapper.BootstrapMainStarter;
 
 public class Client {
     // this is called by POS router service
@@ -44,7 +45,11 @@ public class Client {
                 requestProcessor = new DebitRequest();
                 resposne = requestProcessor.processRequest(request);
                 break;
+            case EBT:
+                requestProcessor = new EBTRequest();
+                resposne = requestProcessor.processRequest(request);
         }
+        requestProcessor = null; // finally deallocate
         return resposne;
     }
 
@@ -56,10 +61,10 @@ public class Client {
         return response;
     }
 
-    public Response processDebitRequest(){
+    public Response processDebitRequest(final Request request){
         Response response = null;
         DebitRequest debitRequest = new DebitRequest();
-//        response = debitRequest.processDebitRequest(request); // todo
+        response = debitRequest.processRequest(request);
         return response;
     }
 }

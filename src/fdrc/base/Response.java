@@ -23,6 +23,12 @@ public class Response {
     public String origSTAN;
     @XmlElement
     public String origRespCode;
+    @XmlElement
+    public String refNum;
+    public String orderNum;
+    public String banknetData;
+    public String discNRID;
+    public String discTransQualifier;
 
     public String responseRaw;
 

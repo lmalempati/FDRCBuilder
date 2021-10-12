@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import fdrc.base.Request;
 import fdrc.base.Response;
+import fdrc.proxy.TxnTypeType;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -61,11 +62,17 @@ public class JsonBuilder {
     public static boolean updateCompletionPayload(Response response, String fileName) {
         Request request = getRequestFromJson(fileName);
         request.origAuthID = response.origAuthID;
-        ;
         request.origRespCode = response.origRespCode;
         request.origSTAN = response.origSTAN;
         request.origTranDateTime = response.origTranDateTime;
         request.origLocalDateTime = response.origLocalDateTime;
+        request.refNum = response.refNum;
+        request.banknetData = response.banknetData;
+        request.discNRID = response.discNRID;
+        request.discTransQualifier = response.discTransQualifier;
+
+        if (TxnTypeType.fromValue(request.txnType) == TxnTypeType.COMPLETION)
+            request.orderNum = response.orderNum;
 
         getJsonFromRequest(request, fileName);
         return true;
@@ -83,17 +90,14 @@ public class JsonBuilder {
     }
 }
 
-class MyTypeAdapter implements JsonDeserializer<Request>
-{
+class MyTypeAdapter implements JsonDeserializer<Request> {
     @Override
     public Request deserialize(JsonElement json, Type myClassType, JsonDeserializationContext context)
-            throws JsonParseException
-    {
+            throws JsonParseException {
         // json = {"field":"one"}
         JsonObject originalJsonObject = json.getAsJsonObject();
         JsonObject replacementJsonObject = new JsonObject();
-        for (Map.Entry<String, JsonElement> elementEntry : originalJsonObject.entrySet())
-        {
+        for (Map.Entry<String, JsonElement> elementEntry : originalJsonObject.entrySet()) {
             String key = elementEntry.getKey();
             JsonElement value = originalJsonObject.get(key);
 //            key = key.toLowerCase();
