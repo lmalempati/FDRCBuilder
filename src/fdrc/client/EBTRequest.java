@@ -1,0 +1,45 @@
+package fdrc.client;
+
+import fdrc.base.IRequestProcessor;
+import fdrc.base.Request;
+import fdrc.base.Response;
+import fdrc.common.FiServRequest;
+import fdrc.proxy.AddtlAmtGrp;
+import fdrc.proxy.DebitRequestDetails;
+import fdrc.proxy.EBTRequestDetails;
+import fdrc.proxy.GMFMessageVariants;
+
+import java.io.Serializable;
+import java.util.List;
+
+public class EBTRequest implements Serializable, IRequestProcessor {
+    GMFMessageVariants gmfmv = new GMFMessageVariants();
+
+    public String buildRequest(Request request) {
+        FiServRequest fiServRequest = null;
+        EBTRequestDetails ebtReqDtl = null;
+        try {
+            ebtReqDtl = new EBTRequestDetails();
+            ebtReqDtl.setCommonGrp(fiServRequest.getCommonGrp());
+            ebtReqDtl.setCardGrp(fiServRequest.getCardGrp());
+
+            List<AddtlAmtGrp> addtlAmtGr = ebtReqDtl.getAddtlAmtGrp();
+            List<AddtlAmtGrp> addlGrps = fiServRequest.getAddtlAmtGrp();
+            if (addlGrps != null)
+                for (AddtlAmtGrp grp : addlGrps
+                ) {
+                    addtlAmtGr.add(grp);
+                }
+
+
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        return "";
+    }
+
+    @Override
+    public Response processRequest(Request request) {
+        return null;
+    }
+}
