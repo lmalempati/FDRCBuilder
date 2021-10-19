@@ -1,0 +1,24 @@
+package fdrc.base;
+
+import fdrc.proxy.CreditResponseDetails;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+public class Response {
+    @XmlElement
+    public String respCode;
+    @XmlElement
+    public String addtlRespData;
+    @XmlElement
+    public String errorMsg;
+
+    public Response(String errorMsg) {
+        this.errorMsg = errorMsg;
+    }
+    public Response() {
+    }
+
+    CreditResponseDetails creditResponseDetails = new CreditResponseDetails();
+}
