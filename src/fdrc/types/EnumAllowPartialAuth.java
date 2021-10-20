@@ -1,7 +1,5 @@
 package fdrc.types;
 
-import fdrc.proxy.CardTypeType;
-
 public enum EnumAllowPartialAuth {
     NotSet(""),
     DoNotAllow("0"),

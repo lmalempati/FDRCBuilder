@@ -1,8 +1,10 @@
 package fdrc.common;
 
+import com.fiserv.merchant.gmfv10.ReversalIndType;
 import fdrc.base.Constants;
-import fdrc.proxy.GMFMessageVariants;
-import fdrc.proxy.TxnTypeType;
+import com.fiserv.merchant.gmfv10.GMFMessageVariants;
+import com.fiserv.merchant.gmfv10.TxnTypeType;
+import fdrc.base.Request;
 import fdrc.utils.Utils;
 
 public class RequestUtils {
@@ -10,15 +12,15 @@ public class RequestUtils {
     /* Generate Client Ref Number in the format <STAN>|<TPPID>, right justified and left padded with "0" */
     public static String getClientRef() {
         String clientRef = "";
-//        clientRef = String.format("0%SV%S", Utils.getSTAN(), Constants.REQUEST_TPPID);
-        clientRef = Utils.getSTAN() + "|" + Constants.REQUEST_TPPID;
+        clientRef = String.format("0%sV%s", Utils.getSTAN(), Constants.REQUEST_TPPID);
+//        clientRef = Utils.getSTAN() + "|" + Constants.REQUEST_TPPID;
         clientRef = "00" + clientRef;
         return clientRef;
     }
 
     public static String getXMLData(GMFMessageVariants gmfMessageVariants) {
         Serialization serialization = new Serialization();
-        return serialization.GetXMLData(gmfMessageVariants).replaceAll("gmfMessageVariants", "GMF");
+        return serialization.getXMLData(gmfMessageVariants, "");
     }
 
     public static String mapMidToDID(){
@@ -34,8 +36,10 @@ public class RequestUtils {
         }
     }
 
-    public static boolean origAuthGrpRequired(String txnType){
-        if (TxnTypeType.fromValue(txnType) == TxnTypeType.REFUND) return false;
+    public static boolean origAuthGrpRequired(Request request){
+         if (TxnTypeType.fromValue(request.txnType) == TxnTypeType.REFUND &&
+                 (Utils.isNotNullOrEmpty(request.reversalInd) && Utils.getEnumValue(ReversalIndType.class, request.reversalInd) != ReversalIndType.VOID)) return false;
+        // todo: commented above line after FDRC expecting origGrp to be present in reversals
         return true;
     }
 

@@ -61,6 +61,8 @@ public class Request {
     public String discPOSData;
     public String discTransQualifier;
     public String discNRID;
+    //Amex grp
+    public String amExTranID;
     // config
     public String tppID;
     public String termID;

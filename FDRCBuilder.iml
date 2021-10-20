@@ -69,17 +69,8 @@
     <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
     <orderEntry type="module-library">
       <library>
-        <CLASSES />
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/lib/fiserv-gmf-lib.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/gradle-wrapper.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/fiserv-gmf-lib-10.02.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

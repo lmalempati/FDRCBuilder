@@ -4,10 +4,10 @@ import fdrc.base.IRequestProcessor;
 import fdrc.base.Request;
 import fdrc.base.Response;
 import fdrc.common.FiServRequest;
-import fdrc.proxy.AddtlAmtGrp;
-import fdrc.proxy.DebitRequestDetails;
-import fdrc.proxy.EBTRequestDetails;
-import fdrc.proxy.GMFMessageVariants;
+import com.fiserv.merchant.gmfv10.AddtlAmtGrp;
+import com.fiserv.merchant.gmfv10.DebitRequestDetails;
+import com.fiserv.merchant.gmfv10.EBTRequestDetails;
+import com.fiserv.merchant.gmfv10.GMFMessageVariants;
 
 import java.io.Serializable;
 import java.util.List;

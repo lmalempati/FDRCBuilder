@@ -1,10 +1,10 @@
 package fdrc.utils;
 
+import com.fiserv.merchant.gmfv10.TxnTypeType;
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import fdrc.base.Request;
 import fdrc.base.Response;
-import fdrc.proxy.TxnTypeType;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

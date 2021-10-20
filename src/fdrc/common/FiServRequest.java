@@ -6,7 +6,7 @@ To call methods that populate common grp, card grp and so on and then get the xm
 
 import fdrc.base.Constants;
 import fdrc.base.Request;
-import fdrc.proxy.*;
+import com.fiserv.merchant.gmfv10.*;
 import fdrc.types.EnumAllowPartialAuth;
 import fdrc.utils.Utils;
 
@@ -150,7 +150,7 @@ public class FiServRequest { // todo name
                 visaGrp.setTransID(request.transID);
             if (Utils.isNotNullOrEmpty(request.taxAmtCapablt))
                 visaGrp.setTaxAmtCapablt(request.taxAmtCapablt);
-            if (Utils.isNotNullOrEmpty(request.cardLevelResult))
+            if (Utils.isNotNullOrEmpty(request.cardLevelResult) && !(Utils.getEnumValue(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID))
                 visaGrp.setCardLevelResult(request.cardLevelResult);
         } catch (Exception e) {
             e.printStackTrace();
@@ -186,6 +186,13 @@ public class FiServRequest { // todo name
         if (Utils.isNotNullOrEmpty(request.discNRID))
             dsGrp.setDiscNRID(request.discNRID);
         return Utils.valueOrNothing(dsGrp);
+    }
+
+    public AmexGrp getAmexGrp(){
+        AmexGrp amexGrp =  new AmexGrp();
+        if (Utils.isNotNullOrEmpty(request.amExTranID))
+            amexGrp.setAmExTranID(request.amExTranID);
+        return amexGrp;
     }
 
     public AltMerchNameAndAddrGrp getAltMerchNameAndAddrGrp() {
@@ -228,7 +235,7 @@ public class FiServRequest { // todo name
 
     public OrigAuthGrp getOrigAuthGrp() {
         // check if origAuthGrp is required
-        if (!RequestUtils.origAuthGrpRequired(request.txnType)) return null;
+        if (!RequestUtils.origAuthGrpRequired(request)) return null;
         OrigAuthGrp origAuthGrp = new OrigAuthGrp();
         if (Utils.isNotNullOrEmpty(request.origAuthID))
             origAuthGrp.setOrigAuthID(request.origAuthID);
@@ -268,6 +275,15 @@ public class FiServRequest { // todo name
                 addtlAmtGrp.setPartAuthrztnApprvlCapablt(String.valueOf(request.partAuthrztnApprvlCapablt));
                 list.add(addtlAmtGrp);
             }
+        }
+
+        // todo: check why this needed? if needed, who passes it?
+        if (Utils.isNotNullOrEmpty(request.reversalInd) && Utils.getEnumValue(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID){
+            AddtlAmtGrp addtlAmtGrp = new AddtlAmtGrp();
+            addtlAmtGrp.setAddAmt("100");
+            addtlAmtGrp.setAddAmtCrncy("840");
+            addtlAmtGrp.setAddAmtType(AddAmtTypeType.TOTAL_AUTH_AMT);
+            list.add(addtlAmtGrp);
         }
         return Utils.valueOrNothing(list);
     }
