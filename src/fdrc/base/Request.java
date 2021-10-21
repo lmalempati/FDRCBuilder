@@ -23,7 +23,7 @@ public class Request {
     public BigDecimal firstAuthAmt;
     public BigDecimal totalAuthAmt;
     //EMV grp
-    public  String emvData; // byte[]
+    public String emvData; // byte[]
     public String cardSeqNum;
     // PINGrp
      public String pinData; // byte[]
@@ -32,7 +32,7 @@ public class Request {
     public String posCondCode;
     public String posEntryMode;
     public String pymtType;
-    public String industrytype;
+//    public String industrytype; -- not required
     public String stan;
     public String refNum;
     public String orderNum;
@@ -51,6 +51,8 @@ public class Request {
     public String taxAmtCapablt;
     public String transID;
     public String cardLevelResult;
+    // SecrTxnGrp
+    public String cavvResultCode;
     // MC grp
     public String finAuthInd;
     public String banknetData;
@@ -61,6 +63,8 @@ public class Request {
     public String discPOSData;
     public String discTransQualifier;
     public String discNRID;
+    //Amex grp
+    public String amexTranID;
     // config
     public String tppID;
     public String termID;
@@ -90,5 +94,9 @@ public class Request {
     public String merchCity;
     public String merchState;
     public String merchPostalCode;
+    public String addtlAmtType;
+    public String addtlAmt;
+    //todo: temporary
+    public String merchantMID;
 }
 

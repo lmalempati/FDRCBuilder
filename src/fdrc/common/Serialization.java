@@ -1,24 +1,19 @@
 package fdrc.common;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import fdrc.proxy.CreditResponseDetails;
-import fdrc.proxy.GMFMessageVariants;
+import com.fiserv.merchant.gmfv10.GMFMessageVariants;
 
-import fdrc.xml.ObjectFactory;
-import fdrc.xml.PayloadType;
-import fdrc.xml.Response;
-import fdrc.xml.TransactionType;
-
-import javax.xml.bind.*;
-import java.io.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.StringReader;
+import java.io.StringWriter;
 
 public class Serialization {
     /* The below method will transform the transaction request object to an XML string in UTF-8 encoding.
      * It will convert gmfmv object into serialized XML data which will be sent to Data wire.
      * */
-    public String GetXMLData(GMFMessageVariants gmfmv) {
+    public String getXMLData(GMFMessageVariants gmfmv, String error) {
         StringWriter stringWriter = new StringWriter();
         String returnValue = "";
         try {

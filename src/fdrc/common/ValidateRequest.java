@@ -1,13 +1,11 @@
 package fdrc.common;
 
-import fdrc.Exceptions.InvalidNumber;
+import com.fiserv.merchant.gmfv10.PymtTypeType;
+import com.fiserv.merchant.gmfv10.TxnTypeType;
 import fdrc.base.Request;
-import fdrc.proxy.PymtTypeType;
-import fdrc.proxy.TxnTypeType;
-import fdrc.types.EnumEngineEntryMethod;
 import fdrc.types.EnumIndustryType;
+import fdrc.utils.Utils;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.regex.Pattern;
 
 public class ValidateRequest {

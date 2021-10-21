@@ -47,7 +47,8 @@ public class Client {
                     requestProcessor = new DebitRequest();
                     break;
                 case EBT:
-                    requestProcessor = new EBTRequest();
+//                    requestProcessor = new EBTRequest();
+                    break;
             }
             if (Utils.isNotNullOrEmpty(request.reversalInd))
                 switch (Utils.getEnumValue(ReversalIndType.class, request.reversalInd)) {

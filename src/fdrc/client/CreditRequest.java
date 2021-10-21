@@ -98,21 +98,6 @@ public class CreditRequest extends GenericRequest implements Serializable, IRequ
 //        return response;
 //    }
 
-    /* Generate Client Ref Number in the format <STAN>|<TPPID>, right justified and left padded with "0" */
-//    public String getClientRef() {
-//        String clientRef = "";
-//
-//        creditReqDtl = gmfmv.getCreditRequest();
-//        clientRef = creditReqDtl.getCommonGrp().getSTAN() + "|" + creditReqDtl.getCommonGrp().getTPPID();
-//        clientRef = "00" + clientRef;
-//
-//        return clientRef;
-//    }
-
-    //    private String getXMLData(GMFMessageVariants gmfMessageVariants) {
-//        Serialization serialization = new Serialization();
-//        return serialization.GetXMLData(gmfMessageVariants);
-//    }
     @Override
     public boolean getResponse(GMFMessageVariants gmfmvResponse, Response response) {
         boolean result = false;

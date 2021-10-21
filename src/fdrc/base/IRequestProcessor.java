@@ -1,5 +1,5 @@
 package fdrc.base;
 
 public interface IRequestProcessor {
-    public Response ProcessRequest(Request request);
+    public Response processRequest(Request request);
 }
