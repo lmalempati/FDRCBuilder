@@ -42,7 +42,8 @@ public class Serialization {
         GMFMessageVariants g = null;
 
         try {
-            xml = xml.replaceAll("GMF", "gmfMessageVariants");
+            // this is not needed after replacing proxys with gmf lib.
+            // xml = xml.replaceAll("GMF", "gmfMessageVariants");
             context = JAXBContext.newInstance(GMFMessageVariants.class);
             unmarshaller = context.createUnmarshaller();
             g = (GMFMessageVariants)unmarshaller.unmarshal(new StringReader(xml));

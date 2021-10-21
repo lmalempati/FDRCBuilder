@@ -28,12 +28,13 @@ public class FiServRequest { // todo name
         CommonGrp cmnGrp = new CommonGrp();
         /* The payment type of the transaction. */
 //        try {
-            if (Utils.isNotNullOrEmpty(request.pymtType))
-                cmnGrp.setPymtType(PymtTypeType.fromValue(request.pymtType)); // PymtTypeType.CREDIT
+        if (Utils.isNotNullOrEmpty(request.pymtType))
+            cmnGrp.setPymtType(PymtTypeType.fromValue(request.pymtType)); // PymtTypeType.CREDIT
 //        } catch (Exception e) {
 //            throw new InvalidValueException(String.format("Unsupported value %s", request.pymtType));
 //        }
-        cmnGrp.setReversalInd(Utils.getReversalInd(request.reversalInd));
+        if (Utils.isNotNullOrEmpty(request.reversalInd))
+            cmnGrp.setReversalInd(Utils.getEnumValue(ReversalIndType.class, request.reversalInd));
         /* The type of transaction being performed. */
         cmnGrp.setTxnType(TxnTypeType.fromValue(request.txnType)); //TxnTypeType.SALE
         /* The local date and time in which the transaction was performed. */
@@ -287,7 +288,7 @@ public class FiServRequest { // todo name
             }
         }
         // todo: as per sampel trxns, voids are expecting this. to know why?
-        if (Utils.isNotNullOrEmpty (request.reversalInd) && Utils.getReversalInd(request.reversalInd) == ReversalIndType.VOID){
+        if (Utils.isNotNullOrEmpty(request.reversalInd) && Utils.getEnumValue(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID) {
             AddtlAmtGrp addtlAmtGrp = new AddtlAmtGrp();
             addtlAmtGrp.setAddAmt("100");
             addtlAmtGrp.setAddAmtCrncy("840");

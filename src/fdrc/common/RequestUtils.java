@@ -37,7 +37,7 @@ public class RequestUtils {
     }
 
     public static boolean origAuthGrpRequired(Request request){
-         if (TxnTypeType.fromValue(request.txnType) == TxnTypeType.REFUND && (Utils.isNotNullOrEmpty(request.reversalInd) &&  Utils.getReversalInd(request.reversalInd) != ReversalIndType.VOID)) return false;
+         if (TxnTypeType.fromValue(request.txnType) == TxnTypeType.REFUND && (Utils.isNotNullOrEmpty(request.reversalInd) &&  Utils.getEnumValue(ReversalIndType.class, request.reversalInd) != ReversalIndType.VOID)) return false;
         // todo: commented above line after FDRC expecting origGrp to be present in reversals
         return true;
     }

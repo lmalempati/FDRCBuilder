@@ -1,6 +1,7 @@
 package fdrc.http;
 
 import fdrc.base.Constants;
+import fdrc.common.RequestUtils;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -54,11 +55,11 @@ public class HTTPPostHandler {
          * Service Schema file [rc.xsd]*/
         ReqClientIDType reqClientIDType = new ReqClientIDType();
         reqClientIDType.setApp("RAPIDCONNECTSRS");
-        reqClientIDType.setAuth(String.format("%s%s|%s", Constants.REQUEST_GROUPID, Constants.REQUEST_MERCHID, Constants.REQUEST_TERMID ));
+        reqClientIDType.setAuth(String.format("%s%s|%s", Constants.REQUEST_GROUPID, RequestUtils.merchantID, Constants.REQUEST_TERMID ));
         /* Set the clientRef value*/
         reqClientIDType.setClientRef(clientRef); //give value later
         /* Set the DID value*/
-        reqClientIDType.setDID(Constants.HTTP_DID);
+        reqClientIDType.setDID(RequestUtils.mapMidToDID());
 
         /*Assign ReqClientID object value to transaction request*/
         gmfTransactionRequest.setReqClientID(reqClientIDType);

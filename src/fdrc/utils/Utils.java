@@ -89,37 +89,10 @@ public class Utils {
         }
         return tClass;
     }
-
-    public static ReversalIndType getReversalInd(String reversalInd) {
-        if (isNotNullOrEmpty(reversalInd))
-            return Enum.valueOf(ReversalIndType.class, reversalInd);
-        return null;
-    }
-
-//    public static <Enum> Enumeration ToEnum(Enumeration en, String indType) {
-//        Enum result = null;
-//        try {
-////            Class<?> c = Class.forName(en);
-////            if (c.isEnum()) {
-////                Object obj = c.getDeclaredConstructor().newInstance();
-////            }
-//            String className = en.getClass().getName();
-//            Class cls = Class.forName(className);
-//            result = Enum.valueOf(cls, indType);
-//        } catch (IllegalArgumentException | ClassNotFoundException e){
-//            e.printStackTrace();
-//        }
-//        return result;
-//    }
-
     public static <T extends Enum<T>> T getEnumValue(Class<T> type, String envVal) {
         return Enum.valueOf(type, envVal.toUpperCase());
     }
-
-
     public static void main(String[] args) {
         System.out.println(Utils.getEnumValue(ReversalIndType.class, "Timeout"));
-
-
     }
 }
