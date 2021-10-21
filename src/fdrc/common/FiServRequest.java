@@ -6,7 +6,7 @@ To call methods that populate common grp, card grp and so on and then get the xm
 
 import fdrc.base.Constants;
 import fdrc.base.Request;
-import fdrc.proxy.*;
+import com.fiserv.merchant.gmfv10.*;
 import fdrc.types.EnumAllowPartialAuth;
 import fdrc.utils.Utils;
 

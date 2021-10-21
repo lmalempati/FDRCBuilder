@@ -1,6 +1,8 @@
 package fdrc.base;
 
-import fdrc.proxy.CreditResponseDetails;
+import com.fiserv.merchant.gmfv10.ReversalIndType;
+
+import com.fiserv.merchant.gmfv10.CreditResponseDetails;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -23,6 +25,17 @@ public class Response {
     public String origSTAN;
     @XmlElement
     public String origRespCode;
+    @XmlElement
+    public String refNum;
+    public String orderNum;
+    public String banknetData;
+    public String aci;
+    public String reversalResponse;
+    public String transID;
+    public String discNRID;
+    public String discTransQualifier;
+    public String cardLevelResult;
+    public String amexTranID;
 
     public String responseRaw;
 
@@ -32,6 +45,8 @@ public class Response {
 
     public Response() {
     }
+
+
 
     CreditResponseDetails creditResponseDetails = new CreditResponseDetails();
 }

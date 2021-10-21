@@ -16,8 +16,10 @@ public class ValidateRequest {
         if(request == null)
             return "invalid or empty request";
         // to check payment and trxn types are valid
-        PymtTypeType.fromValue(request.pymtType);
-        TxnTypeType.fromValue(request.txnType);
+        if (Utils.isNotNullOrEmpty(request.pymtType))
+        Utils.getEnumValue(PymtTypeType.class, request.pymtType);
+        if (Utils.isNotNullOrEmpty(request.txnType))
+            Utils.getEnumValue(TxnTypeType.class, request.txnType);
 
         Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
         if (request.txnAmt == null || !pattern.matcher(request.txnAmt.toString()).matches()) {
