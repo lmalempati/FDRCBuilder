@@ -1,6 +1,7 @@
 package fdrc.common;
 
 import com.fiserv.merchant.gmfv10.ReversalIndType;
+import fdrc.Exceptions.InvalidValueException;
 import fdrc.base.Constants;
 import com.fiserv.merchant.gmfv10.GMFMessageVariants;
 import com.fiserv.merchant.gmfv10.TxnTypeType;
@@ -14,7 +15,7 @@ public class RequestUtils {
         String clientRef = "";
         clientRef = String.format("0%sV%s", Utils.getSTAN(), Constants.REQUEST_TPPID);
 //        clientRef = Utils.getSTAN() + "|" + Constants.REQUEST_TPPID;
-        clientRef = "00" + clientRef;
+//        clientRef = "00" + clientRef;
         return clientRef;
     }
 
@@ -23,7 +24,7 @@ public class RequestUtils {
         return serialization.getXMLData(gmfMessageVariants, "");
     }
 
-    public static String mapMidToDID(){
+    public static String mapMidToDID(String merchantID){
         switch(merchantID){
             case "RCTST1000091636":
                 return "00041372277848179310";
@@ -32,13 +33,15 @@ public class RequestUtils {
             case "RCTST1000091638":
                 return "00035488381390525644";
             default:
-                throw new RuntimeException("invalid merchand id");
+                throw new InvalidValueException(String.format("merchantID %s", merchantID));
         }
     }
 
     public static boolean origAuthGrpRequired(Request request){
-         if (TxnTypeType.fromValue(request.txnType) == TxnTypeType.REFUND && (Utils.isNotNullOrEmpty(request.reversalInd) &&  Utils.getEnumValue(ReversalIndType.class, request.reversalInd) != ReversalIndType.VOID)) return false;
-        // todo: commented above line after FDRC expecting origGrp to be present in reversals
+        // FDRC expecting origGrp to be present in reversals
+        boolean isRevVoid = Utils.isNotNullOrEmpty(request.reversalInd) &&  Utils.getEnumValue(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID;
+        if (TxnTypeType.fromValue(request.txnType) == TxnTypeType.AUTHORIZATION && !isRevVoid) return false;
+         if (TxnTypeType.fromValue(request.txnType) == TxnTypeType.REFUND && !isRevVoid) return false;
         return true;
     }
 

@@ -16,7 +16,5 @@ public class Constants {
     public static final int TCP_PORT = 1234;
 
     public static final String HTTP_DID = "00035469814383142846"; /*Restaurant 10001 */
-//    public static final String HTTP_DID = "00041198330131720090"; /*Moto 10001 */
 
-//    public static final String HTTP_DID = "00041836971547330349"; /*moto old one*/
 }

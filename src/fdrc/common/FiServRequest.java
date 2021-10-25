@@ -131,7 +131,7 @@ public class FiServRequest { // todo name
             if (Utils.isNotNullOrEmpty(request.avsResultCode))
                 cardGrp.setAVSResultCode(request.avsResultCode);
             if (Utils.isNotNullOrEmpty(request.ccvResultCode))
-                cardGrp.setCCVResultCode(CCVResultCodeType.fromValue(request.ccvResultCode));
+                cardGrp.setCCVResultCode(Utils.getEnumValue (CCVResultCodeType.class, request.ccvResultCode));
             cardGrp.setTrack2Data(request.track2Data);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -224,8 +224,6 @@ public class FiServRequest { // todo name
             e.printStackTrace();
         }
         return Utils.valueOrNothing(altMerchNameAndAddrGrp);
-//        if (!Utils.isNotNullOrEmpty(altMerchNameAndAddrGrp.getMerchName())) return null;
-//        return altMerchNameAndAddrGrp;
     }
 
     public CustInfoGrp getCustInfoGrp() {
@@ -287,14 +285,14 @@ public class FiServRequest { // todo name
                 list.add(addtlAmtGrp);
             }
         }
-        // todo: as per sampel trxns, voids are expecting this. to know why?
-        if (Utils.isNotNullOrEmpty(request.reversalInd) && Utils.getEnumValue(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID) {
-            AddtlAmtGrp addtlAmtGrp = new AddtlAmtGrp();
-            addtlAmtGrp.setAddAmt("100");
-            addtlAmtGrp.setAddAmtCrncy("840");
-            addtlAmtGrp.setAddAmtType(AddAmtTypeType.TOTAL_AUTH_AMT);
-            list.add(addtlAmtGrp);
-        }
+//        // todo: as per sample trxns, voids are expecting this. to know why?
+//        if (Utils.isNotNullOrEmpty(request.reversalInd) && Utils.getEnumValue(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID) {
+//            AddtlAmtGrp addtlAmtGrp = new AddtlAmtGrp();
+//            addtlAmtGrp.setAddAmt("100");
+//            addtlAmtGrp.setAddAmtCrncy("840");
+//            addtlAmtGrp.setAddAmtType(AddAmtTypeType.TOTAL_AUTH_AMT);
+//            list.add(addtlAmtGrp);
+//        }
         return Utils.valueOrNothing(list);
     }
 

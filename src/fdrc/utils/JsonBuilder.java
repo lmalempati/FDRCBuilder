@@ -4,9 +4,9 @@ import com.fiserv.merchant.gmfv10.ReversalIndType;
 import com.fiserv.merchant.gmfv10.TxnTypeType;
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
+import fdrc.Exceptions.InvalidValueException;
 import fdrc.base.Request;
 import fdrc.base.Response;
-import jdk.jshell.execution.Util;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -20,9 +20,8 @@ public class JsonBuilder {
         String resultJson = null;
         try {
             Gson gson = new GsonBuilder().serializeNulls().create();
-            resultJson = gson.toJson(request, Request.class);
-//            String tmp =resultJson.replaceAll("null", "");
-//            resultJson =tmp;
+            String tmp = gson.toJson(request, Request.class);
+            resultJson = tmp.replaceAll("\\\\u003d", "=");
             FileWriter writer = new FileWriter(fileName);
             writer.write(resultJson);
             writer.close();
@@ -46,6 +45,9 @@ public class JsonBuilder {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        finally {
+            if (request == null) throw new InvalidValueException("Invalid Json.");
         }
         return request;
     }
@@ -76,7 +78,7 @@ public class JsonBuilder {
         request.cardLevelResult = response.cardLevelResult;
         request.aci = response.aci;
 
-        if (TxnTypeType.fromValue(request.txnType) == TxnTypeType.COMPLETION ||
+        if (Utils.getEnumValue(TxnTypeType.class, request.txnType) == TxnTypeType.COMPLETION ||
         Utils.isNotNullOrEmpty(request.reversalInd) && Utils.getEnumValue(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID)
             request.orderNum = response.orderNum;
 

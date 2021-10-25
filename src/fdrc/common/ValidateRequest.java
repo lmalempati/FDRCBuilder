@@ -18,6 +18,7 @@ public class ValidateRequest {
         Utils.getEnumValue(PymtTypeType.class, request.pymtType);
         if (Utils.isNotNullOrEmpty(request.txnType))
             Utils.getEnumValue(TxnTypeType.class, request.txnType);
+        RequestUtils.merchantID = RequestUtils.mapMidToDID(request.merchantMID);
 
         Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
         if (request.txnAmt == null || !pattern.matcher(request.txnAmt.toString()).matches()) {
@@ -57,8 +58,6 @@ public class ValidateRequest {
         EnumIndustryType type = EnumIndustryType.valueOf("autorental");
 
 //        EnumEngineEntryMethod.values()
-
-        System.out.println();
         System.out.println(type);
     }
 

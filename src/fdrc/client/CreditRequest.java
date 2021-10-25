@@ -17,7 +17,6 @@ public class CreditRequest extends GenericRequest implements Serializable, IRequ
         CreditRequestDetails creditReqDtl = new CreditRequestDetails();
         FiServRequest fiServRequest = new FiServRequest(request);
         try {
-//            OrigAuthGrp origAuthGrp = fiServRequest.getOrigAuthGrp();
             creditReqDtl.setOrigAuthGrp(fiServRequest.getOrigAuthGrp());
 
             creditReqDtl.setCommonGrp(fiServRequest.getCommonGrp());
@@ -34,9 +33,12 @@ public class CreditRequest extends GenericRequest implements Serializable, IRequ
                     creditReqDtl.setMCGrp(fiServRequest.getMasterCardGrp());
                     break;
                 case JCB:
-                    if (TxnTypeType.fromValue(request.txnType) == TxnTypeType.COMPLETION)
+                case DISCOVER:
+                case DINERS:
                         creditReqDtl.setDSGrp(fiServRequest.getDiscoverGrp());
                     break;
+                case AMEX:
+                    creditReqDtl.setAmexGrp(fiServRequest.getAmexGrp());
             }
 
             /* Addtl Amount Group
@@ -69,34 +71,6 @@ public class CreditRequest extends GenericRequest implements Serializable, IRequ
     }
 
     /*Transaction response in XML format received from Data wire */
-//    @Override
-//    public Response processRequest(Request request) {
-//        String requestString = "";
-//        String responseString = "";
-//        Response response = null;
-//        String error = buildRequest(request);
-//        if (error != "")
-//            return new Response(error);
-//
-//        requestString = RequestUtils.getXMLData(gmfmv);
-////        requestString = requestString.replaceAll("gmfMessageVariants", "GMF");
-//        System.out.println("GMF Credit Request == " + requestString);
-//
-//        /*Generate Client Ref Number in the format <STAN>|<TPPID>, right justified and left padded with "0" */
-//        String clientRef = RequestUtils.getClientRef();
-//        try {
-//            //Send data using HTTP POST protocol
-//            // todo: set any exception to Resposne.errorMsg
-//            responseString = new HTTPPostHandler().SendMessage(requestString, clientRef);
-//            response = getResponse(responseString);
-//            response.responseRaw = responseString;
-//        } catch (HTTPException e) {
-//            System.out.println("HTTP Exception: " + e);// todo remove / handle it
-//            response.errorMsg = e.getMessage();
-//        }
-//        System.out.println("Successful HTTP POST Credit response: " + "\n" + responseString + "\n");
-//        return response;
-//    }
 
     @Override
     public boolean getResponse(GMFMessageVariants gmfmvResponse, Response response) {

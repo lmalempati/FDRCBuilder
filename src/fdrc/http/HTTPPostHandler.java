@@ -2,6 +2,7 @@ package fdrc.http;
 
 import fdrc.base.Constants;
 import fdrc.common.RequestUtils;
+import fdrc.xml.*;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -13,12 +14,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.math.BigInteger;
-import fdrc.xml.ObjectFactory;
-import fdrc.xml.Request;
-import fdrc.xml.ReqClientIDType;
-import fdrc.xml.Response;
-import fdrc.xml.TransactionType;
-import fdrc.xml.PayloadType;
 
 public class HTTPPostHandler {
 
@@ -59,7 +54,7 @@ public class HTTPPostHandler {
         /* Set the clientRef value*/
         reqClientIDType.setClientRef(clientRef); //give value later
         /* Set the DID value*/
-        reqClientIDType.setDID(RequestUtils.mapMidToDID());
+        reqClientIDType.setDID(RequestUtils.mapMidToDID(RequestUtils.merchantID));
 
         /*Assign ReqClientID object value to transaction request*/
         gmfTransactionRequest.setReqClientID(reqClientIDType);

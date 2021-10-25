@@ -96,7 +96,7 @@ public class Request {
     public String merchPostalCode;
     public String addtlAmtType;
     public String addtlAmt;
-    //todo: temporary
+    //todo: not required in prod
     public String merchantMID;
 }
 
