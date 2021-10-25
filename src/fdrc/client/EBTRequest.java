@@ -5,7 +5,6 @@ import fdrc.base.Request;
 import fdrc.base.Response;
 import fdrc.common.FiServRequest;
 import com.fiserv.merchant.gmfv10.AddtlAmtGrp;
-import com.fiserv.merchant.gmfv10.DebitRequestDetails;
 import com.fiserv.merchant.gmfv10.EBTRequestDetails;
 import com.fiserv.merchant.gmfv10.GMFMessageVariants;
 

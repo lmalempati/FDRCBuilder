@@ -1,7 +1,5 @@
 package fdrc.base;
 
-import com.fiserv.merchant.gmfv10.ReversalIndType;
-
 import com.fiserv.merchant.gmfv10.CreditResponseDetails;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -30,10 +28,10 @@ public class Response {
     public String orderNum;
     public String banknetData;
     public String aci;
-    public String reversalResponse;
-    public String transID;
     public String discNRID;
     public String discTransQualifier;
+    public String cavvResultCode;
+    public String transID;
     public String cardLevelResult;
     public String amexTranID;
 

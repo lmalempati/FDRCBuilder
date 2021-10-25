@@ -4,13 +4,12 @@ Check if it is possible first
 To call methods that populate common grp, card grp and so on and then get the xml payload the way cardknox does it.
 *  */
 
+import com.fiserv.merchant.gmfv10.*;
 import fdrc.base.Constants;
 import fdrc.base.Request;
-import com.fiserv.merchant.gmfv10.*;
 import fdrc.types.EnumAllowPartialAuth;
 import fdrc.utils.Utils;
 
-import java.io.InvalidObjectException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +28,13 @@ public class FiServRequest { // todo name
         CommonGrp cmnGrp = new CommonGrp();
         /* The payment type of the transaction. */
 //        try {
-        cmnGrp.setPymtType(PymtTypeType.fromValue(request.pymtType)); // PymtTypeType.CREDIT
+        if (Utils.isNotNullOrEmpty(request.pymtType))
+            cmnGrp.setPymtType(PymtTypeType.fromValue(request.pymtType)); // PymtTypeType.CREDIT
+//        } catch (Exception e) {
+//            throw new InvalidValueException(String.format("Unsupported value %s", request.pymtType));
+//        }
         if (Utils.isNotNullOrEmpty(request.reversalInd))
-            cmnGrp.setReversalInd(ReversalIndType.fromValue(request.reversalInd));
+            cmnGrp.setReversalInd(Utils.getEnumValue(ReversalIndType.class, request.reversalInd));
         /* The type of transaction being performed. */
         cmnGrp.setTxnType(TxnTypeType.fromValue(request.txnType)); //TxnTypeType.SALE
         /* The local date and time in which the transaction was performed. */
@@ -128,7 +131,7 @@ public class FiServRequest { // todo name
             if (Utils.isNotNullOrEmpty(request.avsResultCode))
                 cardGrp.setAVSResultCode(request.avsResultCode);
             if (Utils.isNotNullOrEmpty(request.ccvResultCode))
-                cardGrp.setCCVResultCode(CCVResultCodeType.fromValue(request.ccvResultCode));
+                cardGrp.setCCVResultCode(Utils.getEnumValue (CCVResultCodeType.class, request.ccvResultCode));
             cardGrp.setTrack2Data(request.track2Data);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -150,12 +153,20 @@ public class FiServRequest { // todo name
                 visaGrp.setTransID(request.transID);
             if (Utils.isNotNullOrEmpty(request.taxAmtCapablt))
                 visaGrp.setTaxAmtCapablt(request.taxAmtCapablt);
-            if (Utils.isNotNullOrEmpty(request.cardLevelResult) && !(Utils.getEnumValue(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID))
+            if (Utils.isNotNullOrEmpty(request.cardLevelResult) && !Utils.isNotNullOrEmpty(request.reversalInd))
                 visaGrp.setCardLevelResult(request.cardLevelResult);
+            if (Utils.isNotNullOrEmpty(request.transID))
+                visaGrp.setTransID(request.transID);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return Utils.valueOrNothing(visaGrp);
+    }
+
+    public SecrTxnGrp getSecrTxnGrp() {
+        SecrTxnGrp secrTxnGrp = new SecrTxnGrp();
+        secrTxnGrp.setCAVVResultCode(request.cavvResultCode);
+        return Utils.valueOrNothing(secrTxnGrp);
     }
 
     public MCGrp getMasterCardGrp() {
@@ -188,11 +199,11 @@ public class FiServRequest { // todo name
         return Utils.valueOrNothing(dsGrp);
     }
 
-    public AmexGrp getAmexGrp(){
-        AmexGrp amexGrp =  new AmexGrp();
-        if (Utils.isNotNullOrEmpty(request.amExTranID))
-            amexGrp.setAmExTranID(request.amExTranID);
-        return amexGrp;
+    public AmexGrp getAmexGrp() {
+        AmexGrp amexGrp = new AmexGrp();
+        if (Utils.isNotNullOrEmpty(request.amexTranID))
+            amexGrp.setAmExTranID(request.amexTranID);
+        return Utils.valueOrNothing(amexGrp);
     }
 
     public AltMerchNameAndAddrGrp getAltMerchNameAndAddrGrp() {
@@ -213,8 +224,6 @@ public class FiServRequest { // todo name
             e.printStackTrace();
         }
         return Utils.valueOrNothing(altMerchNameAndAddrGrp);
-//        if (!Utils.isNotNullOrEmpty(altMerchNameAndAddrGrp.getMerchName())) return null;
-//        return altMerchNameAndAddrGrp;
     }
 
     public CustInfoGrp getCustInfoGrp() {
@@ -257,7 +266,7 @@ public class FiServRequest { // todo name
             if (!request.firstAuthAmt.equals(BD_ZERO))
                 list.add(getAddtlAmtGrp(request, request.firstAuthAmt, AddAmtTypeType.FIRST_AUTH_AMT));
 
-        if (Utils.isNotNullOrEmpty(request.firstAuthAmt))
+        if (Utils.isNotNullOrEmpty(request.totalAuthAmt))
             if (!request.totalAuthAmt.equals(BD_ZERO))
                 list.add(getAddtlAmtGrp(request, request.totalAuthAmt, AddAmtTypeType.TOTAL_AUTH_AMT));
 
@@ -276,15 +285,14 @@ public class FiServRequest { // todo name
                 list.add(addtlAmtGrp);
             }
         }
-
-        // todo: check why this needed? if needed, who passes it?
-        if (Utils.isNotNullOrEmpty(request.reversalInd) && Utils.getEnumValue(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID){
-            AddtlAmtGrp addtlAmtGrp = new AddtlAmtGrp();
-            addtlAmtGrp.setAddAmt("100");
-            addtlAmtGrp.setAddAmtCrncy("840");
-            addtlAmtGrp.setAddAmtType(AddAmtTypeType.TOTAL_AUTH_AMT);
-            list.add(addtlAmtGrp);
-        }
+//        // todo: as per sample trxns, voids are expecting this. to know why?
+//        if (Utils.isNotNullOrEmpty(request.reversalInd) && Utils.getEnumValue(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID) {
+//            AddtlAmtGrp addtlAmtGrp = new AddtlAmtGrp();
+//            addtlAmtGrp.setAddAmt("100");
+//            addtlAmtGrp.setAddAmtCrncy("840");
+//            addtlAmtGrp.setAddAmtType(AddAmtTypeType.TOTAL_AUTH_AMT);
+//            list.add(addtlAmtGrp);
+//        }
         return Utils.valueOrNothing(list);
     }
 
@@ -303,7 +311,7 @@ public class FiServRequest { // todo name
         return pinGrp;
     }
 
-    public EbtGrp getEBTGrp(){
+    public EbtGrp getEBTGrp() {
         EbtGrp ebtGrp = new EbtGrp();
         ebtGrp.setEBTType(EBTTypeType.EBT_CASH);
         return ebtGrp;

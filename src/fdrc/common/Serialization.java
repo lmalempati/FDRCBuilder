@@ -1,11 +1,19 @@
 package fdrc.common;
 
 import com.fiserv.merchant.gmfv10.GMFMessageVariants;
+import org.xml.sax.SAXException;
 
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+import java.io.File;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 
@@ -15,7 +23,7 @@ public class Serialization {
      * */
     public String getXMLData(GMFMessageVariants gmfmv, String error) {
         StringWriter stringWriter = new StringWriter();
-        String xmlString = "";
+        String returnValue = "";
         try {
             JAXBContext context = null;
             Marshaller marshaller = null;
@@ -24,13 +32,13 @@ public class Serialization {
             marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
             marshaller.marshal(gmfmv, stringWriter);
 
-            xmlString = stringWriter.toString();
+            returnValue = stringWriter.toString();
         } catch (JAXBException j) {
             error = j.getMessage();
         } catch (Exception e) {
             error = e.getMessage();
         }
-        return xmlString;
+        return returnValue;
     }
 
     public GMFMessageVariants getObjectXML(String xml){ // , T type
@@ -40,7 +48,8 @@ public class Serialization {
         GMFMessageVariants g = null;
 
         try {
-//            xml = xml.replaceAll("GMF", "gmfMessageVariants");
+            // this is not needed after replacing proxys with gmf lib.
+            // xml = xml.replaceAll("GMF", "gmfMessageVariants");
             context = JAXBContext.newInstance(GMFMessageVariants.class);
             unmarshaller = context.createUnmarshaller();
             g = (GMFMessageVariants)unmarshaller.unmarshal(new StringReader(xml));
@@ -49,6 +58,25 @@ public class Serialization {
             e.printStackTrace();
         }
         return g;
+    }
+    // todo: figure out if we need to validate teh xml payload.
+    public boolean validateXMLSchema(String xml){
+        try {
+            SchemaFactory factory =
+                    SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = factory.newSchema(new File("UMF_XML_SCHEMA.xsd"));
+            Validator validator = schema.newValidator();
+            validator.validate(new StreamSource(xml));
+        } catch (IOException e){
+            System.out.println("Exception: "+e.getMessage());
+            return false;
+        }catch(SAXException e1){
+            System.out.println("SAX Exception: "+e1.getMessage());
+            return false;
+        }
+
+        return true;
+
     }
 
     public static void main(String[] args) {
