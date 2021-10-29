@@ -4,7 +4,7 @@ import com.fiserv.merchant.gmfv10.ReversalIndType;
 import com.fiserv.merchant.gmfv10.TxnTypeType;
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
-import fdrc.Exceptions.InvalidValueException;
+import fdrc.Exceptions.UnsupportedValueException;
 import fdrc.base.Request;
 import fdrc.base.Response;
 
@@ -47,7 +47,7 @@ public class JsonBuilder {
             e.printStackTrace();
         }
         finally {
-            if (request == null) throw new InvalidValueException("Invalid Json.");
+            if (request == null) throw new UnsupportedValueException("Json payload.");
         }
         return request;
     }
@@ -58,7 +58,7 @@ public class JsonBuilder {
             Gson gson = new GsonBuilder().create();
             request = gson.fromJson(json, Request.class);
         } catch (JsonSyntaxException e) {
-            e.printStackTrace();
+            throw new JsonSyntaxException(e.getMessage());
         }
         return request;
     }

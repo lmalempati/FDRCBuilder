@@ -1,15 +1,18 @@
 package fdrc.client;
 
 import com.fiserv.merchant.gmfv10.*;
-import fdrc.base.IRequestProcessor;
+import fdrc.Exceptions.UnsupportedValueException;
+import fdrc.base.RequestProcessor;
 import fdrc.base.Request;
 import fdrc.base.Response;
 import fdrc.common.FiServRequest;
+import fdrc.utils.Utils;
+import fdrc.xml.TransactionResponseType;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class CreditRequest extends GenericRequest implements Serializable, IRequestProcessor {
+public class CreditRequest extends GenericRequest implements Serializable, RequestProcessor {
 
     @Override
     public String buildRequest(final Request request) {
@@ -25,7 +28,8 @@ public class CreditRequest extends GenericRequest implements Serializable, IRequ
 
             creditReqDtl.setCardGrp(fiServRequest.getCardGrp());
             // CardTypeType.valueOf(request.cardInfo.cardType.toUpperCase())
-            switch (CardTypeType.fromValue(request.cardType)) {
+            if (Utils.isNotNullOrEmpty(request.cardType))
+            switch (Utils.getEnumValue(CardTypeType.class, request.cardType)) {
                 case VISA:
                     creditReqDtl.setVisaGrp(fiServRequest.getVisaGrp());
                     break;
@@ -60,9 +64,9 @@ public class CreditRequest extends GenericRequest implements Serializable, IRequ
             creditReqDtl.setCustInfoGrp(fiServRequest.getCustInfoGrp());
             /* Add the credit request object to GMF message variant object */
             gmfmv.setCreditRequest(creditReqDtl);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | UnsupportedValueException e) {
             errorMsg = e.getMessage();
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             errorMsg = e.getMessage();
         } finally {
             fiServRequest = null;
@@ -71,7 +75,6 @@ public class CreditRequest extends GenericRequest implements Serializable, IRequ
     }
 
     /*Transaction response in XML format received from Data wire */
-
     @Override
     public boolean getResponse(GMFMessageVariants gmfmvResponse, Response response) {
         boolean result = false;
@@ -106,5 +109,4 @@ public class CreditRequest extends GenericRequest implements Serializable, IRequ
         result = true;
         return result;
     }
-
 }

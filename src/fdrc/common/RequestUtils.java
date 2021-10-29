@@ -1,7 +1,7 @@
 package fdrc.common;
 
 import com.fiserv.merchant.gmfv10.ReversalIndType;
-import fdrc.Exceptions.InvalidValueException;
+import fdrc.Exceptions.UnsupportedValueException;
 import fdrc.base.Constants;
 import com.fiserv.merchant.gmfv10.GMFMessageVariants;
 import com.fiserv.merchant.gmfv10.TxnTypeType;
@@ -33,16 +33,16 @@ public class RequestUtils {
             case "RCTST1000091638":
                 return "00035488381390525644";
             default:
-                throw new InvalidValueException(String.format("merchantID %s", merchantID));
+                throw new UnsupportedValueException(String.format("merchantID %s", merchantID));
         }
     }
 
     public static boolean origAuthGrpRequired(Request request){
         // FDRC expecting origGrp to be present in reversals
+        TxnTypeType txnType = Utils.getEnumValue(TxnTypeType.class, request.txnType);
         boolean isRevVoid = Utils.isNotNullOrEmpty(request.reversalInd) &&  Utils.getEnumValue(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID;
-        if (TxnTypeType.fromValue(request.txnType) == TxnTypeType.AUTHORIZATION && !isRevVoid) return false;
-         if (TxnTypeType.fromValue(request.txnType) == TxnTypeType.REFUND && !isRevVoid) return false;
+        if (txnType == TxnTypeType.AUTHORIZATION && !isRevVoid) return false;
+         if (txnType == TxnTypeType.REFUND && !isRevVoid) return false;
         return true;
     }
-
 }
