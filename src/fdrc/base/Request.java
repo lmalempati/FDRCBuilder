@@ -22,6 +22,7 @@ public class Request {
     public String partAuthrztnApprvlCapablt;
     public BigDecimal firstAuthAmt;
     public BigDecimal totalAuthAmt;
+    public BigDecimal cashBack;
     //EMV grp
     public String emvData; // byte[]
     public String cardSeqNum;
@@ -40,7 +41,7 @@ public class Request {
     public String reversalInd;
     public String termCatCode;
     public String termEntryCapablt;
-    public Double txnAmt;
+    public Double txnAmt; // todo: should we use BigDecimal?
     public String txnCrncy;
     public String termLocInd;
     public String cardCaptCap;
@@ -56,6 +57,7 @@ public class Request {
     // MC grp
     public String finAuthInd;
     public String banknetData;
+    public String mcACI;
     // Discover grp
     public String discProcCode;
     public String discPOSEntry;
@@ -96,7 +98,8 @@ public class Request {
     public String merchPostalCode;
     public String addtlAmtType;
     public String addtlAmt;
-    //todo: temporary
+    //todo: not required in prod
     public String merchantMID;
+    public String ebtType;
 }
 

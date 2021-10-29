@@ -1,23 +1,18 @@
 package fdrc.utils;
 
-import com.fiserv.merchant.gmfv10.ReversalIndType;
+import com.fiserv.merchant.gmfv10.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fdrc.Exceptions.InvalidNumber;
-import fdrc.Exceptions.InvalidValueException;
-import fdrc.base.Response;
+import fdrc.Exceptions.UnsupportedValueException;
+import fdrc.base.Request;
+import fdrc.common.RequestUtils;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
 import java.util.regex.Pattern;
 
 public class Utils {
@@ -45,54 +40,102 @@ public class Utils {
         return java.time.LocalDate.now().toString().replaceAll("-", "").substring(4, 8) + java.time.LocalTime.now().toString().replaceAll(":", "").substring(0, 6);
     }
 
-    public static boolean isNotNull(Object o) {
-        return o != null ? true : false;
-    }
-
     public static boolean isNotNullOrEmpty(Object s) {
-        // string utls apache common lang library
-        // return StringUtils.isNotBlank(o);
-        return (s != null && s.toString().trim() != String.valueOf("")) ? true : false;
+        try {
+            return (s != null && !s.toString().trim().equals("")) ? true : false;
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     public static String formatAmount(String amount) {
-        Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
+        Pattern pattern = Pattern.compile("\\d+(\\.\\d+)?");
         if (amount == null || !pattern.matcher(amount.toString()).matches()) {
             throw new InvalidNumber("Invalid amount.");
         }
-        return String.format("0" + "%.0f", new BigDecimal(amount).multiply(new BigDecimal(100)));
+        return String.format("%012.0f", new BigDecimal(amount).multiply(new BigDecimal(100)));
     }
 
     public static <T> T valueOrNothing(T tClass) {
+        if (tClass == null) return null;
+        String errorMsg = null;
         String className = tClass.getClass().getName();
+        Gson gson = null;
         try {
             Class cls = Class.forName(className);
             T obj = (T) cls.getDeclaredConstructor().newInstance();
-            Gson gson = new GsonBuilder().create();
-
+            gson = new GsonBuilder().create();
             return gson.toJson(obj).equals(gson.toJson(tClass)) ? null : tClass;
-            //            return obj.equals(tClass) ? null : tClass;
-//             return Objects.equals(obj, tClass) ? null : tClass;
-//             obj.hashCode() = tClass.hashCode();
-//            tClass.getClass().getDeclaredFields();
-//            tClass.getClass().getDeclaredMethod()
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            errorMsg = e.getMessage();
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            errorMsg = e.getMessage();
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            errorMsg = e.getMessage();
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            errorMsg = e.getMessage();
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            errorMsg = e.getMessage();
+        } finally {
+            gson = null;
         }
+        if (errorMsg != null) throw new RuntimeException("error in valueOrNothing: " + errorMsg);
         return tClass;
     }
-    public static <T extends Enum<T>> T getEnumValue(Class<T> type, String envVal) {
-        return Enum.valueOf(type, envVal.toUpperCase());
+
+    public static <T extends Enum<T>> T getEnumValue(final Class<T> type, final String envVal) {
+        String errorMsg = "";
+        final String methodFromValue = "fromValue";
+        String className = type.getName();
+
+        try {
+            Class cls = Class.forName(className);
+            try {
+                // 'fromValue' method exists on every Enum class in gmf library.
+                Method method = cls.getDeclaredMethod(methodFromValue, String.class);
+                return type.cast(method.invoke(type, envVal));
+
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                try {
+                    return Enum.valueOf(type, envVal.toUpperCase());
+                } catch (IllegalArgumentException ex) {
+                    throw new UnsupportedValueException(String.format("%s for %s", envVal, type.getName()));
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            errorMsg = String.format("Invalid type: %s", type);
+        }
+        throw new UnsupportedValueException(errorMsg);
     }
-    public static void main(String[] args) {
-        System.out.println(Utils.getEnumValue(ReversalIndType.class, "Timeout"));
+
+    public static String validate(final Request request) {
+        //todo: what else to validate?
+        if (request == null)
+            return "invalid or empty request";
+        if (!Utils.isNotNullOrEmpty(request.pymtType))
+            return "Payment type can't be empty";
+        Utils.getEnumValue(PymtTypeType.class, request.pymtType);
+        if (!Utils.isNotNullOrEmpty(request.txnType))
+            return "Transaction type can't be empty";
+        Utils.getEnumValue(TxnTypeType.class, request.txnType);
+        if (!(Utils.getEnumValue(PymtTypeType.class, request.pymtType) == PymtTypeType.DEBIT ||
+                Utils.getEnumValue(PymtTypeType.class, request.pymtType) == PymtTypeType.EBT)) {
+//            if (!Utils.isNotNullOrEmpty(request.cardType))
+//                return "Card type can't be empty";
+//            else
+            Utils.getEnumValue(CardTypeType.class, request.cardType);
+        }
+
+        if (Utils.isNotNullOrEmpty(request.ccvInd))
+            Utils.getEnumValue(CCVIndType.class, request.ccvInd);
+        if (Utils.isNotNullOrEmpty(request.merchantMID))
+            RequestUtils.merchantID = RequestUtils.mapMidToDID(request.merchantMID); // todo: no need in prod
+
+        Pattern pattern = Pattern.compile("\\d+(\\.\\d+)?");
+        if (request.txnAmt == null || !pattern.matcher(request.txnAmt.toString()).matches()) {
+            return "Invalid amount.";
+        }
+        return "";
     }
+
 }
