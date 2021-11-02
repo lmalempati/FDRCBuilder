@@ -3,8 +3,7 @@ package fdrc.client;
 import com.fiserv.merchant.gmfv10.PymtTypeType;
 import com.fiserv.merchant.gmfv10.ReversalIndType;
 import com.google.gson.JsonSyntaxException;
-import fdrc.Exceptions.UnsupportedValueException;
-import fdrc.base.RequestProcessor;
+import fdrc.Exceptions.UnsupportedEnumValueException;
 import fdrc.base.Request;
 import fdrc.base.Response;
 import fdrc.utils.JsonBuilder;
@@ -32,7 +31,7 @@ public class Client {
     public Response processRequest(Request request) {
         Response resposne = null;
         String errorMessage = null;
-        RequestProcessor requestProcessor = null;
+        GenericRequest requestProcessor = null;
         //todo: temp code, to remove in prod: begin
         try {
             if (request == null)
@@ -47,7 +46,7 @@ public class Client {
                 return new Response(errorMessage);
 
             if (Utils.isNotNullOrEmpty(request.pymtType))
-                switch (Utils.getEnumValue(PymtTypeType.class, request.pymtType)) {
+                switch (Utils.toEnum(PymtTypeType.class, request.pymtType)) {
                     case CREDIT:
                         requestProcessor = new CreditRequest();
                         break;
@@ -59,19 +58,21 @@ public class Client {
                         requestProcessor = new EBTRequest();
                         break;
                     default:
-                        throw new UnsupportedValueException(String.format("payment type %s", request.pymtType));
+                        throw new UnsupportedEnumValueException(String.format("payment type %s", request.pymtType));
                 }
             if (Utils.isNotNullOrEmpty(request.reversalInd))
-                switch (Utils.getEnumValue(ReversalIndType.class, request.reversalInd)) {
+                switch (Utils.toEnum(ReversalIndType.class, request.reversalInd)) {
                     case VOID:
+                    case PARTIAL:
                         requestProcessor = new ReversalRequest();
                         break;
+
                     default:
-                        throw new UnsupportedValueException(String.format("reversalInd %s", request.reversalInd));
+                        throw new UnsupportedEnumValueException(String.format("reversalInd %s", request.reversalInd));
                 }
 
             resposne = requestProcessor.processRequest(request);
-        } catch (IllegalArgumentException | UnsupportedValueException e) {
+        } catch (IllegalArgumentException | UnsupportedEnumValueException e) {
             errorMessage = e.getMessage();
         } catch (Exception e) {
             errorMessage = "Error: " + e.getMessage();

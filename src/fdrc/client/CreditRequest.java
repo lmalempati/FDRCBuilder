@@ -1,18 +1,16 @@
 package fdrc.client;
 
 import com.fiserv.merchant.gmfv10.*;
-import fdrc.Exceptions.UnsupportedValueException;
-import fdrc.base.RequestProcessor;
+import fdrc.Exceptions.UnsupportedEnumValueException;
 import fdrc.base.Request;
 import fdrc.base.Response;
 import fdrc.common.FiServRequest;
 import fdrc.utils.Utils;
-import fdrc.xml.TransactionResponseType;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class CreditRequest extends GenericRequest implements Serializable, RequestProcessor {
+public class CreditRequest extends GenericRequest implements Serializable {
 
     @Override
     public String buildRequest(final Request request) {
@@ -29,7 +27,7 @@ public class CreditRequest extends GenericRequest implements Serializable, Reque
             creditReqDtl.setCardGrp(fiServRequest.getCardGrp());
             // CardTypeType.valueOf(request.cardInfo.cardType.toUpperCase())
             if (Utils.isNotNullOrEmpty(request.cardType))
-            switch (Utils.getEnumValue(CardTypeType.class, request.cardType)) {
+            switch (Utils.toEnum(CardTypeType.class, request.cardType)) {
                 case VISA:
                     creditReqDtl.setVisaGrp(fiServRequest.getVisaGrp());
                     break;
@@ -64,7 +62,7 @@ public class CreditRequest extends GenericRequest implements Serializable, Reque
             creditReqDtl.setCustInfoGrp(fiServRequest.getCustInfoGrp());
             /* Add the credit request object to GMF message variant object */
             gmfmv.setCreditRequest(creditReqDtl);
-        } catch (IllegalArgumentException | UnsupportedValueException e) {
+        } catch (IllegalArgumentException | UnsupportedEnumValueException e) {
             errorMsg = e.getMessage();
         } catch (Exception e) {
             errorMsg = e.getMessage();

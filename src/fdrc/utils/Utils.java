@@ -4,7 +4,7 @@ import com.fiserv.merchant.gmfv10.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fdrc.Exceptions.InvalidNumber;
-import fdrc.Exceptions.UnsupportedValueException;
+import fdrc.Exceptions.UnsupportedEnumValueException;
 import fdrc.base.Request;
 import fdrc.common.RequestUtils;
 
@@ -42,7 +42,7 @@ public class Utils {
 
     public static boolean isNotNullOrEmpty(Object s) {
         try {
-            return (s != null && !s.toString().trim().equals("")) ? true : false;
+            return s != null && !s.toString().trim().equals("");
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -50,7 +50,7 @@ public class Utils {
 
     public static String formatAmount(String amount) {
         Pattern pattern = Pattern.compile("\\d+(\\.\\d+)?");
-        if (amount == null || !pattern.matcher(amount.toString()).matches()) {
+        if (amount == null || !pattern.matcher(amount).matches()) {
             throw new InvalidNumber("Invalid amount.");
         }
         return String.format("%012.0f", new BigDecimal(amount).multiply(new BigDecimal(100)));
@@ -83,7 +83,7 @@ public class Utils {
         return tClass;
     }
 
-    public static <T extends Enum<T>> T getEnumValue(final Class<T> type, final String envVal) {
+    public static <T extends Enum<T>> T toEnum(final Class<T> type, final String envVal) {
         String errorMsg = "";
         final String methodFromValue = "fromValue";
         String className = type.getName();
@@ -99,13 +99,13 @@ public class Utils {
                 try {
                     return Enum.valueOf(type, envVal.toUpperCase());
                 } catch (IllegalArgumentException ex) {
-                    throw new UnsupportedValueException(String.format("%s for %s", envVal, type.getName()));
+                    throw new UnsupportedEnumValueException(String.format("%s for %s", envVal, type.getName()));
                 }
             }
         } catch (ClassNotFoundException e) {
             errorMsg = String.format("Invalid type: %s", type);
         }
-        throw new UnsupportedValueException(errorMsg);
+        throw new UnsupportedEnumValueException(errorMsg);
     }
 
     public static String validate(final Request request) {
@@ -114,20 +114,20 @@ public class Utils {
             return "invalid or empty request";
         if (!Utils.isNotNullOrEmpty(request.pymtType))
             return "Payment type can't be empty";
-        Utils.getEnumValue(PymtTypeType.class, request.pymtType);
+        Utils.toEnum(PymtTypeType.class, request.pymtType);
         if (!Utils.isNotNullOrEmpty(request.txnType))
             return "Transaction type can't be empty";
-        Utils.getEnumValue(TxnTypeType.class, request.txnType);
-        if (!(Utils.getEnumValue(PymtTypeType.class, request.pymtType) == PymtTypeType.DEBIT ||
-                Utils.getEnumValue(PymtTypeType.class, request.pymtType) == PymtTypeType.EBT)) {
+        Utils.toEnum(TxnTypeType.class, request.txnType);
+        if (!(Utils.toEnum(PymtTypeType.class, request.pymtType) == PymtTypeType.DEBIT ||
+                Utils.toEnum(PymtTypeType.class, request.pymtType) == PymtTypeType.EBT)) {
 //            if (!Utils.isNotNullOrEmpty(request.cardType))
 //                return "Card type can't be empty";
 //            else
-            Utils.getEnumValue(CardTypeType.class, request.cardType);
+            Utils.toEnum(CardTypeType.class, request.cardType);
         }
 
         if (Utils.isNotNullOrEmpty(request.ccvInd))
-            Utils.getEnumValue(CCVIndType.class, request.ccvInd);
+            Utils.toEnum(CCVIndType.class, request.ccvInd);
         if (Utils.isNotNullOrEmpty(request.merchantMID))
             RequestUtils.merchantID = RequestUtils.mapMidToDID(request.merchantMID); // todo: no need in prod
 

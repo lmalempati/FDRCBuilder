@@ -9,7 +9,6 @@ import fdrc.base.Constants;
 import fdrc.base.Request;
 import fdrc.types.EnumAllowPartialAuth;
 import fdrc.utils.Utils;
-import jdk.jshell.execution.Util;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -29,11 +28,11 @@ public class FiServRequest { // todo name
         CommonGrp cmnGrp = new CommonGrp();
         /* The payment type of the transaction. */
         if (Utils.isNotNullOrEmpty(request.pymtType))
-            cmnGrp.setPymtType(Utils.getEnumValue(PymtTypeType.class, request.pymtType)); // PymtTypeType.CREDIT
+            cmnGrp.setPymtType(Utils.toEnum(PymtTypeType.class, request.pymtType)); // PymtTypeType.CREDIT
         if (Utils.isNotNullOrEmpty(request.reversalInd))
-            cmnGrp.setReversalInd(Utils.getEnumValue(ReversalIndType.class, request.reversalInd));
+            cmnGrp.setReversalInd(Utils.toEnum(ReversalIndType.class, request.reversalInd));
         /* The type of transaction being performed. */
-        cmnGrp.setTxnType(Utils.getEnumValue(TxnTypeType.class, request.txnType)); //TxnTypeType.SALE
+        cmnGrp.setTxnType(Utils.toEnum(TxnTypeType.class, request.txnType)); //TxnTypeType.SALE
         /* The local date and time in which the transaction was performed. */
         cmnGrp.setLocalDateTime(Utils.getLocalDateTime());
         /* The transmission date and time of the transaction (in GMT/UCT). */
@@ -111,15 +110,15 @@ public class FiServRequest { // todo name
         if (Utils.isNotNullOrEmpty(request.cardExpiryDate))
             cardGrp.setCardExpiryDate(request.cardExpiryDate); //20160430
         if (Utils.isNotNullOrEmpty(request.ccvInd))
-            cardGrp.setCCVInd(Utils.getEnumValue(CCVIndType.class, request.ccvInd)); // CCVIndType.PRVDED
+            cardGrp.setCCVInd(Utils.toEnum(CCVIndType.class, request.ccvInd)); // CCVIndType.PRVDED
         if (Utils.isNotNullOrEmpty(request.ccvData))
             cardGrp.setCCVData(request.ccvData); // "123"
         if (Utils.isNotNullOrEmpty(request.cardType))
-            cardGrp.setCardType(Utils.getEnumValue(CardTypeType.class, request.cardType));
+            cardGrp.setCardType(Utils.toEnum(CardTypeType.class, request.cardType));
         if (Utils.isNotNullOrEmpty(request.avsResultCode))
             cardGrp.setAVSResultCode(request.avsResultCode);
         if (Utils.isNotNullOrEmpty(request.ccvResultCode))
-            cardGrp.setCCVResultCode(Utils.getEnumValue(CCVResultCodeType.class, request.ccvResultCode));
+            cardGrp.setCCVResultCode(Utils.toEnum(CCVResultCodeType.class, request.ccvResultCode));
         cardGrp.setTrack2Data(request.track2Data);
         return Utils.valueOrNothing(cardGrp);
     }
@@ -130,7 +129,7 @@ public class FiServRequest { // todo name
             visaGrp.setACI(request.aci.toUpperCase());
         if (Utils.isNotNullOrEmpty(request.visaBID))
             visaGrp.setVisaBID(request.visaBID); // ToDo
-        if (Utils.getEnumValue(TxnTypeType.class, request.txnType) != TxnTypeType.AUTHORIZATION)
+        if (Utils.toEnum(TxnTypeType.class, request.txnType) != TxnTypeType.AUTHORIZATION)
             visaGrp.setVisaAUAR(request.visaAUAR);
         /*Visa TAX Amount capability indicator value*/
         if (Utils.isNotNullOrEmpty(request.transID))
@@ -158,7 +157,7 @@ public class FiServRequest { // todo name
             mcGrp.setBanknetData(request.banknetData); // as per
 
         if (Utils.isNotNullOrEmpty(request.addtlAmtType) && Utils.isNotNullOrEmpty(request.addtlAmtType.split(",")[0]))
-            if (!request.addtlAmt.split(",")[0].equals(BD_ZERO) && (Utils.getEnumValue(AddAmtTypeType.class, request.addtlAmtType.split(",")[0]) == AddAmtTypeType.HLTCARE))
+            if (!request.addtlAmt.split(",")[0].equals(BD_ZERO) && (Utils.toEnum(AddAmtTypeType.class, request.addtlAmtType.split(",")[0]) == AddAmtTypeType.HLTCARE))
                 mcGrp.setMCMSDI(MCMSDIType.HEALTHCARE);
         if (Utils.isNotNullOrEmpty(request.mcACI)) {
             mcGrp.setMCACI(request.mcACI);
@@ -251,15 +250,15 @@ public class FiServRequest { // todo name
                 list.add(getAddtlAmtGrp(request, request.cashBack, AddAmtTypeType.CASHBACK));
 
         if (Utils.isNotNullOrEmpty(request.addtlAmtType) && Utils.isNotNullOrEmpty(request.addtlAmtType.split(",")[0]))
-            if (!request.addtlAmt.split(",")[0].equals(BD_ZERO) && (Utils.getEnumValue(AddAmtTypeType.class, request.addtlAmtType.split(",")[0]) == AddAmtTypeType.HLTCARE))
+            if (!request.addtlAmt.split(",")[0].equals(BD_ZERO) && (Utils.toEnum(AddAmtTypeType.class, request.addtlAmtType.split(",")[0]) == AddAmtTypeType.HLTCARE))
                 list.add(getAddtlAmtGrp(request, new BigDecimal(request.addtlAmt.split(",")[0]), AddAmtTypeType.HLTCARE));
 
         if (Utils.isNotNullOrEmpty(request.addtlAmtType) && Utils.isNotNullOrEmpty(request.addtlAmtType.split(",")[1]))
-            if (!request.addtlAmt.split(",")[1].equals(BD_ZERO) && (Utils.getEnumValue(AddAmtTypeType.class, request.addtlAmtType.split(",")[1]) == AddAmtTypeType.RX))
+            if (!request.addtlAmt.split(",")[1].equals(BD_ZERO) && (Utils.toEnum(AddAmtTypeType.class, request.addtlAmtType.split(",")[1]) == AddAmtTypeType.RX))
                 list.add(getAddtlAmtGrp(request, new BigDecimal(request.addtlAmt.split(",")[1]), AddAmtTypeType.RX));
 
         if (Utils.isNotNullOrEmpty(request.partAuthrztnApprvlCapablt)) {
-            if (Utils.getEnumValue(EnumAllowPartialAuth.class, request.partAuthrztnApprvlCapablt) != EnumAllowPartialAuth.NotSet) {
+            if (Utils.toEnum(EnumAllowPartialAuth.class, request.partAuthrztnApprvlCapablt) != EnumAllowPartialAuth.NotSet) {
                 AddtlAmtGrp addtlAmtGrp = new AddtlAmtGrp();
                 addtlAmtGrp.setPartAuthrztnApprvlCapablt(String.valueOf(request.partAuthrztnApprvlCapablt));
                 list.add(addtlAmtGrp);
@@ -294,7 +293,7 @@ public class FiServRequest { // todo name
     public EbtGrp getEBTGrp(Request request) {
         EbtGrp ebtGrp = new EbtGrp();
         if (Utils.isNotNullOrEmpty(request.ebtType))
-        ebtGrp.setEBTType(Utils.getEnumValue(EBTTypeType.class, request.ebtType));
+        ebtGrp.setEBTType(Utils.toEnum(EBTTypeType.class, request.ebtType));
         return Utils.valueOrNothing(ebtGrp);
     }
 

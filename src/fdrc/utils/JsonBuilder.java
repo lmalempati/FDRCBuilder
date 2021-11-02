@@ -4,7 +4,7 @@ import com.fiserv.merchant.gmfv10.ReversalIndType;
 import com.fiserv.merchant.gmfv10.TxnTypeType;
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
-import fdrc.Exceptions.UnsupportedValueException;
+import fdrc.Exceptions.UnsupportedEnumValueException;
 import fdrc.base.Request;
 import fdrc.base.Response;
 
@@ -14,6 +14,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
+
+/**
+ * This class has functionality to serialize and deserialize json.
+ * This class is not actually used by the Android app
+ * */
 
 public class JsonBuilder {
     public static String getJsonFromRequest(Request request, String fileName) {
@@ -47,7 +52,7 @@ public class JsonBuilder {
             e.printStackTrace();
         }
         finally {
-            if (request == null) throw new UnsupportedValueException("Json payload.");
+            if (request == null) throw new UnsupportedEnumValueException("Json payload.");
         }
         return request;
     }
@@ -78,8 +83,8 @@ public class JsonBuilder {
         request.cardLevelResult = response.cardLevelResult;
         request.aci = response.aci;
 
-        if (Utils.getEnumValue(TxnTypeType.class, request.txnType) == TxnTypeType.COMPLETION ||
-        Utils.isNotNullOrEmpty(request.reversalInd) && Utils.getEnumValue(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID)
+        if (Utils.toEnum(TxnTypeType.class, request.txnType) == TxnTypeType.COMPLETION ||
+        Utils.isNotNullOrEmpty(request.reversalInd) && Utils.toEnum(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID)
             request.orderNum = response.orderNum;
 
         getJsonFromRequest(request, fileName);

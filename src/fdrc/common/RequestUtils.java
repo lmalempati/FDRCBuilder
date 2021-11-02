@@ -1,7 +1,7 @@
 package fdrc.common;
 
 import com.fiserv.merchant.gmfv10.ReversalIndType;
-import fdrc.Exceptions.UnsupportedValueException;
+import fdrc.Exceptions.UnsupportedEnumValueException;
 import fdrc.base.Constants;
 import com.fiserv.merchant.gmfv10.GMFMessageVariants;
 import com.fiserv.merchant.gmfv10.TxnTypeType;
@@ -33,16 +33,18 @@ public class RequestUtils {
             case "RCTST1000091638":
                 return "00035488381390525644";
             default:
-                throw new UnsupportedValueException(String.format("merchantID %s", merchantID));
+                throw new UnsupportedEnumValueException(String.format("merchantID %s", merchantID));
         }
     }
 
     public static boolean origAuthGrpRequired(Request request){
         // FDRC expecting origGrp to be present in reversals
-        TxnTypeType txnType = Utils.getEnumValue(TxnTypeType.class, request.txnType);
-        boolean isRevVoid = Utils.isNotNullOrEmpty(request.reversalInd) &&  Utils.getEnumValue(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID;
-        if (txnType == TxnTypeType.AUTHORIZATION && !isRevVoid) return false;
-         if (txnType == TxnTypeType.REFUND && !isRevVoid) return false;
-        return true;
+        TxnTypeType txnType = Utils.toEnum(TxnTypeType.class, request.txnType);
+        boolean isReversalVoid = Utils.isNotNullOrEmpty(request.reversalInd) &&
+                (Utils.toEnum(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID ||
+                        Utils.toEnum(ReversalIndType.class, request.reversalInd) == ReversalIndType.PARTIAL);
+
+        if (txnType == TxnTypeType.AUTHORIZATION && !isReversalVoid) return false;
+        return txnType != TxnTypeType.REFUND || isReversalVoid;
     }
 }
