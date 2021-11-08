@@ -1,0 +1,21 @@
+{
+  "acctNum": "4264281511112228",
+  "cardExpiryDate": "20251231",
+  "cardType": "Visa",
+  "posCondCode": "08",
+  "posEntryMode": "010",
+  "pymtType": "Credit",
+  "txnType": "Authorization",
+  "termCatCode": "00",
+  "termEntryCapablt": "00",
+  "txnAmt": "629.88",
+  "txnCrncy": "840",
+  "termLocInd": "0",
+  "cardCaptCap": "1",
+  "merchCatCode": "5812",
+  "partAuthrztnApprvlCapablt": "1",
+  "custSvcPhoneNumber": "4048900000",
+  "aci": "Y",
+  "visaBID": "56412",
+  "merchantMID": "RCTST1000091637"
+}

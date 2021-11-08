@@ -1,0 +1,23 @@
+{
+  "acctNum":"4001360000000090",
+  "cardExpiryDate": "20251231",
+  "cardType": "Visa",
+  "posCondCode": "08",
+  "posEntryMode": "010",
+  "pymtType": "Credit",
+  "industrytype": null,
+  "txnType": "Verification",
+  "termCatCode": "00",
+  "termEntryCapablt":"01",
+  "txnAmt": "0.00",
+  "txnCrncy": "840",
+  "termLocInd": "0",
+  "cardCaptCap": "1",
+  "merchCatCode": "5399",
+  "partAuthrztnApprvlCapablt": null,
+  "merchantMID": "RCTST1000091636",
+  "ccvInd": "Prvded",
+  "ccvData": "123",
+  "avsBillingAddr": "1307 Broad Hollow Road",
+  "avsBillingPostalCode":"11747"
+}

@@ -1,0 +1,23 @@
+{
+  "track2Data": "5076810000000018=25123111000012345678",
+  "cardExpiryDate": "20251231",
+  "cardType": "",
+  "posCondCode": "00",
+  "posEntryMode": "901",
+  "pymtType": "EBT",
+  "txnType": "Sale",
+  "termCatCode": "01",
+  "termEntryCapablt": "00",
+  "txnAmt": "30.36",
+  "txnCrncy": "840",
+  "termLocInd": "0",
+  "cardCaptCap": "1",
+  "merchCatCode": "5399",
+  "partAuthrztnApprvlCapablt": "1",
+  "custSvcPhoneNumber": "4048900000",
+  "taxAmtCapablt": "1",
+  "merchantMID": "RCTST1000091638",
+  "ebtType": "EBTCash",
+  "pinData": "A0EBF3BDC44A8F8D",
+  "keySerialNumData": "F876543210A00420016F"
+}
