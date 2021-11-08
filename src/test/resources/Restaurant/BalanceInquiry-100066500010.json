@@ -1,0 +1,19 @@
+{
+  "track2Data": "5424181111112228=25123111000012345678",
+  "cardExpiryDate": "20251231",
+  "cardType": "MasterCard",
+  "posCondCode": "08",
+  "posEntryMode": "901",
+  "pymtType": "Credit",
+  "industrytype": null,
+  "txnType": "BalanceInquiry",
+  "termCatCode": "00",
+  "termEntryCapablt": "01",
+  "txnAmt": "0.00",
+  "txnCrncy": "840",
+  "termLocInd": "0",
+  "cardCaptCap": "1",
+  "merchCatCode": "5812",
+  "merchantMID": "RCTST1000091637"
+
+}

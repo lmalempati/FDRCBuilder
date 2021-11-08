@@ -1,0 +1,20 @@
+{
+  "track2Data":"5149612200000001=25123111000012345678",
+  "cardExpiryDate": "20251231",
+  "cardType": null,
+  "posCondCode": "08",
+  "posEntryMode": "901",
+  "pymtType": "Debit",
+  "industrytype": null,
+  "txnType": "Sale",
+  "termCatCode": "00",
+  "termEntryCapablt":"01",
+  "txnAmt": "90.00",
+  "txnCrncy": "840",
+  "termLocInd": "0",
+  "cardCaptCap": "1",
+  "merchCatCode": "5812",
+  "partAuthrztnApprvlCapablt": "1",
+  "pinData": "A0EBF3BDC44A8F8D",
+  "keySerialNumData":"F876543210A00420016F"
+}
