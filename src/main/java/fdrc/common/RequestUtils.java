@@ -25,6 +25,7 @@ public class RequestUtils {
     }
 
     public static String mapMidToDID(String merchantID){
+        // Todo: MID, DID, MCC, IndustryType so on has to come from caller, builder has no idea.
         switch(merchantID){
             case "RCTST1000091636":
                 return "00041372277848179310";

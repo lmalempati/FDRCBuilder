@@ -1,7 +1,9 @@
 package fdrc.client;
 
-import com.fiserv.merchant.gmfv10.*;
-import fdrc.base.RequestProcessor;
+import com.fiserv.merchant.gmfv10.AddtlAmtGrp;
+import com.fiserv.merchant.gmfv10.DebitRequestDetails;
+import com.fiserv.merchant.gmfv10.DebitResponseDetails;
+import com.fiserv.merchant.gmfv10.GMFMessageVariants;
 import fdrc.base.Request;
 import fdrc.base.Response;
 import fdrc.common.FiServRequest;
@@ -9,7 +11,7 @@ import fdrc.common.FiServRequest;
 import java.io.Serializable;
 import java.util.List;
 
-public class DebitRequest extends GenericRequest implements Serializable, RequestProcessor {
+public class DebitRequest extends GenericRequest implements Serializable {
     /* builds request object, if */
     public String buildRequest(Request request) {
         DebitRequestDetails debitReqDtl = new DebitRequestDetails();

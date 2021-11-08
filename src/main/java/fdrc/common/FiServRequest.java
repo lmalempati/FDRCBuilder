@@ -7,7 +7,9 @@ To call methods that populate common grp, card grp and so on and then get the xm
 import com.fiserv.merchant.gmfv10.*;
 import fdrc.base.Constants;
 import fdrc.base.Request;
+import fdrc.types.CardCaptCapType;
 import fdrc.types.EnumAllowPartialAuth;
+import fdrc.types.MOTOIndType;
 import fdrc.utils.Utils;
 
 import java.math.BigDecimal;
@@ -87,10 +89,15 @@ public class FiServRequest { // todo name
         cmnGrp.setTermLocInd(request.termLocInd); // 0
         /* Indicates whether or not the terminal has the capability to capture the card data. */
         cmnGrp.setCardCaptCap(request.cardCaptCap); //1
+
+        if (Utils.isNotNullOrEmpty(request.cardCaptCap)) // todo: this can't be on request as we need to derive it..
+            cmnGrp.setCardCaptCap(Utils.toEnum(CardCaptCapType.class, request.cardCaptCap).val); //1
         /* Indicates Group ID. */
         cmnGrp.setGroupID(Constants.REQUEST_GROUPID);
         if (Utils.isNotNullOrEmpty(request.merchCatCode))
             cmnGrp.setMerchCatCode(request.merchCatCode);
+        if (Utils.isNotNullOrEmpty(request.refundType))
+            cmnGrp.setRefundType(Utils.toEnum(RefundTypeType.class, request.refundType));
         return cmnGrp;
     }
 
@@ -179,6 +186,10 @@ public class FiServRequest { // todo name
             dsGrp.setDiscTransQualifier(request.discTransQualifier);
         if (Utils.isNotNullOrEmpty(request.discNRID))
             dsGrp.setDiscNRID(request.discNRID);
+        // todo - MotoInd?
+        if (Utils.isNotNullOrEmpty(request.motoInd))
+            dsGrp.setMOTOInd(Utils.toEnum(MOTOIndType.class, request.motoInd).val);
+
         return Utils.valueOrNothing(dsGrp);
     }
 
@@ -191,29 +202,29 @@ public class FiServRequest { // todo name
 
     public AltMerchNameAndAddrGrp getAltMerchNameAndAddrGrp() {
         AltMerchNameAndAddrGrp altMerchNameAndAddrGrp = new AltMerchNameAndAddrGrp();
-            altMerchNameAndAddrGrp = new AltMerchNameAndAddrGrp();
-            if (Utils.isNotNullOrEmpty(request.merchName))
-                altMerchNameAndAddrGrp.setMerchName(request.merchName);
-            if (Utils.isNotNullOrEmpty(request.merchAddr))
-                altMerchNameAndAddrGrp.setMerchAddr(request.merchAddr);
-            if (Utils.isNotNullOrEmpty(request.merchCity))
-                altMerchNameAndAddrGrp.setMerchCity(request.merchCity);
-            if (Utils.isNotNullOrEmpty(request.merchState))
-                altMerchNameAndAddrGrp.setMerchState(request.merchState);
-            if (Utils.isNotNullOrEmpty(request.merchPostalCode))
-                altMerchNameAndAddrGrp.setMerchPostalCode(request.merchPostalCode);
+        altMerchNameAndAddrGrp = new AltMerchNameAndAddrGrp();
+        if (Utils.isNotNullOrEmpty(request.merchName))
+            altMerchNameAndAddrGrp.setMerchName(request.merchName);
+        if (Utils.isNotNullOrEmpty(request.merchAddr))
+            altMerchNameAndAddrGrp.setMerchAddr(request.merchAddr);
+        if (Utils.isNotNullOrEmpty(request.merchCity))
+            altMerchNameAndAddrGrp.setMerchCity(request.merchCity);
+        if (Utils.isNotNullOrEmpty(request.merchState))
+            altMerchNameAndAddrGrp.setMerchState(request.merchState);
+        if (Utils.isNotNullOrEmpty(request.merchPostalCode))
+            altMerchNameAndAddrGrp.setMerchPostalCode(request.merchPostalCode);
         return Utils.valueOrNothing(altMerchNameAndAddrGrp);
     }
 
     public CustInfoGrp getCustInfoGrp() {
         /* Populate values for CustInfoGrp Group */
         CustInfoGrp custInfoGrp = new CustInfoGrp();
-            /*Billing address of the card holder*/
-            if (Utils.isNotNullOrEmpty(request.avsBillingAddr))
-                custInfoGrp.setAVSBillingAddr(request.avsBillingAddr);
-            /*Postal ZIP Code of the card holder*/
-            if (Utils.isNotNullOrEmpty(request.avsBillingPostalCode))
-                custInfoGrp.setAVSBillingPostalCode(request.avsBillingPostalCode);
+        /*Billing address of the card holder*/
+        if (Utils.isNotNullOrEmpty(request.avsBillingAddr))
+            custInfoGrp.setAVSBillingAddr(request.avsBillingAddr);
+        /*Postal ZIP Code of the card holder*/
+        if (Utils.isNotNullOrEmpty(request.avsBillingPostalCode))
+            custInfoGrp.setAVSBillingPostalCode(request.avsBillingPostalCode);
         return Utils.valueOrNothing(custInfoGrp);
     }
 
@@ -293,7 +304,7 @@ public class FiServRequest { // todo name
     public EbtGrp getEBTGrp(Request request) {
         EbtGrp ebtGrp = new EbtGrp();
         if (Utils.isNotNullOrEmpty(request.ebtType))
-        ebtGrp.setEBTType(Utils.toEnum(EBTTypeType.class, request.ebtType));
+            ebtGrp.setEBTType(Utils.toEnum(EBTTypeType.class, request.ebtType));
         return Utils.valueOrNothing(ebtGrp);
     }
 

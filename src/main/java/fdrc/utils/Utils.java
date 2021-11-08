@@ -126,6 +126,9 @@ public class Utils {
             Utils.toEnum(CardTypeType.class, request.cardType);
         }
 
+        if (!Utils.isNotNullOrEmpty(request.cardCaptCap)) // todo: this can't be on request as we need to derive it..
+            return "Invalid cardCaptCap";
+
         if (Utils.isNotNullOrEmpty(request.ccvInd))
             Utils.toEnum(CCVIndType.class, request.ccvInd);
         if (Utils.isNotNullOrEmpty(request.merchantMID))

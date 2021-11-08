@@ -18,6 +18,7 @@ public class Request {
     public String origTranDateTime;
     public String origRespCode;
     public String origSTAN;
+    public String refundType;
     // AddtlAmtGrp
     public String partAuthrztnApprvlCapablt;
     public BigDecimal firstAuthAmt;
@@ -65,6 +66,7 @@ public class Request {
     public String discPOSData;
     public String discTransQualifier;
     public String discNRID;
+    public String motoInd;
     //Amex grp
     public String amexTranID;
     // config
