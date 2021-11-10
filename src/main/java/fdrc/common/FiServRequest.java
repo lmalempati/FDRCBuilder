@@ -305,6 +305,9 @@ public class FiServRequest { // todo name
         EbtGrp ebtGrp = new EbtGrp();
         if (Utils.isNotNullOrEmpty(request.ebtType))
             ebtGrp.setEBTType(Utils.toEnum(EBTTypeType.class, request.ebtType));
+
+
+//        if (Utils.toEnum(EBTTypeType.class, request.ebtType)  )
         return Utils.valueOrNothing(ebtGrp);
     }
 

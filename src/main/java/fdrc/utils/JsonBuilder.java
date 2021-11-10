@@ -82,7 +82,8 @@ public class JsonBuilder {
         request.transID = response.transID;
         request.cardLevelResult = response.cardLevelResult;
         request.aci = response.aci;
-
+        request.amexTranID = response.amexTranID;
+        request.spendQind = response.spendQInd;
         if (Utils.toEnum(TxnTypeType.class, request.txnType) == TxnTypeType.COMPLETION ||
         Utils.isNotNullOrEmpty(request.reversalInd) && Utils.toEnum(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID)
             request.orderNum = response.orderNum;
