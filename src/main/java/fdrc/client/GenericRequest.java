@@ -1,7 +1,9 @@
 package fdrc.client;
 
 import com.fiserv.merchant.gmfv10.GMFMessageVariants;
+import com.fiserv.merchant.gmfv10.RejectResponseDetails;
 import fdrc.Exceptions.InvalidRequest;
+import fdrc.Exceptions.InvalidResponseXml;
 import fdrc.base.Request;
 import fdrc.base.Response;
 import fdrc.common.RequestUtils;
@@ -28,7 +30,11 @@ public abstract class GenericRequest {
         try {
 
             responseString = new HTTPPostHandler().SendMessage(requestXml, clientRef);
-            response.responseRaw = responseString; // todo: this for caller to see the whole response.
+            if (responseString == "") {
+                throw new InvalidResponseXml("Empty response");
+            }
+            responseString = responseString.replaceAll("&gt;", ">").replaceAll("&lt;", "<");
+            response.responseRaw = responseString; // debug purpose only
             gmfmvResponse = serialization.getObjectXML(responseString);
         } catch (HTTPException e) {
             response.errorMsg = e.getMessage();
@@ -51,6 +57,12 @@ public abstract class GenericRequest {
             return new Response(error);
         GMFMessageVariants responseObj = submitRequest(gmfmv, response);
         if (response.errorMsg != null) {
+            return response;
+        }
+        // if rejection, sed the error msg in response
+        if (responseObj.getRejectResponse() != null){
+            RejectResponseDetails responseDetails = responseObj.getRejectResponse();
+            response.errorMsg = responseDetails.getRespGrp().getErrorData();
             return response;
         }
         try {

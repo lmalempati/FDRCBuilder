@@ -1,11 +1,10 @@
 package fdrc.client;
 
-import com.fiserv.merchant.gmfv10.AddtlAmtGrp;
-import com.fiserv.merchant.gmfv10.EBTRequestDetails;
-import com.fiserv.merchant.gmfv10.GMFMessageVariants;
+import com.fiserv.merchant.gmfv10.*;
 import fdrc.base.Request;
 import fdrc.base.Response;
 import fdrc.common.FiServRequest;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -42,6 +41,24 @@ public class EBTRequest extends GenericRequest implements Serializable {
 
     @Override
     public boolean getResponse(GMFMessageVariants gmfmvResponse, Response response) {
-        return false;
+        RespGrp respGrp = null;
+        boolean result = false;
+        if (gmfmvResponse.getEBTResponse() == null) {
+            throw new RuntimeException("invalid response");
+        }
+        EBTResponseDetails ebtResponse = gmfmvResponse.getEBTResponse();
+
+        response.respCode = ebtResponse.getRespGrp().getRespCode();
+        response.addtlRespData = ebtResponse.getRespGrp().getAddtlRespData();
+        response.origAuthID = ebtResponse.getRespGrp().getAuthID();
+        response.origSTAN = ebtResponse.getCommonGrp().getSTAN();//?
+        response.origLocalDateTime = ebtResponse.getCommonGrp().getLocalDateTime();
+        response.origTranDateTime = ebtResponse.getCommonGrp().getTrnmsnDateTime();
+        response.origRespCode = ebtResponse.getRespGrp().getRespCode();
+        response.refNum = ebtResponse.getCommonGrp().getRefNum();
+        response.orderNum = ebtResponse.getCommonGrp().getOrderNum();
+
+        result = true;
+        return result;
     }
 }

@@ -89,6 +89,7 @@ public class ReversalRequest extends GenericRequest implements Serializable {
             response.aci = reversalResponse.getVisaGrp().getACI();
             response.cardLevelResult = reversalResponse.getVisaGrp().getCardLevelResult();
             response.transID = reversalResponse.getVisaGrp().getTransID();
+            response.spendQInd = reversalResponse.getVisaGrp().getSpendQInd();
         }
         if (reversalResponse.getAmexGrp() != null) {
             response.amexTranID = reversalResponse.getAmexGrp().getAmExTranID();

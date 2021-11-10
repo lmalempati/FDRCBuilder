@@ -12,7 +12,7 @@ public class TestRetailOrRestaurant {
 
     @Test
     public void creditVisaAuthKeyed() {
-        Response response = new Client().processRequest(JsonBuilder.getRequestFromJson("payloads/RetailOrRestt/Credit-Visa-Auth-swipe-200019960020.json"));
+        Response response = new Client().processRequest(JsonBuilder.getRequestFromJson(PATH +  "Credit-Visa-Auth-swipe-200019960020.json"));
         assertEquals("000", response.respCode);
 //        updateCompletionPayload(response, "payloads/Credit-Visa-AuthComple-swipe-200019960021.json");
         if (JsonBuilder.updateCompletionPayload(response,  PATH + "Credit-Visa-AuthComple-swipe-200019960021.json")){
