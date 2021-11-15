@@ -53,6 +53,7 @@ public class Request {
     public String taxAmtCapablt;
     public String transID;
     public String cardLevelResult;
+    public String spendQind;
     // SecrTxnGrp
     public String cavvResultCode;
     // MC grp

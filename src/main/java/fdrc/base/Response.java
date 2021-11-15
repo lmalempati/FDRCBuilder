@@ -34,6 +34,7 @@ public class Response {
     public String transID;
     public String cardLevelResult;
     public String amexTranID;
+    public String spendQInd;
 
     public String responseRaw;
 

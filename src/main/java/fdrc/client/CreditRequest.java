@@ -96,6 +96,7 @@ public class CreditRequest extends GenericRequest implements Serializable {
             response.transID = creditResponse.getVisaGrp().getTransID();
             response.cardLevelResult = creditResponse.getVisaGrp().getCardLevelResult();
             response.aci =  creditResponse.getVisaGrp().getACI();
+            response.spendQInd = creditResponse.getVisaGrp().getSpendQInd();
         }
         if (creditResponse.getMCGrp() != null) {
             response.banknetData = creditResponse.getMCGrp().getBanknetData();
@@ -104,6 +105,10 @@ public class CreditRequest extends GenericRequest implements Serializable {
             response.discNRID = creditResponse.getDSGrp().getDiscNRID();
             response.discTransQualifier = creditResponse.getDSGrp().getDiscTransQualifier();
         }
+        if (creditResponse.getAmexGrp() != null) {
+            response.amexTranID = creditResponse.getAmexGrp().getAmExTranID();
+        }
+
         result = true;
         return result;
     }
