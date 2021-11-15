@@ -8,7 +8,7 @@ import fdrc.common.FiServRequest;
 import java.io.Serializable;
 import java.util.List;
 
-public class EBTRequest extends GenericRequest implements Serializable {
+class EBTRequest extends GenericRequest implements Serializable {
     public String buildRequest(Request request) {
         String errorMsg = null;
         FiServRequest fiServRequest = null;

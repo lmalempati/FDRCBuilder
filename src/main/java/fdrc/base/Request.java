@@ -23,7 +23,10 @@ public class Request {
     public String partAuthrztnApprvlCapablt;
     public BigDecimal firstAuthAmt;
     public BigDecimal totalAuthAmt;
-    public BigDecimal cashBack;
+    public BigDecimal cashbackAmt;
+    public BigDecimal healthcareAmt;
+    public BigDecimal rxAmt;
+
     //EMV grp
     public String emvData; // byte[]
     public String cardSeqNum;
@@ -46,14 +49,14 @@ public class Request {
     public String txnCrncy;
     public String termLocInd;
     public String cardCaptCap;
-    // VisaGrp
+    // VisaGrp -
     public String aci;
     public String visaBID;
     public String visaAUAR;
     public String taxAmtCapablt;
     public String transID;
     public String cardLevelResult;
-    public String spendQind;
+    public String spendQInd;
     // SecrTxnGrp
     public String cavvResultCode;
     // MC grp
@@ -87,6 +90,7 @@ public class Request {
     public String encrptBlock;
     public String tknType;
     public String token;
+    public String deviceType;
     // EcommGrp
     public String custSvcPhoneNumber;
     //CustInfoGrp
@@ -99,8 +103,8 @@ public class Request {
     public String merchCity;
     public String merchState;
     public String merchPostalCode;
-    public String addtlAmtType;
-    public String addtlAmt;
+//    public String addtlAmtType;
+//    public String addtlAmt;
     //todo: not required in prod
     public String merchantMID;
     public String ebtType;

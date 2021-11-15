@@ -10,7 +10,7 @@ import fdrc.utils.Utils;
 import java.io.Serializable;
 import java.util.List;
 
-public class CreditRequest extends GenericRequest implements Serializable {
+class CreditRequest extends GenericRequest implements Serializable {
 
     @Override
     public String buildRequest(final Request request) {
@@ -60,6 +60,9 @@ public class CreditRequest extends GenericRequest implements Serializable {
             /* CustInfoGrp Group
              * Assign the CustInfoGrp Group object to the property of CreditSaleRequest object */
             creditReqDtl.setCustInfoGrp(fiServRequest.getCustInfoGrp());
+            // TA grp
+            creditReqDtl.setTAGrp(fiServRequest.getTAGrp(request));
+
             /* Add the credit request object to GMF message variant object */
             gmfmv.setCreditRequest(creditReqDtl);
         } catch (IllegalArgumentException | UnsupportedEnumValueException e) {
@@ -107,6 +110,12 @@ public class CreditRequest extends GenericRequest implements Serializable {
         }
         if (creditResponse.getAmexGrp() != null) {
             response.amexTranID = creditResponse.getAmexGrp().getAmExTranID();
+        }
+
+        if (creditResponse.getTAGrp() != null){
+            response.token = creditResponse.getTAGrp().getTkn();
+            response.sctyLvl = creditResponse.getTAGrp().getSctyLvl().toString();
+//            response.tknType = creditResponse.getTAGrp().getTknType().
         }
 
         result = true;

@@ -10,10 +10,9 @@ import fdrc.common.RequestUtils;
 import fdrc.common.Serialization;
 import fdrc.http.HTTPPostHandler;
 import fdrc.utils.Utils;
-
 import javax.xml.ws.http.HTTPException;
 
-public abstract class GenericRequest {
+abstract class GenericRequest {
     GMFMessageVariants gmfmv = new GMFMessageVariants();
 
     public GMFMessageVariants submitRequest(GMFMessageVariants gmfmv, Response response) {
@@ -23,6 +22,9 @@ public abstract class GenericRequest {
         String  errorMsg = "";
         Serialization serialization = new Serialization();
         requestXml = serialization.getXMLData (gmfmv, errorMsg);
+
+        serialization.validateXMLSchema(requestXml);
+
         if (!errorMsg.equals("")) throw new InvalidRequest(errorMsg); // todo:
 
         System.out.println("GMF Request == " + requestXml); // todo: debug purpose only

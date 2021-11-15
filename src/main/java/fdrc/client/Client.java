@@ -35,7 +35,7 @@ public class Client {
         //todo: temp code, to remove in prod: begin
         try {
             if (request == null)
-                request = JsonBuilder.getRequestFromJson("debit-payload-1.json");
+                request = JsonBuilder.getRequestFromJson("HealthCare-payload.json");
 //            request = JsonBuilder.getRequestFromJson("debit-payload-200070100010.json");
 
             // todo: end

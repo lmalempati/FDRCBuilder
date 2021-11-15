@@ -9,7 +9,7 @@ import fdrc.utils.Utils;
 import java.io.Serializable;
 import java.util.List;
 
-public class ReversalRequest extends GenericRequest implements Serializable {
+class ReversalRequest extends GenericRequest implements Serializable {
 
     @Override
     public String buildRequest(Request request) {

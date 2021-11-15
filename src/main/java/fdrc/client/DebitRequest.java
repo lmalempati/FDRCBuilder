@@ -11,7 +11,7 @@ import fdrc.common.FiServRequest;
 import java.io.Serializable;
 import java.util.List;
 
-public class DebitRequest extends GenericRequest implements Serializable {
+class DebitRequest extends GenericRequest implements Serializable {
     /* builds request object, if */
     public String buildRequest(Request request) {
         DebitRequestDetails debitReqDtl = new DebitRequestDetails();
