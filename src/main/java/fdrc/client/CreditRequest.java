@@ -113,9 +113,9 @@ class CreditRequest extends GenericRequest implements Serializable {
         }
 
         if (creditResponse.getTAGrp() != null){
-            response.token = creditResponse.getTAGrp().getTkn();
-            response.sctyLvl = creditResponse.getTAGrp().getSctyLvl().toString();
-//            response.tknType = creditResponse.getTAGrp().getTknType().
+//            response.sctyLvl = creditResponse.getTAGrp().getSctyLvl().toString();
+//            response.tknType = creditResponse.getTAGrp().getTknType();
+            response.tkn = creditResponse.getTAGrp().getTkn();
         }
 
         result = true;

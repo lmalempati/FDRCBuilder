@@ -47,13 +47,7 @@ public class FiServRequest { // todo name
         if (Utils.isNotNullOrEmpty(request.refNum))
             cmnGrp.setRefNum(request.refNum); // "20200101012"
         else
-            cmnGrp.setRefNum(Utils.getOrderNum()); // "20200101012"
-        /* A number assigned by the merchant to uniquely reference a transaction order sequence. */
-        // ToDo, completions should have ordernum, need to validate?
-        if (Utils.isNotNullOrEmpty(request.orderNum))
-            cmnGrp.setOrderNum(request.orderNum);
-        else
-            cmnGrp.setOrderNum(Utils.getOrderNum());
+            cmnGrp.setRefNum(Utils.getOrderRefNum()); // "20200101012"
         /* An ID assigned by Fiserv, for the Third Party Processor or
          * Software Vendor that generated the transaction. */
         cmnGrp.setTPPID(Constants.REQUEST_TPPID); // ToDo, get from req
@@ -67,7 +61,16 @@ public class FiServRequest { // todo name
         } else {
             cmnGrp.setMerchID(Constants.REQUEST_MERCHID); // ToDo, get from req
         }
+        cmnGrp.setGroupID(Constants.REQUEST_GROUPID);
+        // TATikenRequest don't need the following fields?
+        if (Utils.toEnum(TxnTypeType.class, request.txnType) == TxnTypeType.TA_TOKEN_REQUEST) return cmnGrp;
 
+        /* A number assigned by the merchant to uniquely reference a transaction order sequence. */
+        // ToDo, completions should have ordernum, need to validate?
+        if (Utils.isNotNullOrEmpty(request.orderNum))
+            cmnGrp.setOrderNum(request.orderNum);
+        else
+            cmnGrp.setOrderNum(Utils.getOrderRefNum());
         /* An identifier used to indicate the terminal’s account number entry mode
          * and authentication capability via the Point-of-Service. */
         cmnGrp.setPOSEntryMode(request.posEntryMode); //010// 011
@@ -94,7 +97,6 @@ public class FiServRequest { // todo name
         if (Utils.isNotNullOrEmpty(request.cardCaptCap)) // todo: this can't be on request as we need to derive it..
             cmnGrp.setCardCaptCap(Utils.toEnum(CardCaptCapType.class, request.cardCaptCap).val); //1
         /* Indicates Group ID. */
-        cmnGrp.setGroupID(Constants.REQUEST_GROUPID);
         if (Utils.isNotNullOrEmpty(request.merchCatCode))
             cmnGrp.setMerchCatCode(request.merchCatCode);
         if (Utils.isNotNullOrEmpty(request.refundType))
@@ -113,7 +115,7 @@ public class FiServRequest { // todo name
     public CardGrp getCardGrp() {
         if (request == null) return null;
         CardGrp cardGrp = new CardGrp();
-        if (!Utils.isNotNullOrEmpty(request.encrptType))
+        if (!Utils.isNotNullOrEmpty(request.encrptType) && !Utils.isNotNullOrEmpty(request.tkn))
             if (Utils.isNotNullOrEmpty(request.acctNum))
                 cardGrp.setAcctNum(request.acctNum);
         if (Utils.isNotNullOrEmpty(request.cardExpiryDate))
@@ -332,6 +334,8 @@ public class FiServRequest { // todo name
             taGrp.setTknType(request.tknType);
         if (Utils.isNotNullOrEmpty(request.deviceType))
             taGrp.setDeviceType(request.deviceType);
+        if (Utils.isNotNullOrEmpty(request.tkn))
+            taGrp.setTkn(request.tkn);
         return Utils.valueOrNothing(taGrp);
     }
 

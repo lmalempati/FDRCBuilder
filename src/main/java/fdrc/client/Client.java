@@ -2,6 +2,7 @@ package fdrc.client;
 
 import com.fiserv.merchant.gmfv10.PymtTypeType;
 import com.fiserv.merchant.gmfv10.ReversalIndType;
+import com.fiserv.merchant.gmfv10.TxnTypeType;
 import com.google.gson.JsonSyntaxException;
 import fdrc.Exceptions.UnsupportedEnumValueException;
 import fdrc.base.Request;
@@ -48,11 +49,23 @@ public class Client {
             if (Utils.isNotNullOrEmpty(request.pymtType))
                 switch (Utils.toEnum(PymtTypeType.class, request.pymtType)) {
                     case CREDIT:
-                        requestProcessor = new CreditRequest();
+                        switch (Utils.toEnum(TxnTypeType.class, request.txnType)) {
+                            case TA_TOKEN_REQUEST:
+                                requestProcessor = new TransArmorRequest();
+                                break;
+                            default:
+                                requestProcessor = new CreditRequest();
+                        }
                         break;
                     // todo:
                     case DEBIT:
-                        requestProcessor = new DebitRequest();
+                        switch (Utils.toEnum(TxnTypeType.class, request.txnType)) {
+                            case TA_TOKEN_REQUEST:
+                                requestProcessor = new TransArmorRequest();
+                                break;
+                            default:
+                                requestProcessor = new DebitRequest();
+                        }
                         break;
                     case EBT:
                         requestProcessor = new EBTRequest();

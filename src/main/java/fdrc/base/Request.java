@@ -89,7 +89,7 @@ public class Request {
     public String keyID;
     public String encrptBlock;
     public String tknType;
-    public String token;
+    public String tkn;
     public String deviceType;
     // EcommGrp
     public String custSvcPhoneNumber;

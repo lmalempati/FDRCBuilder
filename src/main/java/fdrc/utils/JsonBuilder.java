@@ -87,6 +87,7 @@ public class JsonBuilder {
         if (Utils.toEnum(TxnTypeType.class, request.txnType) == TxnTypeType.COMPLETION ||
         Utils.isNotNullOrEmpty(request.reversalInd) && Utils.toEnum(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID)
             request.orderNum = response.orderNum;
+        request.tkn = response.tkn;
 
         getJsonFromRequest(request, fileName);
         return true;

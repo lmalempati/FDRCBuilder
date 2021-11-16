@@ -37,7 +37,7 @@ public class Response {
     public String spendQInd;
     public String sctyLvl;
     public String tknType;
-    public String token;
+    public String tkn;
 
     public String responseRaw;
 
