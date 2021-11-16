@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.Assert.assertEquals;
 
-public class TestRetail {
+public class TestRetail extends TestGneric {
     public static final String PATH = "src/test/resources/Retail/";
 
     @ParameterizedTest
@@ -27,24 +27,6 @@ public class TestRetail {
 
     )
     public void runAnyTest(String fileName) {
-        String[] inputs=  fileName.split(";");
-        if (inputs.length < 2) return; // not entered response code to check with? stop processing.
-
-        String fn =  inputs[0];
-        String rc = inputs[1];
-        boolean subsequent = inputs.length > 2 && inputs[2].equals("1");
-
-        Response response = new Client().processRequest(JsonBuilder.getRequestFromJson(PATH + fn));
-        assertEquals(rc, response.respCode);
-
-        if (subsequent){
-            int dotIndex = fileName.lastIndexOf(".");
-            if (fn.charAt(dotIndex - 1) == '1')  return;
-
-            StringBuffer buffer = new StringBuffer(fn);
-            buffer.setCharAt(dotIndex-1, '1');
-            fn = buffer.toString();
-            JsonBuilder.updateCompletionPayload(response, PATH + fn);
-        }
+        parametrizedTest(fileName, PATH);
     }
 }
