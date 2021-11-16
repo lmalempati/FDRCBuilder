@@ -36,7 +36,7 @@ public class Utils {
         return java.time.LocalTime.now().toString().replaceAll(":", "").substring(0, 6);
     }
 
-    public static String getOrderNum() {
+    public static String getOrderRefNum() {
         return java.time.LocalDate.now().toString().replaceAll("-", "").substring(4, 8) + java.time.LocalTime.now().toString().replaceAll(":", "").substring(0, 6);
     }
 

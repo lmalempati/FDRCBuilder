@@ -8,6 +8,7 @@ import com.fiserv.merchant.gmfv10.*;
 import fdrc.base.Constants;
 import fdrc.base.Request;
 import fdrc.types.CardCaptCapType;
+import fdrc.types.EncrptTypeType;
 import fdrc.types.EnumAllowPartialAuth;
 import fdrc.types.MOTOIndType;
 import fdrc.utils.Utils;
@@ -46,13 +47,7 @@ public class FiServRequest { // todo name
         if (Utils.isNotNullOrEmpty(request.refNum))
             cmnGrp.setRefNum(request.refNum); // "20200101012"
         else
-            cmnGrp.setRefNum(Utils.getOrderNum()); // "20200101012"
-        /* A number assigned by the merchant to uniquely reference a transaction order sequence. */
-        // ToDo, completions should have ordernum, need to validate?
-        if (Utils.isNotNullOrEmpty(request.orderNum))
-            cmnGrp.setOrderNum(request.orderNum);
-        else
-            cmnGrp.setOrderNum(Utils.getOrderNum());
+            cmnGrp.setRefNum(Utils.getOrderRefNum()); // "20200101012"
         /* An ID assigned by Fiserv, for the Third Party Processor or
          * Software Vendor that generated the transaction. */
         cmnGrp.setTPPID(Constants.REQUEST_TPPID); // ToDo, get from req
@@ -66,7 +61,16 @@ public class FiServRequest { // todo name
         } else {
             cmnGrp.setMerchID(Constants.REQUEST_MERCHID); // ToDo, get from req
         }
+        cmnGrp.setGroupID(Constants.REQUEST_GROUPID);
+        // TATikenRequest don't need the following fields?
+        if (Utils.toEnum(TxnTypeType.class, request.txnType) == TxnTypeType.TA_TOKEN_REQUEST) return cmnGrp;
 
+        /* A number assigned by the merchant to uniquely reference a transaction order sequence. */
+        // ToDo, completions should have ordernum, need to validate?
+        if (Utils.isNotNullOrEmpty(request.orderNum))
+            cmnGrp.setOrderNum(request.orderNum);
+        else
+            cmnGrp.setOrderNum(Utils.getOrderRefNum());
         /* An identifier used to indicate the terminal’s account number entry mode
          * and authentication capability via the Point-of-Service. */
         cmnGrp.setPOSEntryMode(request.posEntryMode); //010// 011
@@ -93,7 +97,6 @@ public class FiServRequest { // todo name
         if (Utils.isNotNullOrEmpty(request.cardCaptCap)) // todo: this can't be on request as we need to derive it..
             cmnGrp.setCardCaptCap(Utils.toEnum(CardCaptCapType.class, request.cardCaptCap).val); //1
         /* Indicates Group ID. */
-        cmnGrp.setGroupID(Constants.REQUEST_GROUPID);
         if (Utils.isNotNullOrEmpty(request.merchCatCode))
             cmnGrp.setMerchCatCode(request.merchCatCode);
         if (Utils.isNotNullOrEmpty(request.refundType))
@@ -112,8 +115,9 @@ public class FiServRequest { // todo name
     public CardGrp getCardGrp() {
         if (request == null) return null;
         CardGrp cardGrp = new CardGrp();
-        if (Utils.isNotNullOrEmpty(request.acctNum))
-            cardGrp.setAcctNum(request.acctNum);
+        if (!Utils.isNotNullOrEmpty(request.encrptType) && !Utils.isNotNullOrEmpty(request.tkn))
+            if (Utils.isNotNullOrEmpty(request.acctNum))
+                cardGrp.setAcctNum(request.acctNum);
         if (Utils.isNotNullOrEmpty(request.cardExpiryDate))
             cardGrp.setCardExpiryDate(request.cardExpiryDate); //20160430
         if (Utils.isNotNullOrEmpty(request.ccvInd))
@@ -147,6 +151,9 @@ public class FiServRequest { // todo name
             visaGrp.setCardLevelResult(request.cardLevelResult);
         if (Utils.isNotNullOrEmpty(request.transID))
             visaGrp.setTransID(request.transID);
+        if (Utils.isNotNullOrEmpty(request.spendQInd))
+            visaGrp.setSpendQInd(request.spendQInd);
+
         return Utils.valueOrNothing(visaGrp);
     }
 
@@ -162,10 +169,10 @@ public class FiServRequest { // todo name
             mcGrp.setFinAuthInd(String.valueOf(request.finAuthInd));
         if (Utils.isNotNullOrEmpty(request.banknetData))
             mcGrp.setBanknetData(request.banknetData); // as per
-
-        if (Utils.isNotNullOrEmpty(request.addtlAmtType) && Utils.isNotNullOrEmpty(request.addtlAmtType.split(",")[0]))
-            if (!request.addtlAmt.split(",")[0].equals(BD_ZERO) && (Utils.toEnum(AddAmtTypeType.class, request.addtlAmtType.split(",")[0]) == AddAmtTypeType.HLTCARE))
+        if (Utils.isNotNullOrEmpty(request.healthcareAmt))
+            if (!request.healthcareAmt.equals(BD_ZERO))
                 mcGrp.setMCMSDI(MCMSDIType.HEALTHCARE);
+
         if (Utils.isNotNullOrEmpty(request.mcACI)) {
             mcGrp.setMCACI(request.mcACI);
         }
@@ -256,17 +263,17 @@ public class FiServRequest { // todo name
             if (!request.totalAuthAmt.equals(BD_ZERO))
                 list.add(getAddtlAmtGrp(request, request.totalAuthAmt, AddAmtTypeType.TOTAL_AUTH_AMT));
 
-        if (Utils.isNotNullOrEmpty(request.cashBack))
-            if (!request.cashBack.equals(BD_ZERO))
-                list.add(getAddtlAmtGrp(request, request.cashBack, AddAmtTypeType.CASHBACK));
+        if (Utils.isNotNullOrEmpty(request.cashbackAmt))
+            if (!request.cashbackAmt.equals(BD_ZERO))
+                list.add(getAddtlAmtGrp(request, request.cashbackAmt, AddAmtTypeType.CASHBACK));
 
-        if (Utils.isNotNullOrEmpty(request.addtlAmtType) && Utils.isNotNullOrEmpty(request.addtlAmtType.split(",")[0]))
-            if (!request.addtlAmt.split(",")[0].equals(BD_ZERO) && (Utils.toEnum(AddAmtTypeType.class, request.addtlAmtType.split(",")[0]) == AddAmtTypeType.HLTCARE))
-                list.add(getAddtlAmtGrp(request, new BigDecimal(request.addtlAmt.split(",")[0]), AddAmtTypeType.HLTCARE));
+        if (Utils.isNotNullOrEmpty(request.healthcareAmt))
+            if (!request.healthcareAmt.equals(BD_ZERO))
+                list.add(getAddtlAmtGrp(request, request.healthcareAmt, AddAmtTypeType.HLTCARE));
 
-        if (Utils.isNotNullOrEmpty(request.addtlAmtType) && Utils.isNotNullOrEmpty(request.addtlAmtType.split(",")[1]))
-            if (!request.addtlAmt.split(",")[1].equals(BD_ZERO) && (Utils.toEnum(AddAmtTypeType.class, request.addtlAmtType.split(",")[1]) == AddAmtTypeType.RX))
-                list.add(getAddtlAmtGrp(request, new BigDecimal(request.addtlAmt.split(",")[1]), AddAmtTypeType.RX));
+        if (Utils.isNotNullOrEmpty(request.rxAmt))
+            if (!request.rxAmt.equals(BD_ZERO))
+                list.add(getAddtlAmtGrp(request, request.rxAmt, AddAmtTypeType.RX));
 
         if (Utils.isNotNullOrEmpty(request.partAuthrztnApprvlCapablt)) {
             if (Utils.toEnum(EnumAllowPartialAuth.class, request.partAuthrztnApprvlCapablt) != EnumAllowPartialAuth.NotSet) {
@@ -309,6 +316,27 @@ public class FiServRequest { // todo name
 
 //        if (Utils.toEnum(EBTTypeType.class, request.ebtType)  )
         return Utils.valueOrNothing(ebtGrp);
+    }
+
+    public TAGrp getTAGrp(Request request) {
+        TAGrp taGrp = new TAGrp();
+        if (Utils.isNotNullOrEmpty(request.sctyLvl))
+            taGrp.setSctyLvl(Utils.toEnum(SctyLvlType.class, request.sctyLvl));
+        if (Utils.isNotNullOrEmpty(request.encrptType))
+            taGrp.setEncrptType(Utils.toEnum(EncrptTypeType.class, request.encrptType).toString());
+        if (Utils.isNotNullOrEmpty(request.encrptTrgt))
+            taGrp.setEncrptTrgt(Utils.toEnum(EncrptTrgtType.class, request.encrptTrgt));
+        if (Utils.isNotNullOrEmpty(request.keyID))
+            taGrp.setKeyID(request.keyID);
+        if (Utils.isNotNullOrEmpty(request.encrptBlock))
+            taGrp.setEncrptBlock(request.encrptBlock);
+        if (Utils.isNotNullOrEmpty(request.tknType))
+            taGrp.setTknType(request.tknType);
+        if (Utils.isNotNullOrEmpty(request.deviceType))
+            taGrp.setDeviceType(request.deviceType);
+        if (Utils.isNotNullOrEmpty(request.tkn))
+            taGrp.setTkn(request.tkn);
+        return Utils.valueOrNothing(taGrp);
     }
 
     protected String getXmlPayload() {

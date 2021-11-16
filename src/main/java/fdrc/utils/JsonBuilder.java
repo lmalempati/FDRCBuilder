@@ -83,10 +83,11 @@ public class JsonBuilder {
         request.cardLevelResult = response.cardLevelResult;
         request.aci = response.aci;
         request.amexTranID = response.amexTranID;
-        request.spendQind = response.spendQInd;
+        request.spendQInd = response.spendQInd;
         if (Utils.toEnum(TxnTypeType.class, request.txnType) == TxnTypeType.COMPLETION ||
         Utils.isNotNullOrEmpty(request.reversalInd) && Utils.toEnum(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID)
             request.orderNum = response.orderNum;
+        request.tkn = response.tkn;
 
         getJsonFromRequest(request, fileName);
         return true;

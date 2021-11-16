@@ -19,22 +19,22 @@ public class TestsMoto {
     public void creditAmexAuthKeyed() {
         Response response = new Client().processRequest(JsonBuilder.getRequestFromJson( PATH + "Amex-Auth-payload.json"));
         assertEquals("002", response.respCode);
-        if (JsonBuilder.updateCompletionPayload(response, PATH +"Amex-Compl-payload.json"))
+        if (JsonBuilder.updateCompletionPayload(response, PATH + "Amex-Compl-payload.json"))
             creditAmexCompl();
     }
 
     private void creditAmexCompl() {
-        Response response = new Client().processRequest(JsonBuilder.getRequestFromJson(PATH +"Amex-Compl-payload.json"));
+        Response response = new Client().processRequest(JsonBuilder.getRequestFromJson(PATH + "Amex-Compl-payload.json"));
         assertEquals("000", response.respCode);
 
     }
 
     @Test// Auth JCB
     public void creditJCBAuthKeyed100070950010() {
-        Response response = new Client().processRequest(JsonBuilder.getRequestFromJson(PATH +"JCB-Auth-Keyed-100070950010.json"));
+        Response response = new Client().processRequest(JsonBuilder.getRequestFromJson(PATH + "JCB-Auth-Keyed-100070950010.json"));
         assertEquals("000", response.respCode);
 //        updateCompletionPayload(response, "payloads/Credit-Visa-AuthComple-swipe-200019960021.json");
-        if (JsonBuilder.updateCompletionPayload(response, PATH +"JCB-Compl-Keyed-100070950011.json"))
+        if (JsonBuilder.updateCompletionPayload(response, PATH + "JCB-Compl-Keyed-100070950011.json"))
             creditJCBAuthKeyed100070950011();
 
     }
@@ -147,12 +147,14 @@ public class TestsMoto {
     @ParameterizedTest
     @ValueSource(strings =
             {
-                    "VisaSaleKeyed-200003520020.json;002",
+//                    "VisaSaleKeyed-200003520020.json;002",
 //                    "Credit-MC-AuthCompl-200021950010.json;000", "Credit-MC-AuthCompl-200021950011.json;000",
 //                    "Discover-AuthCompl-200070910010.json;000;", "Discover-AuthCompl-200070910011.json;000", // Auth & Compl Discover
 //                    "Diners-AuthCompl-200070930010.json;000", "Diners-AuthCompl-200070930011.json;000",
 //                    "Amex-AuthCompl-201013680010.json;002", "Amex-AuthCompl-201013680011.json;000",
 //                    "credit-AuthVoid-200070840010.json;000", "credit-AuthVoid-200070840011.json;000", // Auth & Compl..
+//                    "AddtlAmount-Credit-MC-Sale-200004170020.json;500",
+                    "Credit-TA-Auth-200021900010.json;000"
             })
     public void runParameterizedTests(String fileName) {
         String[] values = fileName.split(";");

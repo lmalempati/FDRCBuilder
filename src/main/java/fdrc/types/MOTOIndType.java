@@ -1,7 +1,5 @@
 package fdrc.types;
 
-import org.junit.jupiter.api.Order;
-
 public enum MOTOIndType {
     MailOrder("1"),
     TelephoneOrder("2");

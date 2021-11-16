@@ -35,6 +35,9 @@ public class Response {
     public String cardLevelResult;
     public String amexTranID;
     public String spendQInd;
+    public String sctyLvl;
+    public String tknType;
+    public String tkn;
 
     public String responseRaw;
 
