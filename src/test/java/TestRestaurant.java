@@ -19,10 +19,15 @@ public class TestRestaurant extends TestGneric {
                     "BalInq-VisaSaleSwipe-200066500010.json;000",
                     "Credit-Visa-AuthCompl-keyed-201012850010.json;000;1", "Credit-Visa-AuthCompl-keyed-201012850011.json;000",
                     "Credit-Visa-Refund-Keyedin-200070140010.json;000", // refund
-                    "TATokenRequest-200292130010.json;000"
+                    "TATokenRequest-200292130010.json;000",
+                    "Credit-Visa-AuthCompl-Swipe-200070230010.json;000;1", "Credit-Visa-AuthCompl-Swipe-200070230011.json;000",
+                    "Credit-JCB-AuthCompl-Swipe-200070490010.json;000;1", "Credit-JCB-AuthCompl-Swipe-200070490011.json;000",
+                    "Credit-MC-AuthCompl-Swipe-201012950010.json;000;1",
+                    "Credit-MC-AuthCompl-Swipe-201012950011.json;000",
+                    "Credit-TA-MC-AuthCompl-Swipe-200293470010.json;002;1", "Credit-TA-MC-AuthCompl-Swipe-200293470011.json;000"
             }
     )
-    public void runAnyTest(String fileName) {
+    public void runTestsRestaurant(String fileName) {
         parametrizedTest(fileName, PATH);
     }
 
