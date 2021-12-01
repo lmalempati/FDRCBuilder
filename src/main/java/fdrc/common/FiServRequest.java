@@ -130,7 +130,12 @@ public class FiServRequest { // todo name
             cardGrp.setAVSResultCode(request.avsResultCode);
         if (Utils.isNotNullOrEmpty(request.ccvResultCode))
             cardGrp.setCCVResultCode(Utils.toEnum(CCVResultCodeType.class, request.ccvResultCode));
-        cardGrp.setTrack2Data(request.track2Data);
+
+        if (Utils.isNotNullOrEmpty(request.encrptTrgt)
+                && (Utils.toEnum(EncrptTrgtType.class, request.encrptTrgt) == EncrptTrgtType.TRACK_2))
+            cardGrp.setTrack2Data(null);
+        else
+            cardGrp.setTrack2Data(request.track2Data);
         return Utils.valueOrNothing(cardGrp);
     }
 
@@ -313,8 +318,11 @@ public class FiServRequest { // todo name
         if (Utils.isNotNullOrEmpty(request.ebtType))
             ebtGrp.setEBTType(Utils.toEnum(EBTTypeType.class, request.ebtType));
 
-
-//        if (Utils.toEnum(EBTTypeType.class, request.ebtType)  )
+        EBTTypeType ebtType = null;
+        if (Utils.isNotNullOrEmpty(request.merchFNSNum))
+            ebtType = Utils.toEnum(EBTTypeType.class, request.ebtType);
+        if (ebtType == EBTTypeType.SNAP || ebtType == EBTTypeType.E_WIC)
+            ebtGrp.setMerchFNSNum(request.merchFNSNum);
         return Utils.valueOrNothing(ebtGrp);
     }
 

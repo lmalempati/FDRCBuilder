@@ -108,5 +108,6 @@ public class Request {
     //todo: not required in prod
     public String merchantMID;
     public String ebtType;
+    public String merchFNSNum; // ToDo: This has to come from setup
 }
 
