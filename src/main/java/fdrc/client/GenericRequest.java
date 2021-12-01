@@ -32,8 +32,8 @@ abstract class GenericRequest {
         try {
 
             responseString = new HTTPPostHandler().SendMessage(requestXml, clientRef);
-            if (responseString == "") {
-                throw new InvalidResponseXml("Empty response");
+            if (responseString == null || responseString.equals("")) {
+                throw new InvalidResponseXml("Invalid or Empty Response");
             }
             responseString = responseString.replaceAll("&gt;", ">").replaceAll("&lt;", "<");
             response.responseRaw = responseString; // debug purpose only
