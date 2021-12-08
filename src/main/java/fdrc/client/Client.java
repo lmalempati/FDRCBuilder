@@ -20,49 +20,23 @@ public class Client {
             Response response = new Response("Invalid Json: " + e.getMessage());
             return response.errorMsg;
         }
-        Response response = processRequest(request);
+        Response response = submitRequest(request);
         return Utils.isNotNullOrEmpty(response.errorMsg) ? response.errorMsg : response.responseRaw;
     }
 
     public static void main(String[] args) {
         Client client = new Client();
-        client.processRequest(null);
+        client.submitRequest(null);
     }
 
-    public Response processRequest(Request request) {
+    public Response submitRequest(Request request) {
         Response resposne = null;
-        String errorMessage = null;
+        String errorMessage = "";
         GenericRequest requestProcessor = null;
         //todo: temp code, to remove in prod: begin
         try {
             if (request == null)
-//                request = JsonBuilder.getRequestFromJson("payload-test.json");
-            request = JsonBuilder.getRequestFromJsonString("{\n" +
-                    "  \"acctNum\": \"5424180001234563\",\n" +
-                    "  \"cardExpiryDate\": \"20251231\",\n" +
-                    "  \"cardType\": \"MasterCard\",\n" +
-                    "  \"posCondCode\": \"08\",\n" +
-                    "  \"posEntryMode\": \"010\",\n" +
-                    "  \"pymtType\": \"Credit\",\n" +
-                    "  \"industrytype\": null,\n" +
-                    "  \"txnType\": \"Sale\",\n" +
-                    "  \"termCatCode\": \"00\",\n" +
-                    "  \"termEntryCapablt\": \"01\",\n" +
-                    "  \"partAuthrztnApprvlCapablt\": \"1\",\n" +
-                    "  \"custSvcPhoneNumber\": \"4048900000\",\n" +
-                    "  \"finAuthInd\": \"1\",\n" +
-                    "  \"txnAmt\": \"203.48\",\n" +
-                    "  \"txnCrncy\": \"840\",\n" +
-                    "  \"termLocInd\": \"1\",\n" +
-                    "  \"cardCaptCap\": \"0\",\n" +
-                    "  \"merchCatCode\": \"5967\",\n" +
-                    "  \"healthcareAmt\": \"203.48\",\n" +
-                    "  \"rxAmt\": \"203.48\",\n" +
-                    "  \"merchantMID\": \"RCTST1000091636\",\n" +
-                    "  \"ccvInd\": \"Prvded\",\n" +
-                    "  \"ccvData\": \"123\"\n" +
-                    "}");
-
+                request = JsonBuilder.getRequestFromJson("payload.json");
             // todo: end
             if (request == null)
                 return new Response("invalid payload.");

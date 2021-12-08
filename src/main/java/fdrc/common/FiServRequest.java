@@ -223,6 +223,8 @@ public class FiServRequest { // todo name
             altMerchNameAndAddrGrp.setMerchCity(request.merchCity);
         if (Utils.isNotNullOrEmpty(request.merchState))
             altMerchNameAndAddrGrp.setMerchState(request.merchState);
+        if (Utils.isNotNullOrEmpty(request.merchCtry))
+            altMerchNameAndAddrGrp.setMerchCtry(request.merchCtry);
         if (Utils.isNotNullOrEmpty(request.merchPostalCode))
             altMerchNameAndAddrGrp.setMerchPostalCode(request.merchPostalCode);
         return Utils.valueOrNothing(altMerchNameAndAddrGrp);

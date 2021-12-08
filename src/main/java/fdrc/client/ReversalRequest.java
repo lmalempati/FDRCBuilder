@@ -1,6 +1,8 @@
 package fdrc.client;
 
 import com.fiserv.merchant.gmfv10.*;
+import fdrc.Exceptions.InvalidResponseXml;
+import fdrc.Exceptions.UnsupportedEnumValueException;
 import fdrc.base.Request;
 import fdrc.base.Response;
 import fdrc.common.FiServRequest;
@@ -12,50 +14,41 @@ import java.util.List;
 class ReversalRequest extends GenericRequest implements Serializable {
 
     @Override
-    public String buildRequest(Request request) {
+    public String buildRequest(Request request, FiServRequest fiServRequest) {
         String errorMsg = null;
         VoidTOReversalRequestDetails reversalRequestDetails = new VoidTOReversalRequestDetails();
-        FiServRequest fiServRequest = new FiServRequest(request);
-        try {
-            reversalRequestDetails.setCommonGrp(fiServRequest.getCommonGrp());
-            reversalRequestDetails.setCardGrp(fiServRequest.getCardGrp());
-            reversalRequestDetails.getAddtlAmtGrp();
-            List<AddtlAmtGrp> addtlAmtGr = reversalRequestDetails.getAddtlAmtGrp();
-            List<AddtlAmtGrp> addlGrps = fiServRequest.getAddtlAmtGrp();
-            if (addlGrps != null)
-                for (AddtlAmtGrp grp : addlGrps
-                ) {
-                    addtlAmtGr.add(grp);
-                }
-            if (Utils.isNotNullOrEmpty(request.cardType))
-                switch (Utils.toEnum(CardTypeType.class, request.cardType)) {
-                    case VISA:
-                        reversalRequestDetails.setVisaGrp(fiServRequest.getVisaGrp());
-                        break;
-                    case MASTER_CARD:
-                        reversalRequestDetails.setMCGrp(fiServRequest.getMasterCardGrp());
-                        break;
-                    case JCB:
-                    case DISCOVER:
-                    case DINERS:
-                        reversalRequestDetails.setDSGrp(fiServRequest.getDiscoverGrp());
-                        break;
-                    case AMEX:
-                        reversalRequestDetails.setAmexGrp(fiServRequest.getAmexGrp());
-                        break;
-//                default: // todo: what if cardtype is null
-//                    errorMsg = "Unknown Crd Type";
-                }
-            reversalRequestDetails.setEcommGrp(fiServRequest.getEcommGrp());
-            reversalRequestDetails.setOrigAuthGrp(fiServRequest.getOrigAuthGrp());
-            gmfmv.setReversalRequest(reversalRequestDetails);
-        } catch (IllegalArgumentException | NullPointerException e) {
-            errorMsg = e.getMessage();
-        } catch (RuntimeException e) {
-            errorMsg = e.getMessage();
-        } finally {
-            fiServRequest = null;
+        reversalRequestDetails.setCommonGrp(fiServRequest.getCommonGrp());
+        reversalRequestDetails.setAltMerchNameAndAddrGrp(fiServRequest.getAltMerchNameAndAddrGrp());
+        reversalRequestDetails.setCardGrp(fiServRequest.getCardGrp());
+        List<AddtlAmtGrp> addtlAmtGr = null;
+        List<AddtlAmtGrp> addlGrps = fiServRequest.getAddtlAmtGrp();
+        if (addlGrps != null) {
+            addtlAmtGr = reversalRequestDetails.getAddtlAmtGrp();
+            for (AddtlAmtGrp grp : addlGrps
+            ) {
+                addtlAmtGr.add(grp);
+            }
         }
+        if (Utils.isNotNullOrEmpty(request.cardType))
+            switch (Utils.toEnum(CardTypeType.class, request.cardType)) {
+                case VISA:
+                    reversalRequestDetails.setVisaGrp(fiServRequest.getVisaGrp());
+                    break;
+                case MASTER_CARD:
+                    reversalRequestDetails.setMCGrp(fiServRequest.getMasterCardGrp());
+                    break;
+                case JCB:
+                case DISCOVER:
+                case DINERS:
+                    reversalRequestDetails.setDSGrp(fiServRequest.getDiscoverGrp());
+                    break;
+                case AMEX:
+                    reversalRequestDetails.setAmexGrp(fiServRequest.getAmexGrp());
+                    break;
+            }
+        reversalRequestDetails.setEcommGrp(fiServRequest.getEcommGrp());
+        reversalRequestDetails.setOrigAuthGrp(fiServRequest.getOrigAuthGrp());
+        gmfmv.setReversalRequest(reversalRequestDetails);
         return errorMsg;
     }
 
@@ -63,7 +56,7 @@ class ReversalRequest extends GenericRequest implements Serializable {
     public boolean getResponse(GMFMessageVariants gmfmvResponse, Response response) {
         boolean result = false;
         if (gmfmvResponse.getReversalResponse() == null) {
-            throw new RuntimeException("invalid response");
+            throw new InvalidResponseXml("invalid response");
         }
 
         VoidTOReversalResponseDetails reversalResponse = gmfmvResponse.getReversalResponse();

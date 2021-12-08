@@ -1,6 +1,7 @@
 package fdrc.client;
 
 import com.fiserv.merchant.gmfv10.*;
+import fdrc.Exceptions.InvalidResponseXml;
 import fdrc.base.Request;
 import fdrc.base.Response;
 import fdrc.common.FiServRequest;
@@ -8,12 +9,10 @@ import fdrc.common.FiServRequest;
 public class TransArmorRequest extends GenericRequest {
 
     @Override
-    public String buildRequest(Request request) {
+    public String buildRequest(Request request, FiServRequest fiServRequest) {
         String errorMsg = null;
-        FiServRequest fiServRequest = null;
         TARequestDetails taReqDetails = null;
         try {
-            fiServRequest = new FiServRequest(request);
             taReqDetails = new TARequestDetails();
             taReqDetails.setCommonGrp(fiServRequest.getCommonGrp());
             taReqDetails.setTAGrp(fiServRequest.getTAGrp(request));
@@ -33,7 +32,7 @@ public class TransArmorRequest extends GenericRequest {
         RespGrp respGrp = null;
         boolean result = false;
         if (gmfmvResponse.getTransArmorResponse() == null) {
-            throw new RuntimeException("invalid response");
+            throw new InvalidResponseXml("invalid response");
         }
         TAResponseDetails taResponse = gmfmvResponse.getTransArmorResponse();
 

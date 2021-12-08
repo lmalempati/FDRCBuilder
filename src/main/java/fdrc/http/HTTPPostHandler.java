@@ -1,19 +1,22 @@
 package fdrc.http;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
+import fdrc.Exceptions.InvalidResponseXml;
 import fdrc.base.Constants;
 import fdrc.common.RequestUtils;
+import fdrc.common.Serialization;
 import fdrc.xml.*;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
 
-import java.io.IOException;
 import java.math.BigInteger;
 
 public class HTTPPostHandler {
@@ -21,7 +24,8 @@ public class HTTPPostHandler {
     /* The below method will take the XML request and returns the XML response received from Data wire.
      * */
     @SuppressWarnings("deprecation")
-    public String SendMessage(String gmfrequest, String clientRef) {
+    public String SendMessage(String gmfrequest) {
+
         /*Response that will be returned.*/
         String response = "";
         /* Create the instance of the Request that is a class generated from the Rapid connect Transaction
@@ -52,7 +56,7 @@ public class HTTPPostHandler {
         reqClientIDType.setApp("RAPIDCONNECTSRS");
         reqClientIDType.setAuth(String.format("%s%s|%s", Constants.REQUEST_GROUPID, RequestUtils.merchantID, Constants.REQUEST_TERMID));
         /* Set the clientRef value*/
-        reqClientIDType.setClientRef(clientRef); //give value later
+        reqClientIDType.setClientRef(RequestUtils.getClientRef());
         /* Set the DID value*/
         reqClientIDType.setDID(RequestUtils.mapMidToDID(RequestUtils.merchantID));
 
@@ -63,27 +67,8 @@ public class HTTPPostHandler {
         /*Set version value*/
         gmfTransactionRequest.setVersion("3");
 
-//        JAXBContext jaxBConText;
         String gmffomattedRequest = "";
         //Transform the gmfTransactionRequest object into XML string.
-//        try {
-//            jaxBConText = JAXBContext
-//                    .newInstance("fdrc.xml");
-//
-//            StringWriter strWriter = new StringWriter();
-//
-//            Marshaller jaxbmarshaller = jaxBConText.createMarshaller();
-//            jaxbmarshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-//
-//            jaxbmarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-//            jaxbmarshaller.marshal(gmfTransactionRequest, strWriter);
-//            gmffomattedRequest = strWriter.toString();
-//        }
-//        catch (JAXBException e) {
-//            System.out.println("SendMessage Exception: " + e);
-//            e.printStackTrace();
-//        }
-
         JacksonXmlModule xmlModule = new JacksonXmlModule();
         xmlModule.setDefaultUseWrapper(false);
         ObjectMapper mapper = new XmlMapper(xmlModule);
@@ -92,19 +77,12 @@ public class HTTPPostHandler {
         mapper.registerModule(new JaxbAnnotationModule());
         try {
             gmffomattedRequest = mapper.writeValueAsString(gmfTransactionRequest);
-            gmffomattedRequest = gmffomattedRequest.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
-            if (gmffomattedRequest.indexOf("<Payload><GMF") > 0)
-                gmffomattedRequest = gmffomattedRequest.replaceAll("<Payload><GMF", "<Payload Encoding=\"cdata\"><![CDATA[<GMF");
-            if (gmffomattedRequest.indexOf("</GMF>]]>") < 0)
-                gmffomattedRequest = gmffomattedRequest.replaceAll("</GMF>", "</GMF>]]>");
-            gmffomattedRequest = gmffomattedRequest.replaceAll("<Encoding>cdata</Encoding>", "");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
-
         /* URL that will consume the transaction request.*/
-        final String postURL = "https://stg.dw.us.fdcnet.biz/rc";
+        final String postURL = "https://stg.dw.us.fdcnet.biz/rc"; // todo: hardcoded?
         /*Instantiate the POST method*/
         final PostMethod post = new PostMethod(postURL);
         /*Instantiate the HTTP client*/
@@ -133,10 +111,8 @@ public class HTTPPostHandler {
                 response = createXMLHttpResponse(post
                         .getResponseBodyAsString());
             }
-        } catch (IOException e) {
-            System.out.println("SendMessage Exception: " + e);
         } catch (Exception e) {
-            System.out.println("SendMessage Exception: " + e);
+            throw new InvalidResponseXml(e.getMessage());
         } finally {
             post.releaseConnection();
         }
@@ -148,74 +124,47 @@ public class HTTPPostHandler {
      * and build Response object; then extract pay load data that is actual
      * transaction response received from Data Wire.*/
     public String createXMLHttpResponse(String xml) {
-//        ClassLoader classLoader = ObjectFactory.class
-//                .getClassLoader();
         String payload = null;
         Response response = null;
-//        try {
-//            JAXBContext context = JAXBContext.newInstance(
-//                    "fdrc.xml", classLoader);
-//            Unmarshaller jaxbUnmarshaller = context.createUnmarshaller();
-//            StringReader responseReader = new StringReader(xml);
-//            /*Un-marshal the XML response and build Response object.*/
-//            Response response = (Response) jaxbUnmarshaller
-//                    .unmarshal(responseReader);
 
-//            String newXml = xml.replaceAll(" Encoding=\"cdata\"", "");
-        JacksonXmlModule module = new JacksonXmlModule();
-        module.setXMLTextElementName("Payload");
-        module.setDefaultUseWrapper(false);
-
-        XmlMapper mapper = (XmlMapper) new XmlMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                .configure(DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS, false)
-                        .configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true)
-                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//                .configure(DeserializationFeature.FAIL_ON_UNRESOLVED_OBJECT_IDS, true)
-//                .configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, true)
-//                .configure(DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS, true)
-//                .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
-//        DeserializationConfig config = new DeserializationConfig();
-//        mapper.setConfig()
-        mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
-        mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true);
-//        mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_VALUES, true);
+        XmlMapper mapper = Serialization.getXmlMapperDeserializer(true);
         Response response1 = null;
         ObjectFactory factory = null;
         try {
             response = (Response) mapper.readValue(xml, Response.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (response != null && response.getStatus() != null
-                && response.getStatus().getStatusCode() != null) {
-            if (response.getStatus().getStatusCode().equalsIgnoreCase("OK")) {
-                if (response.getTransactionResponse() != null
-                        && response.getTransactionResponse().getPayload() != null
-                        && response.getTransactionResponse().getPayload()
-                        .getEncoding() != null) {
-                    if (response.getTransactionResponse().getPayload()
-                            .getEncoding().equals("cdata")) {
-                        /*Extract pay load data that is the transaction response for cdata type encoded message.*/
-                        payload = response.getTransactionResponse()
-                                .getPayload().getValue();
-                    } else if (response.getTransactionResponse()
-                            .getPayload().getEncoding()
-                            .equalsIgnoreCase("xml_escape")) {
-                        /*Extract pay load data that is the transaction response for xml_escape type encoded message.*/
-                        payload = response.getTransactionResponse()
-                                .getPayload().getValue()
-                                .replaceAll("&gt;", ">")
-                                .replaceAll("&lt;", "<")
-                                .replaceAll("&amp;", "&");
+
+            if (response != null && response.getStatus() != null
+                    && response.getStatus().getStatusCode() != null) {
+                if (response.getStatus().getStatusCode().equalsIgnoreCase("OK")) {
+                    if (response.getTransactionResponse() != null
+                            && response.getTransactionResponse().getPayload() != null
+                            && response.getTransactionResponse().getPayload()
+                            .getEncoding() != null) {
+                        if (response.getTransactionResponse().getPayload()
+                                .getEncoding().equals("cdata")) {
+                            /*Extract pay load data that is the transaction response for cdata type encoded message.*/
+                            payload = response.getTransactionResponse()
+                                    .getPayload().getValue();
+                        } else if (response.getTransactionResponse()
+                                .getPayload().getEncoding()
+                                .equalsIgnoreCase("xml_escape")) {
+                            /*Extract pay load data that is the transaction response for xml_escape type encoded message.*/
+                            payload = response.getTransactionResponse()
+                                    .getPayload().getValue()
+                                    .replaceAll("&gt;", ">")
+                                    .replaceAll("&lt;", "<")
+                                    .replaceAll("&amp;", "&");
+                        }
                     }
                 }
+            } else {
+                throw new InvalidResponseXml("Invalid Response");
             }
-        } else {
-
+        } catch (JacksonException e) {
+            throw new InvalidResponseXml(e.getMessage());
+        } catch (Exception e) {
+            throw new InvalidResponseXml(e.getMessage());
         }
-//        } catch (JAXBException e) {
-//            System.out.println("createXMLHttpResponse Exception: " + e);
-//        }
 //        Return the transaction response.
         return payload;
     }

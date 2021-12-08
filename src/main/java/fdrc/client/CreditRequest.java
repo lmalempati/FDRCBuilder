@@ -1,6 +1,7 @@
 package fdrc.client;
 
 import com.fiserv.merchant.gmfv10.*;
+import fdrc.Exceptions.InvalidResponseXml;
 import fdrc.Exceptions.UnsupportedEnumValueException;
 import fdrc.base.Request;
 import fdrc.base.Response;
@@ -13,20 +14,19 @@ import java.util.List;
 class CreditRequest extends GenericRequest implements Serializable {
 
     @Override
-    public String buildRequest(final Request request) {
+    public String buildRequest(final Request request, FiServRequest fiServRequest) {
         String errorMsg = "";
         CreditRequestDetails creditReqDtl = new CreditRequestDetails();
-        FiServRequest fiServRequest = new FiServRequest(request);
-        try {
-            creditReqDtl.setOrigAuthGrp(fiServRequest.getOrigAuthGrp());
 
-            creditReqDtl.setCommonGrp(fiServRequest.getCommonGrp());
+        creditReqDtl.setOrigAuthGrp(fiServRequest.getOrigAuthGrp());
 
-            creditReqDtl.setAltMerchNameAndAddrGrp(fiServRequest.getAltMerchNameAndAddrGrp());
+        creditReqDtl.setCommonGrp(fiServRequest.getCommonGrp());
 
-            creditReqDtl.setCardGrp(fiServRequest.getCardGrp());
-            // CardTypeType.valueOf(request.cardInfo.cardType.toUpperCase())
-            if (Utils.isNotNullOrEmpty(request.cardType))
+        creditReqDtl.setAltMerchNameAndAddrGrp(fiServRequest.getAltMerchNameAndAddrGrp());
+
+        creditReqDtl.setCardGrp(fiServRequest.getCardGrp());
+        // CardTypeType.valueOf(request.cardInfo.cardType.toUpperCase())
+        if (Utils.isNotNullOrEmpty(request.cardType))
             switch (Utils.toEnum(CardTypeType.class, request.cardType)) {
                 case VISA:
                     creditReqDtl.setVisaGrp(fiServRequest.getVisaGrp());
@@ -37,41 +37,36 @@ class CreditRequest extends GenericRequest implements Serializable {
                 case JCB:
                 case DISCOVER:
                 case DINERS:
-                        creditReqDtl.setDSGrp(fiServRequest.getDiscoverGrp());
+                    creditReqDtl.setDSGrp(fiServRequest.getDiscoverGrp());
                     break;
                 case AMEX:
                     creditReqDtl.setAmexGrp(fiServRequest.getAmexGrp());
             }
 
-            /* Addtl Amount Group
-             * Getting the reference object of the AddtlAmtGrp list and add the
-             * AddtlAmtGrp object to the list
-             */
-            List<AddtlAmtGrp> addtlAmtGr = creditReqDtl.getAddtlAmtGrp();
-            List<AddtlAmtGrp> addlGrps = fiServRequest.getAddtlAmtGrp();
-            if (addlGrps != null)
-                for (AddtlAmtGrp grp : addlGrps
-                ) {
-                    addtlAmtGr.add(grp);
-                }
-            /* ECommerce Group */
-            creditReqDtl.setEcommGrp(fiServRequest.getEcommGrp());
-
-            /* CustInfoGrp Group
-             * Assign the CustInfoGrp Group object to the property of CreditSaleRequest object */
-            creditReqDtl.setCustInfoGrp(fiServRequest.getCustInfoGrp());
-            // TA grp
-            creditReqDtl.setTAGrp(fiServRequest.getTAGrp(request));
-
-            /* Add the credit request object to GMF message variant object */
-            gmfmv.setCreditRequest(creditReqDtl);
-        } catch (IllegalArgumentException | UnsupportedEnumValueException e) {
-            errorMsg = e.getMessage();
-        } catch (Exception e) {
-            errorMsg = e.getMessage();
-        } finally {
-            fiServRequest = null;
+        /* Addtl Amount Group
+         * Getting the reference object of the AddtlAmtGrp list and add the
+         * AddtlAmtGrp object to the list
+         */
+        List<AddtlAmtGrp> addtlAmtGr = null;
+        List<AddtlAmtGrp> addlGrps = fiServRequest.getAddtlAmtGrp();
+        if (addlGrps != null) {
+            addtlAmtGr = creditReqDtl.getAddtlAmtGrp();
+            for (AddtlAmtGrp grp : addlGrps
+            ) {
+                addtlAmtGr.add(grp);
+            }
         }
+        /* ECommerce Group */
+        creditReqDtl.setEcommGrp(fiServRequest.getEcommGrp());
+
+        /* CustInfoGrp Group
+         * Assign the CustInfoGrp Group object to the property of CreditSaleRequest object */
+        creditReqDtl.setCustInfoGrp(fiServRequest.getCustInfoGrp());
+        // TA grp
+        creditReqDtl.setTAGrp(fiServRequest.getTAGrp(request));
+
+        /* Add the credit request object to GMF message variant object */
+        gmfmv.setCreditRequest(creditReqDtl);
         return errorMsg;
     }
 
@@ -80,7 +75,7 @@ class CreditRequest extends GenericRequest implements Serializable {
     public boolean getResponse(GMFMessageVariants gmfmvResponse, Response response) {
         boolean result = false;
         if (gmfmvResponse.getCreditResponse() == null) {
-            throw new RuntimeException("invalid response");
+            throw new InvalidResponseXml("invalid response");
         }
         CreditResponseDetails creditResponse = gmfmvResponse.getCreditResponse();
 
@@ -98,7 +93,7 @@ class CreditRequest extends GenericRequest implements Serializable {
         if (creditResponse.getVisaGrp() != null) {
             response.transID = creditResponse.getVisaGrp().getTransID();
             response.cardLevelResult = creditResponse.getVisaGrp().getCardLevelResult();
-            response.aci =  creditResponse.getVisaGrp().getACI();
+            response.aci = creditResponse.getVisaGrp().getACI();
             response.spendQInd = creditResponse.getVisaGrp().getSpendQInd();
         }
         if (creditResponse.getMCGrp() != null) {
@@ -112,7 +107,7 @@ class CreditRequest extends GenericRequest implements Serializable {
             response.amexTranID = creditResponse.getAmexGrp().getAmExTranID();
         }
 
-        if (creditResponse.getTAGrp() != null){
+        if (creditResponse.getTAGrp() != null) {
 //            response.sctyLvl = creditResponse.getTAGrp().getSctyLvl().toString();
 //            response.tknType = creditResponse.getTAGrp().getTknType();
             response.tkn = creditResponse.getTAGrp().getTkn();

@@ -4,6 +4,7 @@ import com.fiserv.merchant.gmfv10.AddtlAmtGrp;
 import com.fiserv.merchant.gmfv10.DebitRequestDetails;
 import com.fiserv.merchant.gmfv10.DebitResponseDetails;
 import com.fiserv.merchant.gmfv10.GMFMessageVariants;
+import fdrc.Exceptions.InvalidResponseXml;
 import fdrc.base.Request;
 import fdrc.base.Response;
 import fdrc.common.FiServRequest;
@@ -13,40 +14,35 @@ import java.util.List;
 
 class DebitRequest extends GenericRequest implements Serializable {
     /* builds request object, if */
-    public String buildRequest(Request request) {
+    public String buildRequest(Request request, FiServRequest fiServRequest) {
         DebitRequestDetails debitReqDtl = new DebitRequestDetails();
-        FiServRequest fiServRequest = new FiServRequest(request);
-        try {
-            fiServRequest = new FiServRequest(request);
-            debitReqDtl = new DebitRequestDetails();
-            debitReqDtl.setCommonGrp(fiServRequest.getCommonGrp());
-            /* Card Group */
-            /* Populate values for Card Group */
-            debitReqDtl.setCardGrp(fiServRequest.getCardGrp());
+        fiServRequest = new FiServRequest(request);
+        debitReqDtl = new DebitRequestDetails();
+        debitReqDtl.setCommonGrp(fiServRequest.getCommonGrp());
+        /* Card Group */
+        /* Populate values for Card Group */
+        debitReqDtl.setCardGrp(fiServRequest.getCardGrp());
 
-            List<AddtlAmtGrp> addtlAmtGr = debitReqDtl.getAddtlAmtGrp();
-            List<AddtlAmtGrp> addlGrps = fiServRequest.getAddtlAmtGrp();
-            if (addlGrps != null)
-                for (AddtlAmtGrp grp : addlGrps
-                ) {
-                    addtlAmtGr.add(grp);
-                }
-            debitReqDtl.setPINGrp(fiServRequest.getPINGrp());
-            /* Add the Debit request object to GMF message variant object */
-            gmfmv.setDebitRequest(debitReqDtl);
-            return "";
-        } catch (Exception e) {
-            return e.getMessage();
-        } finally {
-            fiServRequest = null;
+        List<AddtlAmtGrp> addtlAmtGr = null;
+        List<AddtlAmtGrp> addlGrps = fiServRequest.getAddtlAmtGrp();
+        if (addlGrps != null) {
+            addtlAmtGr = debitReqDtl.getAddtlAmtGrp();
+            for (AddtlAmtGrp grp : addlGrps
+            ) {
+                addtlAmtGr.add(grp);
+            }
         }
+        debitReqDtl.setPINGrp(fiServRequest.getPINGrp());
+        /* Add the Debit request object to GMF message variant object */
+        gmfmv.setDebitRequest(debitReqDtl);
+        return "";
     }
 
     @Override
     public boolean getResponse(GMFMessageVariants gmfmvResponse, Response response) {
         boolean result = false;
         if (gmfmvResponse.getDebitResponse() == null) {
-            throw new RuntimeException("invalid response");
+            throw new InvalidResponseXml("invalid response");
         }
         DebitResponseDetails debitResponse = gmfmvResponse.getDebitResponse();
         response.respCode = debitResponse.getRespGrp().getRespCode();

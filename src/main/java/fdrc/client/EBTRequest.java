@@ -1,6 +1,7 @@
 package fdrc.client;
 
 import com.fiserv.merchant.gmfv10.*;
+import fdrc.Exceptions.InvalidResponseXml;
 import fdrc.base.Request;
 import fdrc.base.Response;
 import fdrc.common.FiServRequest;
@@ -9,33 +10,25 @@ import java.io.Serializable;
 import java.util.List;
 
 class EBTRequest extends GenericRequest implements Serializable {
-    public String buildRequest(Request request) {
+    public String buildRequest(Request request, FiServRequest fiServRequest) {
         String errorMsg = null;
-        FiServRequest fiServRequest = null;
         EBTRequestDetails ebtReqDtl = null;
-        try {
-            fiServRequest = new FiServRequest(request);
-            ebtReqDtl = new EBTRequestDetails();
-            ebtReqDtl.setCommonGrp(fiServRequest.getCommonGrp());
-            ebtReqDtl.setCardGrp(fiServRequest.getCardGrp());
+        ebtReqDtl = new EBTRequestDetails();
+        ebtReqDtl.setCommonGrp(fiServRequest.getCommonGrp());
+        ebtReqDtl.setCardGrp(fiServRequest.getCardGrp());
 
-            List<AddtlAmtGrp> addtlAmtGr = ebtReqDtl.getAddtlAmtGrp();
-            List<AddtlAmtGrp> addlGrps = fiServRequest.getAddtlAmtGrp();
-            if (addlGrps != null)
-                for (AddtlAmtGrp grp : addlGrps
-                ) {
-                    addtlAmtGr.add(grp);
-                }
-            ebtReqDtl.setPINGrp(fiServRequest.getPINGrp());
-            ebtReqDtl.setEbtGrp(fiServRequest.getEBTGrp(request));
-            gmfmv.setEBTRequest(ebtReqDtl);
-        } catch (IllegalArgumentException e) {
-            errorMsg = e.getMessage();
-        } catch (Exception e) {
-            errorMsg = e.getMessage();
-        } finally {
-            fiServRequest = null;
+        List<AddtlAmtGrp> addtlAmtGr = null;
+        List<AddtlAmtGrp> addlGrps = fiServRequest.getAddtlAmtGrp();
+        if (addlGrps != null) {
+            addtlAmtGr = ebtReqDtl.getAddtlAmtGrp();
+            for (AddtlAmtGrp grp : addlGrps
+            ) {
+                addtlAmtGr.add(grp);
+            }
         }
+        ebtReqDtl.setPINGrp(fiServRequest.getPINGrp());
+        ebtReqDtl.setEbtGrp(fiServRequest.getEBTGrp(request));
+        gmfmv.setEBTRequest(ebtReqDtl);
         return errorMsg;
     }
 
@@ -44,7 +37,7 @@ class EBTRequest extends GenericRequest implements Serializable {
         RespGrp respGrp = null;
         boolean result = false;
         if (gmfmvResponse.getEBTResponse() == null) {
-            throw new RuntimeException("invalid response");
+            throw new InvalidResponseXml("invalid response");
         }
         EBTResponseDetails ebtResponse = gmfmvResponse.getEBTResponse();
 

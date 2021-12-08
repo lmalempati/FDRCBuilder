@@ -102,6 +102,7 @@ public class Request {
     public String merchAddr;
     public String merchCity;
     public String merchState;
+    public String merchCtry;
     public String merchPostalCode;
 //    public String addtlAmtType;
 //    public String addtlAmt;
