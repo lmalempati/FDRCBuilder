@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.Assert.assertEquals;
 
-public class TestRetail extends TestGneric {
+public class TestRetail extends TestGeneric {
     public static final String PATH = "src/test/resources/Retail/";
 
     @ParameterizedTest
@@ -29,6 +29,6 @@ public class TestRetail extends TestGneric {
 
     )
     public void runTestsRetail(String fileName) {
-        parametrizedTest(fileName, PATH);
+        parameterizedTest(fileName, PATH);
     }
 }

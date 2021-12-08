@@ -9,8 +9,7 @@ import org.junit.runners.Parameterized;
 
 import static org.junit.Assert.assertEquals;
 
-//@RunWith(Parameterized.class)
-public class TestRestaurant extends TestGneric {
+public class TestRestaurant extends TestGeneric {
     public static final String PATH = "src/test/resources/Restaurant/";
 
     @ParameterizedTest
@@ -28,7 +27,7 @@ public class TestRestaurant extends TestGneric {
             }
     )
     public void runTestsRestaurant(String fileName) {
-        parametrizedTest(fileName, PATH);
+        parameterizedTest(fileName, PATH);
     }
 
 

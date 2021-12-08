@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.Assert.assertEquals;
 
-public class TestRetailOrRestaurant extends TestGneric {
+public class TestRetailOrRestaurant extends TestGeneric {
     public static final String PATH = "src/test/resources/RetailOrRestt/";
 
     @ParameterizedTest
@@ -18,7 +18,7 @@ public class TestRetailOrRestaurant extends TestGneric {
                     "Moto-Verification-NoEncr-4012000000000529.json;000" // Verification
             })
     public void runParameterizedTests(String fileName) {
-        parametrizedTest(fileName, PATH);
+        parameterizedTest(fileName, PATH);
     }
 
     public Request getPayload(String fileName) {
