@@ -7,10 +7,10 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.Assert.assertEquals;
 
-public class TestRetail extends TestGneric {
+public class TestRetail extends TestGeneric {
     public static final String PATH = "src/test/resources/Retail/";
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @ValueSource(strings =
             {
                     "debit-payload-200070040010.json;000", //cashback
@@ -29,6 +29,6 @@ public class TestRetail extends TestGneric {
 
     )
     public void runTestsRetail(String fileName) {
-        parametrizedTest(fileName, PATH);
+        parameterizedTest(fileName, PATH);
     }
 }

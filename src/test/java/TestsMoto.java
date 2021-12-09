@@ -12,10 +12,10 @@ import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
 
-public class TestsMoto extends TestGneric {
+public class TestsMoto extends TestGeneric {
     public static final String PATH = "src/test/resources/Moto/";
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @ValueSource(strings =
             {
                     "Amex-AuthCompl-payload-10.json;002;1", "Amex-AuthCompl-payload-11.json;000", // Auth & Compl Amex
@@ -36,6 +36,6 @@ public class TestsMoto extends TestGneric {
                     "Credit-TA-Sale-MC-200299950010.json;002"
             })
     public void runTestsMoto(String fileName) {
-        parametrizedTest(fileName, PATH);
+        parameterizedTest (fileName, PATH);
     }
 }
