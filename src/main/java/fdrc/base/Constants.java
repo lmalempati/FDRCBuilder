@@ -1,6 +1,8 @@
 package fdrc.base;
 
 public class Constants {
+    public static final String GMF = "<GMF>";
+    public static final String GMF_NS = "<GMF xmlns=\"com/fiserv/Merchant/gmfV10.02\">";
     // Parameters for transaction request
     public static final String REQUEST_TPPID = "RSU005";
     public static final String REQUEST_TERMID = "00000003";

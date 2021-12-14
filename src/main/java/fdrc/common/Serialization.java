@@ -11,6 +11,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import com.fiserv.merchant.gmfv10.GMFMessageVariants;
 import fdrc.Exceptions.InvalidResponseXml;
+import fdrc.base.Constants;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -28,11 +29,27 @@ public class Serialization {
             xmlModule.setDefaultUseWrapper(false);
             ObjectMapper mapper = new XmlMapper(xmlModule);
 
+//            xmlModule.addSerializer(JAXBElement.class, new JsonSerializer<JAXBElement>() {
+//                @Override
+//                public void serialize(JAXBElement value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+//                    if (value.isNil()) {
+//                        gen.writeNull();
+//                    } else {
+//                        gen.writeObject(value.getValue());
+//                    }
+//                }
+//            });
+
+//            mapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true);
+//            XmlJaxbAnnotationIntrospector j = new XmlJaxbAnnotationIntrospector();
+            // j.findNamespace(mapper.getSerializationConfig(), )
+//            mapper.setAnnotationIntrospector(new XmlJaxbAnnotationIntrospector());
+
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL); // to ignore empty groups
             mapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
             mapper.registerModule(new JaxbAnnotationModule()); // to follow xml annotations on model classes
             returnValue = mapper.writeValueAsString(gmfmv);
-            returnValue = returnValue.replaceAll("<GMF>", "<GMF xmlns=\"com/fiserv/Merchant/gmfV10.02\">"); // todo: hardcoded?????
+            returnValue = returnValue.replaceAll(Constants.GMF, Constants.GMF_NS); // todo: xml not getting namespace, hardcoded?????
         } catch (JacksonException e) {
             error = e.getMessage();
         } catch (Exception e) {

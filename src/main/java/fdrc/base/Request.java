@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class Request {
     // no param constructor
-    public Request(){} // todo:tmp code, we can remove in prod. without this, de-serialilization expects all fields to be present!
+    public Request(){} // todo:tmp code, we can remove in prod. without this, json de-serialilization expects all fields to be present!
     // card grp
     public String acctNum;
     public String cardExpiryDate;

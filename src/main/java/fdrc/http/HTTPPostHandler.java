@@ -157,12 +157,13 @@ public class HTTPPostHandler {
                         }
                     }
                 }
+                else{
+                    throw new InvalidResponseXml(response.getStatus().getStatusCode());
+                }
             } else {
                 throw new InvalidResponseXml("Invalid Response");
             }
         } catch (JacksonException e) {
-            throw new InvalidResponseXml(e.getMessage());
-        } catch (Exception e) {
             throw new InvalidResponseXml(e.getMessage());
         }
 //        Return the transaction response.

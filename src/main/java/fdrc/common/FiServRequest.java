@@ -61,16 +61,13 @@ public class FiServRequest { // todo name
         } else {
             cmnGrp.setMerchID(Constants.REQUEST_MERCHID); // ToDo, get from req
         }
-        cmnGrp.setGroupID(Constants.REQUEST_GROUPID);
+        cmnGrp.setGroupID(Utils.isNotNullOrEmpty(request.groupID) ? request.groupID : Constants.REQUEST_GROUPID);
         // TATikenRequest don't need the following fields?
         if (Utils.toEnum(TxnTypeType.class, request.txnType) == TxnTypeType.TA_TOKEN_REQUEST) return cmnGrp;
 
         /* A number assigned by the merchant to uniquely reference a transaction order sequence. */
         // ToDo, completions should have ordernum, need to validate?
-        if (Utils.isNotNullOrEmpty(request.orderNum))
-            cmnGrp.setOrderNum(request.orderNum);
-        else
-            cmnGrp.setOrderNum(Utils.getOrderRefNum());
+        cmnGrp.setOrderNum(Utils.isNotNullOrEmpty(request.orderNum) ? request.orderNum : Utils.getOrderRefNum());
         /* An identifier used to indicate the terminal’s account number entry mode
          * and authentication capability via the Point-of-Service. */
         cmnGrp.setPOSEntryMode(request.posEntryMode); //010// 011
@@ -349,8 +346,11 @@ public class FiServRequest { // todo name
         return Utils.valueOrNothing(taGrp);
     }
 
-    protected String getXmlPayload() {
-        GMFMessageVariants gmfMessageVariants;
-        return "";
+    public HostTotGrp getHostTotGrp(){
+        HostTotGrp hostTotGrp = new HostTotGrp();
+        hostTotGrp.setTotReqDate("ShiftRPT"); // CloseShift
+        hostTotGrp.setPassword("111111");
+        hostTotGrp.setNetSettleAmt("12345");
+        return hostTotGrp;
     }
 }
