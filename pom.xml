@@ -9,115 +9,6 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <dependencies>
-        <!--        <dependency>-->
-        <!--            <groupId>commons-codec</groupId>-->
-        <!--            <artifactId>commons-codec</artifactId>-->
-        <!--            <version>1.4</version>-->
-        <!--            <scope>compile</scope>-->
-        <!--            <exclusions>-->
-        <!--                <exclusion>-->
-        <!--                    <groupId>org.apache.logging.log4j</groupId>-->
-        <!--                    <artifactId>log4j</artifactId>-->
-        <!--                </exclusion>-->
-        <!--            </exclusions>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.json</groupId>-->
-        <!--            <artifactId>json</artifactId>-->
-        <!--            <version>20210307</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.glassfish.jaxb</groupId>-->
-        <!--            <artifactId>jaxb-runtime</artifactId>-->
-        <!--            <version>2.3.1</version>-->
-        <!--            <scope>compile</scope>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>jakarta.xml.ws</groupId>-->
-        <!--            <artifactId>jakarta.xml.ws-api</artifactId>-->
-        <!--            <version>2.3.3</version>-->
-        <!--            <scope>compile</scope>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>jakarta.jws</groupId>-->
-        <!--            <artifactId>jakarta.jws-api</artifactId>-->
-        <!--            <version>2.1.0</version>-->
-        <!--            <scope>compile</scope>-->
-        <!--        </dependency>-->
-
-        <!--                <dependency>-->
-        <!--                    <groupId>com.sun.xml.bind</groupId>-->
-        <!--                    <artifactId>jaxb-impl</artifactId>-->
-        <!--                    <version>2.3.3</version>-->
-        <!--                    <scope>compile</scope>-->
-        <!--                </dependency>-->
-        <!--                <dependency>-->
-        <!--                    <groupId>jakarta.xml.bind</groupId>-->
-        <!--                    <artifactId>jakarta.xml.bind-api</artifactId>-->
-        <!--                    <version>3.0.1</version>-->
-        <!--                </dependency>-->
-        <!--                <dependency>-->
-        <!--                    <groupId>javax.xml.bind</groupId>-->
-        <!--                    <artifactId>jaxb-api</artifactId>-->
-        <!--                    <version>2.3.1</version>-->
-        <!--                    <scope>compile</scope>-->
-        <!--                </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.apache.commons</groupId>-->
-        <!--            <artifactId>commons-lang3</artifactId>-->
-        <!--            <version>3.12.0</version>-->
-        <!--            <scope>compile</scope>-->
-        <!--            <exclusions>-->
-        <!--                <exclusion>-->
-        <!--                    <groupId>org.apache.logging.log4j</groupId>-->
-        <!--                    <artifactId>log4j</artifactId>-->
-        <!--                </exclusion>-->
-        <!--                <exclusion>-->
-        <!--                    <groupId>log4j</groupId>-->
-        <!--                    <artifactId>log4j</artifactId>-->
-        <!--                </exclusion>-->
-        <!--            </exclusions>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>gson</groupId>-->
-        <!--            <artifactId>gson</artifactId>-->
-        <!--            <version>2.8.7</version>-->
-        <!--            <scope>system</scope>-->
-        <!--            <systemPath>${project.basedir}/lib/gson-2.8.7.jar</systemPath>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.eclipse.persistence</groupId>-->
-        <!--            <artifactId>org.eclipse.persistence.moxy</artifactId>-->
-        <!--            <version>2.7.3</version>-->
-        <!--            <scope>runtime</scope>-->
-        <!--        </dependency>-->
-        <!--                <dependency>-->
-        <!--                    <groupId>httpclient</groupId>-->
-        <!--                    <artifactId>httpclient</artifactId>-->
-        <!--                    <version>3.0</version>-->
-        <!--                    <scope>system</scope>-->
-        <!--                    <systemPath>${project.basedir}/lib/commons-httpclient-3.0.jar</systemPath>-->
-        <!--                </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>codec</groupId>-->
-        <!--            <artifactId>codec</artifactId>-->
-        <!--            <version>1.4</version>-->
-        <!--            <scope>system</scope>-->
-        <!--            <systemPath>${project.basedir}/lib/commons-codec-1.4.jar</systemPath>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>logging</groupId>-->
-        <!--            <artifactId>logging</artifactId>-->
-        <!--            <version>1.1</version>-->
-        <!--            <scope>system</scope>-->
-        <!--            <systemPath>${project.basedir}/lib/commons-logging-1.1.jar</systemPath>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>joda-time</groupId>-->
-        <!--            <artifactId>joda-time</artifactId>-->
-        <!--            <version>2.10.10</version>-->
-        <!--            <scope>compile</scope>-->
-        <!--        </dependency>        -->
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
@@ -149,6 +40,11 @@
                     <artifactId>log4j</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.15.0</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -186,7 +82,6 @@
             <version>2.13.0</version>
         </dependency>
     </dependencies>
-
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
@@ -214,7 +109,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>fdrc.client.Client</mainClass>
+                            <mainClass>fdrc.model.Client</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -226,7 +121,7 @@
                         <id>make-assembly</id>
                         <phase>package</phase>
                         <goals>
-                            <!--                            <goal>single</goal>-->
+                            <goal>single</goal>
                             <goal>assembly</goal>
                         </goals>
                     </execution>

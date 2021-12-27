@@ -1,12 +1,14 @@
 package fdrc.utils;
 
-import com.fiserv.merchant.gmfv10.*;
+import com.fiserv.merchant.gmfv10.CCVIndType;
+import com.fiserv.merchant.gmfv10.CardTypeType;
+import com.fiserv.merchant.gmfv10.PymtTypeType;
+import com.fiserv.merchant.gmfv10.TxnTypeType;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fdrc.Exceptions.InvalidNumber;
 import fdrc.Exceptions.UnsupportedEnumValueException;
-import fdrc.base.Request;
-import fdrc.common.RequestUtils;
+import fdrc.base.RCRequest;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -49,8 +51,9 @@ public class Utils {
     }
 
     public static String formatAmount(String amount) {
+        if (amount == null) return null;
         Pattern pattern = Pattern.compile("\\d+(\\.\\d+)?");
-        if (amount == null || !pattern.matcher(amount).matches()) {
+        if (!pattern.matcher(amount).matches()) {
             throw new InvalidNumber("Invalid amount.");
         }
         return String.format("%012.0f", new BigDecimal(amount).multiply(new BigDecimal(100)));
@@ -108,34 +111,34 @@ public class Utils {
         throw new UnsupportedEnumValueException(errorMsg);
     }
 
-    public static String validate(final Request request) {
+    public static String validate(final RCRequest RCRequest) {
         //todo: what else to validate?
-        if (request == null)
+        if (RCRequest == null)
             return "invalid or empty request";
-        if (!Utils.isNotNullOrEmpty(request.pymtType))
+        if (!Utils.isNotNullOrEmpty(RCRequest.pymtType))
             return "Payment type can't be empty";
-        Utils.toEnum(PymtTypeType.class, request.pymtType);
-        if (!Utils.isNotNullOrEmpty(request.txnType))
+        Utils.toEnum(PymtTypeType.class, RCRequest.pymtType);
+        if (!Utils.isNotNullOrEmpty(RCRequest.txnType))
             return "Transaction type can't be empty";
-        Utils.toEnum(TxnTypeType.class, request.txnType);
-        if (!(Utils.toEnum(PymtTypeType.class, request.pymtType) == PymtTypeType.DEBIT ||
-                Utils.toEnum(PymtTypeType.class, request.pymtType) == PymtTypeType.EBT)) {
+        Utils.toEnum(TxnTypeType.class, RCRequest.txnType);
+        if (!(Utils.toEnum(PymtTypeType.class, RCRequest.pymtType) == PymtTypeType.DEBIT ||
+                Utils.toEnum(PymtTypeType.class, RCRequest.pymtType) == PymtTypeType.EBT)) {
 //            if (!Utils.isNotNullOrEmpty(request.cardType))
 //                return "Card type can't be empty";
 //            else
-            Utils.toEnum(CardTypeType.class, request.cardType);
+            Utils.toEnum(CardTypeType.class, RCRequest.cardType);
         }
 
-        if (!Utils.isNotNullOrEmpty(request.cardCaptCap)) // todo: this can't be on request as we need to derive it..
+        if (!Utils.isNotNullOrEmpty(RCRequest.cardCaptCap)) // todo: this can't be on request as we need to derive it..
             return "Invalid cardCaptCap";
 
-        if (Utils.isNotNullOrEmpty(request.ccvInd))
-            Utils.toEnum(CCVIndType.class, request.ccvInd);
-        if (Utils.isNotNullOrEmpty(request.merchantMID))
-            RequestUtils.merchantID = RequestUtils.mapMidToDID(request.merchantMID); // todo: no need in prod
+        if (Utils.isNotNullOrEmpty(RCRequest.ccvInd))
+            Utils.toEnum(CCVIndType.class, RCRequest.ccvInd);
+        if (Utils.isNotNullOrEmpty(RCRequest.merchantMID))
+            RequestUtils.merchantID = RequestUtils.mapMidToDID(RCRequest.merchantMID); // todo: no need in prod
 
         Pattern pattern = Pattern.compile("\\d+(\\.\\d+)?");
-        if (request.txnAmt == null || !pattern.matcher(request.txnAmt.toString()).matches()) {
+        if (RCRequest.txnAmt == null || !pattern.matcher(RCRequest.txnAmt.toString()).matches()) {
             return "Invalid amount.";
         }
         return "";

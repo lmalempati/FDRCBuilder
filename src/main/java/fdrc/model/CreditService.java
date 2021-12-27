@@ -1,46 +1,45 @@
-package fdrc.client;
+package fdrc.model;
 
 import com.fiserv.merchant.gmfv10.*;
 import fdrc.Exceptions.InvalidResponseXml;
-import fdrc.Exceptions.UnsupportedEnumValueException;
-import fdrc.base.Request;
-import fdrc.base.Response;
-import fdrc.common.FiServRequest;
+import fdrc.base.RCRequest;
+import fdrc.base.RCResponse;
+import fdrc.common.FDRCRequestService;
 import fdrc.utils.Utils;
 
 import java.io.Serializable;
 import java.util.List;
 
-class CreditRequest extends GenericRequest implements Serializable {
+class CreditService extends GenericService implements Serializable {
 
     @Override
-    public String buildRequest(final Request request, FiServRequest fiServRequest) {
+    public String buildRequest(final RCRequest RCRequest, FDRCRequestService FDRCRequestService) {
         String errorMsg = "";
         CreditRequestDetails creditReqDtl = new CreditRequestDetails();
 
-        creditReqDtl.setOrigAuthGrp(fiServRequest.getOrigAuthGrp());
+        creditReqDtl.setOrigAuthGrp(FDRCRequestService.getOrigAuthGrp());
 
-        creditReqDtl.setCommonGrp(fiServRequest.getCommonGrp());
+        creditReqDtl.setCommonGrp(FDRCRequestService.getCommonGrp());
 
-        creditReqDtl.setAltMerchNameAndAddrGrp(fiServRequest.getAltMerchNameAndAddrGrp());
+        creditReqDtl.setAltMerchNameAndAddrGrp(FDRCRequestService.getAltMerchNameAndAddrGrp());
 
-        creditReqDtl.setCardGrp(fiServRequest.getCardGrp());
+        creditReqDtl.setCardGrp(FDRCRequestService.getCardGrp());
         // CardTypeType.valueOf(request.cardInfo.cardType.toUpperCase())
-        if (Utils.isNotNullOrEmpty(request.cardType))
-            switch (Utils.toEnum(CardTypeType.class, request.cardType)) {
+        if (Utils.isNotNullOrEmpty(RCRequest.cardType))
+            switch (Utils.toEnum(CardTypeType.class, RCRequest.cardType)) {
                 case VISA:
-                    creditReqDtl.setVisaGrp(fiServRequest.getVisaGrp());
+                    creditReqDtl.setVisaGrp(FDRCRequestService.getVisaGrp());
                     break;
                 case MASTER_CARD:
-                    creditReqDtl.setMCGrp(fiServRequest.getMasterCardGrp());
+                    creditReqDtl.setMCGrp(FDRCRequestService.getMasterCardGrp());
                     break;
                 case JCB:
                 case DISCOVER:
                 case DINERS:
-                    creditReqDtl.setDSGrp(fiServRequest.getDiscoverGrp());
+                    creditReqDtl.setDSGrp(FDRCRequestService.getDiscoverGrp());
                     break;
                 case AMEX:
-                    creditReqDtl.setAmexGrp(fiServRequest.getAmexGrp());
+                    creditReqDtl.setAmexGrp(FDRCRequestService.getAmexGrp());
             }
 
         /* Addtl Amount Group
@@ -48,7 +47,7 @@ class CreditRequest extends GenericRequest implements Serializable {
          * AddtlAmtGrp object to the list
          */
         List<AddtlAmtGrp> addtlAmtGr = null;
-        List<AddtlAmtGrp> addlGrps = fiServRequest.getAddtlAmtGrp();
+        List<AddtlAmtGrp> addlGrps = FDRCRequestService.getAddtlAmtGrp();
         if (addlGrps != null) {
             addtlAmtGr = creditReqDtl.getAddtlAmtGrp();
             for (AddtlAmtGrp grp : addlGrps
@@ -57,13 +56,13 @@ class CreditRequest extends GenericRequest implements Serializable {
             }
         }
         /* ECommerce Group */
-        creditReqDtl.setEcommGrp(fiServRequest.getEcommGrp());
+        creditReqDtl.setEcommGrp(FDRCRequestService.getEcommGrp());
 
         /* CustInfoGrp Group
          * Assign the CustInfoGrp Group object to the property of CreditSaleRequest object */
-        creditReqDtl.setCustInfoGrp(fiServRequest.getCustInfoGrp());
+        creditReqDtl.setCustInfoGrp(FDRCRequestService.getCustInfoGrp());
         // TA grp
-        creditReqDtl.setTAGrp(fiServRequest.getTAGrp(request));
+        creditReqDtl.setTAGrp(FDRCRequestService.getTAGrp(RCRequest));
 
         /* Add the credit request object to GMF message variant object */
         gmfmv.setCreditRequest(creditReqDtl);
@@ -72,21 +71,21 @@ class CreditRequest extends GenericRequest implements Serializable {
 
     /*Transaction response in XML format received from Data wire */
     @Override
-    public boolean getResponse(GMFMessageVariants gmfmvResponse, Response response) {
+    public boolean getResponse(GMFMessageVariants gmfmvResponse, RCRequest request, RCResponse response) {
         boolean result = false;
         if (gmfmvResponse.getCreditResponse() == null) {
             throw new InvalidResponseXml("invalid response");
         }
         CreditResponseDetails creditResponse = gmfmvResponse.getCreditResponse();
-
         response.respCode = creditResponse.getRespGrp().getRespCode();
         response.addtlRespData = creditResponse.getRespGrp().getAddtlRespData();
 
         response.origAuthID = creditResponse.getRespGrp().getAuthID();
         response.origSTAN = creditResponse.getCommonGrp().getSTAN();//?
         response.origLocalDateTime = creditResponse.getCommonGrp().getLocalDateTime();
-        response.origTranDateTime = creditResponse.getCommonGrp().getTrnmsnDateTime();
+        response.origTranDateTime =  creditResponse.getCommonGrp().getTrnmsnDateTime();
         response.origRespCode = creditResponse.getRespGrp().getRespCode();
+        response.trnmsnDateTime = request.trnsmitDateTime;
         response.refNum = creditResponse.getCommonGrp().getRefNum();
         response.orderNum = creditResponse.getCommonGrp().getOrderNum();
 

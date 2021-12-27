@@ -1,9 +1,5 @@
-import fdrc.base.Request;
-import fdrc.base.Response;
-import fdrc.client.Client;
+import fdrc.base.RCRequest;
 import fdrc.utils.JsonBuilder;
-import org.junit.Test;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.Assert.assertEquals;
@@ -21,7 +17,7 @@ public class TestRetailOrRestaurant extends TestGeneric {
         parameterizedTest(fileName, PATH);
     }
 
-    public Request getPayload(String fileName) {
+    public RCRequest getPayload(String fileName) {
         return JsonBuilder.getRequestFromJsonString(fileName);
     }
 

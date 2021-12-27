@@ -1,24 +1,25 @@
-package fdrc.client;
+package fdrc.model;
 
 import com.fiserv.merchant.gmfv10.*;
 import fdrc.Exceptions.InvalidResponseXml;
-import fdrc.base.Request;
-import fdrc.base.Response;
-import fdrc.common.FiServRequest;
+import fdrc.base.RCRequest;
+import fdrc.base.RCResponse;
+import fdrc.common.FDRCRequestService;
 
 import java.io.Serializable;
 import java.util.List;
 
-class EBTRequest extends GenericRequest implements Serializable {
-    public String buildRequest(Request request, FiServRequest fiServRequest) {
+class EBTService extends GenericService implements Serializable {
+    @Override
+    public String buildRequest(RCRequest RCRequest, FDRCRequestService FDRCRequestService) {
         String errorMsg = null;
         EBTRequestDetails ebtReqDtl = null;
         ebtReqDtl = new EBTRequestDetails();
-        ebtReqDtl.setCommonGrp(fiServRequest.getCommonGrp());
-        ebtReqDtl.setCardGrp(fiServRequest.getCardGrp());
+        ebtReqDtl.setCommonGrp(FDRCRequestService.getCommonGrp());
+        ebtReqDtl.setCardGrp(FDRCRequestService.getCardGrp());
 
         List<AddtlAmtGrp> addtlAmtGr = null;
-        List<AddtlAmtGrp> addlGrps = fiServRequest.getAddtlAmtGrp();
+        List<AddtlAmtGrp> addlGrps = FDRCRequestService.getAddtlAmtGrp();
         if (addlGrps != null) {
             addtlAmtGr = ebtReqDtl.getAddtlAmtGrp();
             for (AddtlAmtGrp grp : addlGrps
@@ -26,14 +27,14 @@ class EBTRequest extends GenericRequest implements Serializable {
                 addtlAmtGr.add(grp);
             }
         }
-        ebtReqDtl.setPINGrp(fiServRequest.getPINGrp());
-        ebtReqDtl.setEbtGrp(fiServRequest.getEBTGrp(request));
+        ebtReqDtl.setPINGrp(FDRCRequestService.getPINGrp());
+        ebtReqDtl.setEbtGrp(FDRCRequestService.getEBTGrp(RCRequest));
         gmfmv.setEBTRequest(ebtReqDtl);
         return errorMsg;
     }
 
     @Override
-    public boolean getResponse(GMFMessageVariants gmfmvResponse, Response response) {
+    public boolean getResponse(GMFMessageVariants gmfmvResponse, RCRequest request, RCResponse response) {
         RespGrp respGrp = null;
         boolean result = false;
         if (gmfmvResponse.getEBTResponse() == null) {
@@ -47,6 +48,7 @@ class EBTRequest extends GenericRequest implements Serializable {
         response.origSTAN = ebtResponse.getCommonGrp().getSTAN();//?
         response.origLocalDateTime = ebtResponse.getCommonGrp().getLocalDateTime();
         response.origTranDateTime = ebtResponse.getCommonGrp().getTrnmsnDateTime();
+        response.trnmsnDateTime = request.trnsmitDateTime;
         response.origRespCode = ebtResponse.getRespGrp().getRespCode();
         response.refNum = ebtResponse.getCommonGrp().getRefNum();
         response.orderNum = ebtResponse.getCommonGrp().getOrderNum();

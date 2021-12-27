@@ -1,27 +1,26 @@
-package fdrc.client;
+package fdrc.model;
 
 import com.fiserv.merchant.gmfv10.*;
 import fdrc.Exceptions.InvalidResponseXml;
-import fdrc.Exceptions.UnsupportedEnumValueException;
-import fdrc.base.Request;
-import fdrc.base.Response;
-import fdrc.common.FiServRequest;
+import fdrc.base.RCRequest;
+import fdrc.base.RCResponse;
+import fdrc.common.FDRCRequestService;
 import fdrc.utils.Utils;
 
 import java.io.Serializable;
 import java.util.List;
 
-class ReversalRequest extends GenericRequest implements Serializable {
+class ReversalService extends GenericService implements Serializable {
 
     @Override
-    public String buildRequest(Request request, FiServRequest fiServRequest) {
+    public String buildRequest(RCRequest request, FDRCRequestService requestService) {
         String errorMsg = null;
         VoidTOReversalRequestDetails reversalRequestDetails = new VoidTOReversalRequestDetails();
-        reversalRequestDetails.setCommonGrp(fiServRequest.getCommonGrp());
-        reversalRequestDetails.setAltMerchNameAndAddrGrp(fiServRequest.getAltMerchNameAndAddrGrp());
-        reversalRequestDetails.setCardGrp(fiServRequest.getCardGrp());
+        reversalRequestDetails.setCommonGrp(requestService.getCommonGrp());
+        reversalRequestDetails.setAltMerchNameAndAddrGrp(requestService.getAltMerchNameAndAddrGrp());
+        reversalRequestDetails.setCardGrp(requestService.getCardGrp());
         List<AddtlAmtGrp> addtlAmtGr = null;
-        List<AddtlAmtGrp> addlGrps = fiServRequest.getAddtlAmtGrp();
+        List<AddtlAmtGrp> addlGrps = requestService.getAddtlAmtGrp();
         if (addlGrps != null) {
             addtlAmtGr = reversalRequestDetails.getAddtlAmtGrp();
             for (AddtlAmtGrp grp : addlGrps
@@ -32,28 +31,28 @@ class ReversalRequest extends GenericRequest implements Serializable {
         if (Utils.isNotNullOrEmpty(request.cardType))
             switch (Utils.toEnum(CardTypeType.class, request.cardType)) {
                 case VISA:
-                    reversalRequestDetails.setVisaGrp(fiServRequest.getVisaGrp());
+                    reversalRequestDetails.setVisaGrp(requestService.getVisaGrp());
                     break;
                 case MASTER_CARD:
-                    reversalRequestDetails.setMCGrp(fiServRequest.getMasterCardGrp());
+                    reversalRequestDetails.setMCGrp(requestService.getMasterCardGrp());
                     break;
                 case JCB:
                 case DISCOVER:
                 case DINERS:
-                    reversalRequestDetails.setDSGrp(fiServRequest.getDiscoverGrp());
+                    reversalRequestDetails.setDSGrp(requestService.getDiscoverGrp());
                     break;
                 case AMEX:
-                    reversalRequestDetails.setAmexGrp(fiServRequest.getAmexGrp());
+                    reversalRequestDetails.setAmexGrp(requestService.getAmexGrp());
                     break;
             }
-        reversalRequestDetails.setEcommGrp(fiServRequest.getEcommGrp());
-        reversalRequestDetails.setOrigAuthGrp(fiServRequest.getOrigAuthGrp());
+        reversalRequestDetails.setEcommGrp(requestService.getEcommGrp());
+        reversalRequestDetails.setOrigAuthGrp(requestService.getOrigAuthGrp());
         gmfmv.setReversalRequest(reversalRequestDetails);
         return errorMsg;
     }
 
     @Override
-    public boolean getResponse(GMFMessageVariants gmfmvResponse, Response response) {
+    public boolean getResponse(GMFMessageVariants gmfmvResponse, RCRequest request, RCResponse response) {
         boolean result = false;
         if (gmfmvResponse.getReversalResponse() == null) {
             throw new InvalidResponseXml("invalid response");
@@ -68,6 +67,7 @@ class ReversalRequest extends GenericRequest implements Serializable {
         response.origSTAN = reversalResponse.getCommonGrp().getSTAN();//?
         response.origLocalDateTime = reversalResponse.getCommonGrp().getLocalDateTime();
         response.origTranDateTime = reversalResponse.getCommonGrp().getTrnmsnDateTime();
+        response.trnmsnDateTime = request.trnsmitDateTime;
         response.refNum = reversalResponse.getCommonGrp().getRefNum();
         response.orderNum = reversalResponse.getCommonGrp().getOrderNum();
         if (reversalResponse.getCardGrp() != null)

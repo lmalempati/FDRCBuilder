@@ -1,34 +1,34 @@
-package fdrc.client;
+package fdrc.model;
 
 import com.fiserv.merchant.gmfv10.*;
 import fdrc.Exceptions.InvalidResponseXml;
-import fdrc.base.Request;
-import fdrc.base.Response;
-import fdrc.common.FiServRequest;
+import fdrc.base.RCRequest;
+import fdrc.base.RCResponse;
+import fdrc.common.FDRCRequestService;
 
-public class TransArmorRequest extends GenericRequest {
+class TransArmorService extends GenericService {
 
     @Override
-    public String buildRequest(Request request, FiServRequest fiServRequest) {
+    public String buildRequest(RCRequest RCRequest, FDRCRequestService FDRCRequestService) {
         String errorMsg = null;
         TARequestDetails taReqDetails = null;
         try {
             taReqDetails = new TARequestDetails();
-            taReqDetails.setCommonGrp(fiServRequest.getCommonGrp());
-            taReqDetails.setTAGrp(fiServRequest.getTAGrp(request));
+            taReqDetails.setCommonGrp(FDRCRequestService.getCommonGrp());
+            taReqDetails.setTAGrp(FDRCRequestService.getTAGrp(RCRequest));
             gmfmv.setTransArmorRequest(taReqDetails);
         } catch (IllegalArgumentException e) {
             errorMsg = e.getMessage();
         } catch (Exception e) {
             errorMsg = e.getMessage();
         } finally {
-            fiServRequest = null;
+            FDRCRequestService = null;
         }
         return errorMsg;
     }
 
     @Override
-    public boolean getResponse(GMFMessageVariants gmfmvResponse, Response response) {
+    public boolean getResponse(GMFMessageVariants gmfmvResponse, RCRequest request, RCResponse response) {
         RespGrp respGrp = null;
         boolean result = false;
         if (gmfmvResponse.getTransArmorResponse() == null) {
@@ -42,6 +42,7 @@ public class TransArmorRequest extends GenericRequest {
         response.origSTAN = taResponse.getCommonGrp().getSTAN();//?
         response.origLocalDateTime = taResponse.getCommonGrp().getLocalDateTime();
         response.origTranDateTime = taResponse.getCommonGrp().getTrnmsnDateTime();
+        response.trnmsnDateTime = request.trnsmitDateTime;
         response.origRespCode = taResponse.getRespGrp().getRespCode();
         response.refNum = taResponse.getCommonGrp().getRefNum();
         response.orderNum = taResponse.getCommonGrp().getOrderNum();

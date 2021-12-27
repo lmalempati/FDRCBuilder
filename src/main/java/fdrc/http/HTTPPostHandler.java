@@ -1,17 +1,12 @@
 package fdrc.http;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JacksonException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import fdrc.Exceptions.InvalidResponseXml;
 import fdrc.base.Constants;
-import fdrc.common.RequestUtils;
+import fdrc.base.RCResponse;
 import fdrc.common.Serialization;
+import fdrc.utils.RequestUtils;
 import fdrc.xml.*;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
@@ -24,7 +19,7 @@ public class HTTPPostHandler {
     /* The below method will take the XML request and returns the XML response received from Data wire.
      * */
     @SuppressWarnings("deprecation")
-    public String SendMessage(String gmfrequest) {
+    public RCResponse Submit(String gmfrequest) {
 
         /*Response that will be returned.*/
         String response = "";
@@ -69,17 +64,7 @@ public class HTTPPostHandler {
 
         String gmffomattedRequest = "";
         //Transform the gmfTransactionRequest object into XML string.
-        JacksonXmlModule xmlModule = new JacksonXmlModule();
-        xmlModule.setDefaultUseWrapper(false);
-        ObjectMapper mapper = new XmlMapper(xmlModule);
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        mapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
-        mapper.registerModule(new JaxbAnnotationModule());
-        try {
-            gmffomattedRequest = mapper.writeValueAsString(gmfTransactionRequest);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        gmffomattedRequest = Serialization.getXmlObject(gmfTransactionRequest, null);
 
         /* URL that will consume the transaction request.*/
         final String postURL = "https://stg.dw.us.fdcnet.biz/rc"; // todo: hardcoded?
@@ -106,50 +91,54 @@ public class HTTPPostHandler {
             if (returnCode == HttpStatus.SC_NOT_IMPLEMENTED) {
                 System.err
                         .println("The Post method is not implemented by this URI");
+                return null;
             } else if (returnCode == HttpStatus.SC_OK) {
 
-                response = createXMLHttpResponse(post
+                return loadResponse(post
                         .getResponseBodyAsString());
             }
         } catch (Exception e) {
-            throw new InvalidResponseXml(e.getMessage());
+//            throw new InvalidResponseXml(e.getMessage());
+            return null;
         } finally {
             post.releaseConnection();
         }
-        //Return the response
-        return response;
+        return null;
     }
+
 
     /*The below method takes XML response received after post method execution.
      * and build Response object; then extract pay load data that is actual
      * transaction response received from Data Wire.*/
-    public String createXMLHttpResponse(String xml) {
+    public RCResponse loadResponse(String xml) {
         String payload = null;
         Response response = null;
-
+        RCResponse rcResponse = null;
         XmlMapper mapper = Serialization.getXmlMapperDeserializer(true);
         Response response1 = null;
         ObjectFactory factory = null;
         try {
             response = (Response) mapper.readValue(xml, Response.class);
-
             if (response != null && response.getStatus() != null
                     && response.getStatus().getStatusCode() != null) {
+                rcResponse = new RCResponse();
                 if (response.getStatus().getStatusCode().equalsIgnoreCase("OK")) {
+                    rcResponse.DWStatusCode = response.getStatus().getStatusCode();
                     if (response.getTransactionResponse() != null
                             && response.getTransactionResponse().getPayload() != null
                             && response.getTransactionResponse().getPayload()
                             .getEncoding() != null) {
+                        rcResponse.DWReturnCode = response.getTransactionResponse().getReturnCode();
                         if (response.getTransactionResponse().getPayload()
                                 .getEncoding().equals("cdata")) {
                             /*Extract pay load data that is the transaction response for cdata type encoded message.*/
-                            payload = response.getTransactionResponse()
+                            rcResponse.responseRaw = response.getTransactionResponse()
                                     .getPayload().getValue();
                         } else if (response.getTransactionResponse()
                                 .getPayload().getEncoding()
                                 .equalsIgnoreCase("xml_escape")) {
                             /*Extract pay load data that is the transaction response for xml_escape type encoded message.*/
-                            payload = response.getTransactionResponse()
+                            rcResponse.responseRaw = response.getTransactionResponse()
                                     .getPayload().getValue()
                                     .replaceAll("&gt;", ">")
                                     .replaceAll("&lt;", "<")
@@ -157,17 +146,19 @@ public class HTTPPostHandler {
                         }
                     }
                 }
-                else{
-                    throw new InvalidResponseXml(response.getStatus().getStatusCode());
-                }
-            } else {
-                throw new InvalidResponseXml("Invalid Response");
+//                else{
+//                    throw new InvalidResponseXml(response.getStatus().getStatusCode());
+//            }
             }
-        } catch (JacksonException e) {
+//        else{
+//            throw new InvalidResponseXml("Invalid Response");
+//        }
+        } catch (
+                JacksonException e) {
             throw new InvalidResponseXml(e.getMessage());
         }
 //        Return the transaction response.
-        return payload;
+        return rcResponse;
     }
 
 }

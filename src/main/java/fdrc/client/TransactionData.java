@@ -6,7 +6,7 @@ import java.io.Serializable;
  * This is not in use
  */
 
-public class TransactionData implements Serializable {
+class TransactionData implements Serializable {
     public String ARQC;
     public String ATC;
     public String CID;

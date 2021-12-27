@@ -1,28 +1,28 @@
-package fdrc.client;
+package fdrc.model;
 
 import com.fiserv.merchant.gmfv10.AdminRequestDetails;
 import com.fiserv.merchant.gmfv10.AdminResponseDetails;
 import com.fiserv.merchant.gmfv10.GMFMessageVariants;
 import fdrc.Exceptions.InvalidResponseXml;
-import fdrc.base.Request;
-import fdrc.base.Response;
-import fdrc.common.FiServRequest;
+import fdrc.base.RCRequest;
+import fdrc.base.RCResponse;
+import fdrc.common.FDRCRequestService;
 
-public class AdminRequest extends GenericRequest {
+class AdminService extends GenericService {
 
     @Override
-    public String buildRequest(Request request, FiServRequest fiServRequest) {
+    public String buildRequest(RCRequest RCRequest, FDRCRequestService FDRCRequestService) {
         String errorMsg = "";
         AdminRequestDetails adminRequestDetails = new AdminRequestDetails();
-        adminRequestDetails.setCommonGrp(fiServRequest.getCommonGrp());
-        adminRequestDetails.setHostTotGrp(fiServRequest.getHostTotGrp());
+        adminRequestDetails.setCommonGrp(FDRCRequestService.getCommonGrp());
+        adminRequestDetails.setHostTotGrp(FDRCRequestService.getHostTotGrp());
 
         gmfmv.setAdminRequest(adminRequestDetails);
         return errorMsg;
     }
 
     @Override
-    public boolean getResponse(GMFMessageVariants gmfmvResponse, Response response) {
+    public boolean getResponse(GMFMessageVariants gmfmvResponse, RCRequest request, RCResponse response) {
         boolean result = false;
         if (gmfmvResponse.getAdminResponse() == null) {
             throw new InvalidResponseXml("invalid response");

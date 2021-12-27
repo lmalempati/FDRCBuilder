@@ -1,5 +1,5 @@
-import fdrc.base.Response;
-import fdrc.client.Client;
+import fdrc.base.RCResponse;
+import fdrc.model.Client;
 import fdrc.utils.JsonBuilder;
 import static org.junit.Assert.assertEquals;
 
@@ -11,8 +11,8 @@ public class TestGeneric {
         String rc = values[1];
         boolean subsequent = values.length > 2 && values[2].equals("1");
 
-        Response response = new Client().submitRequest(JsonBuilder.getRequestFromJson(PATH + fileSaleAuth));
-        assertEquals(rc, response.respCode);
+        RCResponse RCResponse = new Client().submitRequest(JsonBuilder.getRequestFromJson(PATH + fileSaleAuth));
+        assertEquals(rc, RCResponse.respCode);
 
         if (subsequent) {
             int dotIndex = fileName.lastIndexOf(".");
@@ -21,7 +21,7 @@ public class TestGeneric {
             StringBuffer buffer = new StringBuffer(fileSaleAuth);
             buffer.setCharAt(dotIndex - 1, '1');
             fileSaleAuth = buffer.toString();
-            JsonBuilder.updateCompletionPayload(response, PATH + fileSaleAuth);
+            JsonBuilder.updateCompletionPayload(RCResponse, PATH + fileSaleAuth);
         }
     }
 

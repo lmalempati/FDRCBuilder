@@ -10,8 +10,10 @@ import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import com.fiserv.merchant.gmfv10.GMFMessageVariants;
+import fdrc.Exceptions.InvalidRequest;
 import fdrc.Exceptions.InvalidResponseXml;
 import fdrc.base.Constants;
+import fdrc.xml.Request;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -21,30 +23,13 @@ public class Serialization {
     /* The below method will transform the transaction request object to an XML string in UTF-8 encoding.
      * It will convert gmfmv object into serialized XML data which will be sent to Data wire.
      * */
-    public String getXMLPayload(GMFMessageVariants gmfmv, String error) {
+    public static String getXmlObject(Object gmfmv, String error) {
         StringWriter stringWriter = new StringWriter();
         String returnValue = "";
         try {
             JacksonXmlModule xmlModule = new JacksonXmlModule();
             xmlModule.setDefaultUseWrapper(false);
             ObjectMapper mapper = new XmlMapper(xmlModule);
-
-//            xmlModule.addSerializer(JAXBElement.class, new JsonSerializer<JAXBElement>() {
-//                @Override
-//                public void serialize(JAXBElement value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-//                    if (value.isNil()) {
-//                        gen.writeNull();
-//                    } else {
-//                        gen.writeObject(value.getValue());
-//                    }
-//                }
-//            });
-
-//            mapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true);
-//            XmlJaxbAnnotationIntrospector j = new XmlJaxbAnnotationIntrospector();
-            // j.findNamespace(mapper.getSerializationConfig(), )
-//            mapper.setAnnotationIntrospector(new XmlJaxbAnnotationIntrospector());
-
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL); // to ignore empty groups
             mapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
             mapper.registerModule(new JaxbAnnotationModule()); // to follow xml annotations on model classes
@@ -57,11 +42,9 @@ public class Serialization {
         }
         return returnValue;
     }
-
-    public GMFMessageVariants getObjectXML(String xml) { // , T type
+    public static GMFMessageVariants getObjectXML(String xml) { // , T type
         GMFMessageVariants gmf = null;
         String exceptionMsg = null;
-
         XmlMapper mapper = getXmlMapperDeserializer(false);
 
         try {

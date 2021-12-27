@@ -3,6 +3,9 @@ package fdrc.base;
 public class Constants {
     public static final String GMF = "<GMF>";
     public static final String GMF_NS = "<GMF xmlns=\"com/fiserv/Merchant/gmfV10.02\">";
+    public static final String[] StatusCodesToReverse = {"Timeout"};
+    public static final String[] ReturnCodesToReverse = {"203", "204", "205", "206", "405", "505", "008"};
+
     // Parameters for transaction request
     public static final String REQUEST_TPPID = "RSU005";
     public static final String REQUEST_TERMID = "00000003";

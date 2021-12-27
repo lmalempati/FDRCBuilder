@@ -2,9 +2,9 @@ package fdrc.base;
 
 import java.math.BigDecimal;
 
-public class Request {
+public class RCRequest {
     // no param constructor
-    public Request(){} // todo:tmp code, we can remove in prod. without this, json de-serialilization expects all fields to be present!
+    public RCRequest(){} // todo:tmp code, we can remove in prod. without this, json de-serialilization expects all fields to be present!
     // card grp
     public String acctNum;
     public String cardExpiryDate;
@@ -13,6 +13,7 @@ public class Request {
     public String ccvData;
     public String track2Data;
     public String ccvResultCode;
+    // OrigAuthGrp
     public String origAuthID;
     public String origLocalDateTime;
     public String origTranDateTime;
@@ -21,11 +22,11 @@ public class Request {
     public String refundType;
     // AddtlAmtGrp
     public String partAuthrztnApprvlCapablt;
-    public BigDecimal firstAuthAmt;
-    public BigDecimal totalAuthAmt;
-    public BigDecimal cashbackAmt;
-    public BigDecimal healthcareAmt;
-    public BigDecimal rxAmt;
+    public String firstAuthAmt;
+    public String totalAuthAmt;
+    public String cashbackAmt;
+    public String healthcareAmt;
+    public String rxAmt;
 
     //EMV grp
     public String emvData; // byte[]
@@ -37,7 +38,9 @@ public class Request {
     public String posCondCode;
     public String posEntryMode;
     public String pymtType;
-//    public String industrytype; -- not required
+    public String trnsmitDateTime;
+
+    //    public String industrytype; -- not required
     public String stan;
     public String refNum;
     public String orderNum;
@@ -45,10 +48,20 @@ public class Request {
     public String reversalInd;
     public String termCatCode;
     public String termEntryCapablt;
-    public Double txnAmt; // todo: should we use BigDecimal?
+    public String txnAmt; // todo: should we use BigDecimal?
     public String txnCrncy;
     public String termLocInd;
     public String cardCaptCap;
+    // config
+    public String tppID;
+    public String termID;
+    public String merchID;
+    public String merchCatCode;
+    public String groupID;
+    public String DigWltProgType;
+    public String MobileInd;
+    public String DfrdAuthInd;
+
     // VisaGrp -
     public String aci;
     public String visaBID;
@@ -73,15 +86,6 @@ public class Request {
     public String motoInd;
     //Amex grp
     public String amexTranID;
-    // config
-    public String tppID;
-    public String termID;
-    public String merchID;
-    public String merchCatCode;
-    public String groupID;
-    public String DigWltProgType;
-    public String MobileInd;
-    public String DfrdAuthInd;
     // TAGrp - Transarmor group
     public String sctyLvl;
     public String encrptType;
@@ -106,9 +110,15 @@ public class Request {
     public String merchPostalCode;
 //    public String addtlAmtType;
 //    public String addtlAmt;
+    // AdminRequest
+    public String totReqDate;
+    public String password;
+    public String netSettleAmt;
     //todo: not required in prod
     public String merchantMID;
     public String ebtType;
     public String merchFNSNum; // ToDo: This has to come from setup
+
+    private boolean isOffLine;
 }
 
