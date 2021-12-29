@@ -7,6 +7,9 @@ package fdrc.xml;
 //
 
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlCData;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -45,6 +48,8 @@ import javax.xml.bind.annotation.XmlValue;
 public class PayloadType {
 
     @XmlValue
+    @JacksonXmlText
+    @JacksonXmlCData
     protected String value;
     @XmlAttribute(name = "Encoding")
     protected String encoding;

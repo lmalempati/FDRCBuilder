@@ -5,8 +5,8 @@ import com.fiserv.merchant.gmfv10.TxnTypeType;
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import fdrc.Exceptions.UnsupportedEnumValueException;
-import fdrc.base.Request;
-import fdrc.base.Response;
+import fdrc.model.RCRequest;
+import fdrc.model.RCResponse;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -21,11 +21,11 @@ import java.util.Map;
  * */
 
 public class JsonBuilder {
-    public static String getJsonFromRequest(Request request, String fileName) {
+    public static String getJsonFromRequest(RCRequest RCRequest, String fileName) {
         String resultJson = null;
         try {
             Gson gson = new GsonBuilder().serializeNulls().create();
-            String tmp = gson.toJson(request, Request.class);
+            String tmp = gson.toJson(RCRequest, RCRequest.class);
             resultJson = tmp.replaceAll("\\\\u003d", "=");
             FileWriter writer = new FileWriter(fileName);
             writer.write(resultJson);
@@ -36,14 +36,14 @@ public class JsonBuilder {
         return resultJson;
     }
 
-    public static Request getRequestFromJson(String filePath) {
-        Request request = null;
+    public static RCRequest getRequestFromJson(String filePath) {
+        RCRequest RCRequest = null;
         try (FileReader reader = new FileReader(filePath)) {
             JsonReader jsonReader = new JsonReader(reader);
             GsonBuilder gsonBuilder = new GsonBuilder();
-            gsonBuilder.registerTypeAdapter(Request.class, new MyTypeAdapter());
+            gsonBuilder.registerTypeAdapter(RCRequest.class, new MyTypeAdapter());
             Gson gson = gsonBuilder.create();
-            request = gson.fromJson(reader, Request.class);
+            RCRequest = gson.fromJson(reader, RCRequest.class);
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
@@ -52,44 +52,44 @@ public class JsonBuilder {
             e.printStackTrace();
         }
         finally {
-            if (request == null) throw new UnsupportedEnumValueException("Json payload.");
+            if (RCRequest == null) throw new UnsupportedEnumValueException("Json payload.");
         }
-        return request;
+        return RCRequest;
     }
 
-    public static Request getRequestFromJsonString(String json) {
-        Request request = null;
+    public static RCRequest getRequestFromJsonString(String json) {
+        RCRequest RCRequest = null;
         try {
             Gson gson = new GsonBuilder().create();
-            request = gson.fromJson(json, Request.class);
+            RCRequest = gson.fromJson(json, RCRequest.class);
         } catch (JsonSyntaxException e) {
             throw new JsonSyntaxException(e.getMessage());
         }
-        return request;
+        return RCRequest;
     }
 
-    public static boolean updateCompletionPayload(Response response, String fileName) {
-        Request request = getRequestFromJson(fileName);
-        request.origAuthID = response.origAuthID;
-        request.origRespCode = response.origRespCode;
-        request.origSTAN = response.origSTAN;
-        request.origTranDateTime = response.origTranDateTime;
-        request.origLocalDateTime = response.origLocalDateTime;
-        request.refNum = response.refNum;
-        request.banknetData = response.banknetData;
-        request.discNRID = response.discNRID;
-        request.discTransQualifier = response.discTransQualifier;
-        request.transID = response.transID;
-        request.cardLevelResult = response.cardLevelResult;
-        request.aci = response.aci;
-        request.amexTranID = response.amexTranID;
-        request.spendQInd = response.spendQInd;
-        if (Utils.toEnum(TxnTypeType.class, request.txnType) == TxnTypeType.COMPLETION ||
-        Utils.isNotNullOrEmpty(request.reversalInd) && Utils.toEnum(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID)
-            request.orderNum = response.orderNum;
-        request.tkn = response.tkn;
+    public static boolean updateCompletionPayload(RCResponse RCResponse, String fileName) {
+        RCRequest RCRequest = getRequestFromJson(fileName);
+        RCRequest.origAuthID = RCResponse.authID;
+        RCRequest.origRespCode = RCResponse.respCode;
+        RCRequest.origSTAN = RCResponse.stan;
+        RCRequest.origTranDateTime = RCResponse.tranDateTime;
+        RCRequest.origLocalDateTime = RCResponse.localDateTime;
+        RCRequest.refNum = RCResponse.refNum;
+        RCRequest.banknetData = RCResponse.banknetData;
+        RCRequest.discNRID = RCResponse.discNRID;
+        RCRequest.discTransQualifier = RCResponse.discTransQualifier;
+        RCRequest.transID = RCResponse.transID;
+        RCRequest.cardLevelResult = RCResponse.cardLevelResult;
+        RCRequest.aci = RCResponse.aci;
+        RCRequest.amexTranID = RCResponse.amexTranID;
+        RCRequest.spendQInd = RCResponse.spendQInd;
+        if (Utils.toEnum(TxnTypeType.class, RCRequest.txnType) == TxnTypeType.COMPLETION ||
+        Utils.isNotNullOrEmpty(RCRequest.reversalInd) && Utils.toEnum(ReversalIndType.class, RCRequest.reversalInd) == ReversalIndType.VOID)
+            RCRequest.orderNum = RCResponse.orderNum;
+        RCRequest.tkn = RCResponse.tkn;
 
-        getJsonFromRequest(request, fileName);
+        getJsonFromRequest(RCRequest, fileName);
         return true;
     }
 
@@ -105,9 +105,9 @@ public class JsonBuilder {
     }
 }
 
-class MyTypeAdapter implements JsonDeserializer<Request> {
+class MyTypeAdapter implements JsonDeserializer<RCRequest> {
     @Override
-    public Request deserialize(JsonElement json, Type myClassType, JsonDeserializationContext context)
+    public RCRequest deserialize(JsonElement json, Type myClassType, JsonDeserializationContext context)
             throws JsonParseException {
         // json = {"field":"one"}
         JsonObject originalJsonObject = json.getAsJsonObject();
@@ -118,6 +118,6 @@ class MyTypeAdapter implements JsonDeserializer<Request> {
 //            key = key.toLowerCase();
             replacementJsonObject.add(key, value);
         }
-        return new Gson().fromJson(replacementJsonObject, Request.class);
+        return new Gson().fromJson(replacementJsonObject, RCRequest.class);
     }
 }

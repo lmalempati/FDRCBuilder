@@ -1,34 +1,32 @@
+import com.sun.net.httpserver.HttpServer;
+import fdrc.model.Client;
+import org.apache.commons.httpclient.HttpStatus;
+
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
-import java.net.URLDecoder;
-import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-import com.sun.net.httpserver.HttpServer;
-import fdrc.client.Client;
-
 
 import static java.util.stream.Collectors.*;
-//import static sun.net.www.ParseUtil.decode;
 
 public class Application {
+    public static final String addr = "/api/fdrc";
+    public static final int serverPort = 8000;
+
     public static void main(String[] args) throws IOException {
-        int serverPort = 8000;
         try {
             HttpServer httpServer = HttpServer.create(new InetSocketAddress(serverPort), 0);
-            httpServer.createContext("/api/fdrc", (exchange -> {
+            httpServer.createContext(addr, (exchange -> {
                 String respText = "Hello!";
 
                 byte[] reqBody  =  exchange.getRequestBody().readAllBytes();
                 String rawReq = new String(reqBody);
                 respText = CallFDRC(rawReq);
-                exchange.sendResponseHeaders(200, respText.getBytes().length);
+                exchange.sendResponseHeaders(HttpStatus.SC_OK, respText.getBytes().length);
                 OutputStream outputStream = exchange.getResponseBody();
                 outputStream.write(respText.getBytes());
                 outputStream.flush();

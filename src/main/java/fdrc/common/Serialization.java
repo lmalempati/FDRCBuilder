@@ -1,15 +1,18 @@
 package fdrc.common;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JacksonException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import com.fiserv.merchant.gmfv10.GMFMessageVariants;
-import javax.xml.bind.JAXBContext;
-import org.xml.sax.SAXException;
-import javax.xml.XMLConstants;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import java.io.File;
+import fdrc.Exceptions.InvalidResponseXml;
+
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 
@@ -17,70 +20,51 @@ public class Serialization {
     /* The below method will transform the transaction request object to an XML string in UTF-8 encoding.
      * It will convert gmfmv object into serialized XML data which will be sent to Data wire.
      * */
-    public String getXMLData(GMFMessageVariants gmfmv, String error) {
+    public static String getXmlObject(Object gmfmv, String error) {
         StringWriter stringWriter = new StringWriter();
         String returnValue = "";
         try {
-            JAXBContext context = null;
-            Marshaller marshaller = null;
-            context = JAXBContext.newInstance(GMFMessageVariants.class);
-            marshaller = context.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-            marshaller.marshal(gmfmv, stringWriter);
-
-            returnValue = stringWriter.toString();
-        } catch (JAXBException j) {
-            error = j.getMessage();
+            JacksonXmlModule xmlModule = new JacksonXmlModule();
+            xmlModule.setDefaultUseWrapper(false);
+            ObjectMapper mapper = new XmlMapper(xmlModule);
+            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL); // to ignore empty groups
+            mapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
+            mapper.registerModule(new JaxbAnnotationModule()); // to follow xml annotations on model classes
+            returnValue = mapper.writeValueAsString(gmfmv);
+            returnValue = returnValue.replaceAll(Constants.GMF, Constants.GMF_NS); // todo: xml not getting namespace, hardcoded?????
+        } catch (JacksonException e) {
+            error = e.getMessage();
         } catch (Exception e) {
             error = e.getMessage();
         }
         return returnValue;
     }
-
-    public GMFMessageVariants getObjectXML(String xml){ // , T type
-        JAXBContext context = null;
-        Unmarshaller unmarshaller = null;
-        GMFMessageVariants gmf = new GMFMessageVariants();
-        GMFMessageVariants g = null;
-
+    public static GMFMessageVariants getObjectXML(String xml) { // , T type
+        GMFMessageVariants gmf = null;
+        String exceptionMsg = null;
+        XmlMapper mapper = getXmlMapperDeserializer(false);
         try {
-            // this is not needed after replacing proxys with gmf lib.
-            // xml = xml.replaceAll("GMF", "gmfMessageVariants");
-            context = JAXBContext.newInstance(GMFMessageVariants.class);
-            unmarshaller = context.createUnmarshaller();
-            g = (GMFMessageVariants)unmarshaller.unmarshal(new StringReader(xml));
-//            g.getCreditResponse()
-        } catch (JAXBException e) {
-            e.printStackTrace();
+            gmf = (GMFMessageVariants) mapper.readValue(new StringReader(xml), GMFMessageVariants.class);
+        } catch (JacksonException e) {
+            exceptionMsg = e.getMessage();
+        } catch (IOException e) {
+            exceptionMsg = e.getMessage();
+        } catch (Exception e) {
+            exceptionMsg = e.getMessage();
         }
-        return g;
+        if (exceptionMsg != null)
+            throw new InvalidResponseXml(exceptionMsg);
+
+        return gmf;
     }
-    // todo: figure out if we need to validate teh xml payload.
-    public boolean validateXMLSchema(String xml){
-        JAXBContext context = null;
-        Unmarshaller unmarshaller = null;
-        GMFMessageVariants gmf = new GMFMessageVariants();
-        try {
-            context = JAXBContext.newInstance(GMFMessageVariants.class);
-            unmarshaller = context.createUnmarshaller();
-            SchemaFactory factory =
-                    SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema = factory.newSchema(new File("UMF_XML_SCHEMA.xsd"));
-            unmarshaller.setSchema(schema);
-            GMFMessageVariants messageVariants = (GMFMessageVariants) unmarshaller.unmarshal(new StringReader(xml));
-//            Validator validator = schema.newValidator();
-//            validator.validate(new StreamSource(xml));
-        } catch(SAXException | JAXBException e1){
-            System.out.println("SAX Exception: "+e1.getMessage());
-            return false;
-        }
-
-        return true;
-
-    }
-
-    public static void main(String[] args) {
-        Object resp = new Serialization().getObjectXML("");
-//        System.out.println(resp.getRespGrp().getRespCode());
+    public static XmlMapper getXmlMapperDeserializer(Boolean failOnUnknownProperties) {
+        XmlMapper mapper = (XmlMapper) new XmlMapper()
+                .configure(DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS, false)
+                .configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true)
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, failOnUnknownProperties)
+                .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
+        mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
+        mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true);
+        return mapper;
     }
 }

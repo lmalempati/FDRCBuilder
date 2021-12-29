@@ -1,18 +1,19 @@
 package fdrc.http;
 
-import fdrc.base.Constants;
-import fdrc.common.RequestUtils;
+import com.fasterxml.jackson.core.JacksonException;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import fdrc.Exceptions.InvalidResponseXml;
+import fdrc.common.Constants;
+import fdrc.model.RCResponse;
+import fdrc.common.Serialization;
+import fdrc.utils.RequestUtils;
 import fdrc.xml.*;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+
 import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.math.BigInteger;
 
 public class HTTPPostHandler {
@@ -20,8 +21,8 @@ public class HTTPPostHandler {
     /* The below method will take the XML request and returns the XML response received from Data wire.
      * */
     @SuppressWarnings("deprecation")
-    public String SendMessage(String gmfrequest, String clientRef)
-    {
+    public String Submit(String gmfrequest) throws IOException, HttpException {
+
         /*Response that will be returned.*/
         String response = "";
         /* Create the instance of the Request that is a class generated from the Rapid connect Transaction
@@ -50,9 +51,9 @@ public class HTTPPostHandler {
          * Service Schema file [rc.xsd]*/
         ReqClientIDType reqClientIDType = new ReqClientIDType();
         reqClientIDType.setApp("RAPIDCONNECTSRS");
-        reqClientIDType.setAuth(String.format("%s%s|%s", Constants.REQUEST_GROUPID, RequestUtils.merchantID, Constants.REQUEST_TERMID ));
+        reqClientIDType.setAuth(String.format("%s%s|%s", Constants.REQUEST_GROUPID, RequestUtils.merchantID, Constants.REQUEST_TERMID));
         /* Set the clientRef value*/
-        reqClientIDType.setClientRef(clientRef); //give value later
+        reqClientIDType.setClientRef(RequestUtils.getClientRef());
         /* Set the DID value*/
         reqClientIDType.setDID(RequestUtils.mapMidToDID(RequestUtils.merchantID));
 
@@ -63,29 +64,12 @@ public class HTTPPostHandler {
         /*Set version value*/
         gmfTransactionRequest.setVersion("3");
 
-        JAXBContext jaxBConText;
         String gmffomattedRequest = "";
         //Transform the gmfTransactionRequest object into XML string.
-        try {
-            jaxBConText = JAXBContext
-                    .newInstance("fdrc.xml");
-
-            StringWriter strWriter = new StringWriter();
-
-            Marshaller jaxbmarshaller = jaxBConText.createMarshaller();
-            jaxbmarshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-
-            jaxbmarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            jaxbmarshaller.marshal(gmfTransactionRequest, strWriter);
-            gmffomattedRequest = strWriter.toString();
-        }
-        catch (JAXBException e) {
-            System.out.println("SendMessage Exception: " + e);
-            e.printStackTrace();
-        }
+        gmffomattedRequest = Serialization.getXmlObject(gmfTransactionRequest, null);
 
         /* URL that will consume the transaction request.*/
-        final String postURL = "https://stg.dw.us.fdcnet.biz/rc";
+        final String postURL = "https://stg.dw.us.fdcnet.biz/rc"; // todo: hardcoded?
         /*Instantiate the POST method*/
         final PostMethod post = new PostMethod(postURL);
         /*Instantiate the HTTP client*/
@@ -107,70 +91,19 @@ public class HTTPPostHandler {
 
             /*Do error handling and parse the response before returning.*/
             if (returnCode == HttpStatus.SC_NOT_IMPLEMENTED) {
-                System.err
-                        .println("The Post method is not implemented by this URI");
+                System.err.println("The Post method is not implemented by this URI");
+                return null;
             } else if (returnCode == HttpStatus.SC_OK) {
-
-                response = createXMLHttpResponse(post
-                        .getResponseBodyAsString());
+                return post.getResponseBodyAsString();
             }
-        }
-        catch (IOException e) {
-            System.out.println("SendMessage Exception: " + e);
+        } catch (Exception e) {
+            throw new InvalidResponseXml(e.getMessage());
         } finally {
             post.releaseConnection();
         }
-        //Return the response
-        return response;
+        return null;
     }
-    /*The below method takes XML response received after post method execution.
-     * and build Response object; then extract pay load data that is actual
-     * transaction response received from Data Wire.*/
-    public String createXMLHttpResponse(String xml)
-    {
-        ClassLoader classLoader = ObjectFactory.class
-                .getClassLoader();
-        String payload = null;
-        try {
-            JAXBContext context = JAXBContext.newInstance(
-                    "fdrc.xml", classLoader);
-            Unmarshaller jaxbUnmarshaller = context.createUnmarshaller();
-            StringReader responseReader = new StringReader(xml);
-            /*Un-marshal the XML response and build Response object.*/
-            Response response = (Response) jaxbUnmarshaller
-                    .unmarshal(responseReader);
-            if (response!=null && response.getStatus() != null
-                    && response.getStatus().getStatusCode() != null) {
-                if (response.getStatus().getStatusCode().equalsIgnoreCase("OK")) {
-                    if (response.getTransactionResponse() != null
-                            && response.getTransactionResponse().getPayload() != null
-                            && response.getTransactionResponse().getPayload()
-                            .getEncoding() != null) {
-                        if (response.getTransactionResponse().getPayload()
-                                .getEncoding().equals("cdata")) {
-                            /*Extract pay load data that is the transaction response for cdata type encoded message.*/
-                            payload = response.getTransactionResponse()
-                                    .getPayload().getValue();
-                        } else if (response.getTransactionResponse()
-                                .getPayload().getEncoding()
-                                .equalsIgnoreCase("xml_escape")) {
-                            /*Extract pay load data that is the transaction response for xml_escape type encoded message.*/
-                            payload = response.getTransactionResponse()
-                                    .getPayload().getValue()
-                                    .replaceAll("&gt;", ">")
-                                    .replaceAll("&lt;", "<")
-                                    .replaceAll("&amp;", "&");
-                        }
-                    }
-                }
-            } else {
 
-            }
-        } catch (JAXBException e) {
-            System.out.println("createXMLHttpResponse Exception: " + e);
-        }
-        //Return the transaction response.
-        return payload;
-    }
+
 
 }

@@ -1,14 +1,5 @@
-import fdrc.base.Request;
-import fdrc.base.Response;
-import fdrc.client.Client;
-import fdrc.utils.JsonBuilder;
-import org.junit.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import java.io.File;
-import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
 
@@ -36,6 +27,6 @@ public class TestsMoto extends TestGeneric {
                     "Credit-TA-Sale-MC-200299950010.json;002"
             })
     public void runTestsMoto(String fileName) {
-        parameterizedTest(fileName, PATH);
+        parameterizedTest (fileName, PATH);
     }
 }
