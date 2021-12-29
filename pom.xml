@@ -109,7 +109,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>fdrc.model.Client</mainClass>
+                            <mainClass>fdrc.service.Client</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
