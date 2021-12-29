@@ -1,4 +1,4 @@
-package fdrc.base;
+package fdrc.common;
 
 public class Constants {
     public static final String GMF = "<GMF>";

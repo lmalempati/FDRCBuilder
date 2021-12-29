@@ -5,8 +5,7 @@ To call methods that populate common grp, card grp and so on and then get the xm
 *  */
 
 import com.fiserv.merchant.gmfv10.*;
-import fdrc.base.Constants;
-import fdrc.base.RCRequest;
+import fdrc.model.RCRequest;
 import fdrc.types.CardCaptCapType;
 import fdrc.types.EncrptTypeType;
 import fdrc.types.EnumAllowPartialAuth;
@@ -301,11 +300,11 @@ public class FDRCRequestService { // todo name
         return Utils.valueOrNothing(list);
     }
 
-    AddtlAmtGrp getAddtlAmtGrp(final RCRequest RCRequest, final String val, final AddAmtTypeType type) {
+    AddtlAmtGrp getAddtlAmtGrp(final RCRequest rcRequest, final String val, final AddAmtTypeType type) {
         AddtlAmtGrp addtlAmtGrp = new AddtlAmtGrp();
         addtlAmtGrp.setAddAmtType(type);
         addtlAmtGrp.setAddAmt(Utils.formatAmount(val));
-        addtlAmtGrp.setAddAmtCrncy(RCRequest.txnCrncy);
+        addtlAmtGrp.setAddAmtCrncy(rcRequest.txnCrncy);
         return addtlAmtGrp;
     }
 
@@ -316,37 +315,37 @@ public class FDRCRequestService { // todo name
         return pinGrp;
     }
 
-    public EbtGrp getEBTGrp(RCRequest RCRequest) {
+    public EbtGrp getEBTGrp(RCRequest rcRequest) {
         EbtGrp ebtGrp = new EbtGrp();
-        if (Utils.isNotNullOrEmpty(RCRequest.ebtType))
-            ebtGrp.setEBTType(Utils.toEnum(EBTTypeType.class, RCRequest.ebtType));
+        if (Utils.isNotNullOrEmpty(rcRequest.ebtType))
+            ebtGrp.setEBTType(Utils.toEnum(EBTTypeType.class, rcRequest.ebtType));
 
         EBTTypeType ebtType = null;
-        if (Utils.isNotNullOrEmpty(RCRequest.merchFNSNum))
-            ebtType = Utils.toEnum(EBTTypeType.class, RCRequest.ebtType);
+        if (Utils.isNotNullOrEmpty(rcRequest.merchFNSNum))
+            ebtType = Utils.toEnum(EBTTypeType.class, rcRequest.ebtType);
         if (ebtType == EBTTypeType.SNAP || ebtType == EBTTypeType.E_WIC)
-            ebtGrp.setMerchFNSNum(RCRequest.merchFNSNum);
+            ebtGrp.setMerchFNSNum(rcRequest.merchFNSNum);
         return Utils.valueOrNothing(ebtGrp);
     }
 
-    public TAGrp getTAGrp(RCRequest RCRequest) {
+    public TAGrp getTAGrp(RCRequest rcRequest) {
         TAGrp taGrp = new TAGrp();
-        if (Utils.isNotNullOrEmpty(RCRequest.sctyLvl))
-            taGrp.setSctyLvl(Utils.toEnum(SctyLvlType.class, RCRequest.sctyLvl));
-        if (Utils.isNotNullOrEmpty(RCRequest.encrptType))
-            taGrp.setEncrptType(Utils.toEnum(EncrptTypeType.class, RCRequest.encrptType).toString());
-        if (Utils.isNotNullOrEmpty(RCRequest.encrptTrgt))
-            taGrp.setEncrptTrgt(Utils.toEnum(EncrptTrgtType.class, RCRequest.encrptTrgt));
-        if (Utils.isNotNullOrEmpty(RCRequest.keyID))
-            taGrp.setKeyID(RCRequest.keyID);
-        if (Utils.isNotNullOrEmpty(RCRequest.encrptBlock))
-            taGrp.setEncrptBlock(RCRequest.encrptBlock);
-        if (Utils.isNotNullOrEmpty(RCRequest.tknType))
-            taGrp.setTknType(RCRequest.tknType);
-        if (Utils.isNotNullOrEmpty(RCRequest.deviceType))
-            taGrp.setDeviceType(RCRequest.deviceType);
-        if (Utils.isNotNullOrEmpty(RCRequest.tkn))
-            taGrp.setTkn(RCRequest.tkn);
+        if (Utils.isNotNullOrEmpty(rcRequest.sctyLvl))
+            taGrp.setSctyLvl(Utils.toEnum(SctyLvlType.class, rcRequest.sctyLvl));
+        if (Utils.isNotNullOrEmpty(rcRequest.encrptType))
+            taGrp.setEncrptType(Utils.toEnum(EncrptTypeType.class, rcRequest.encrptType).toString());
+        if (Utils.isNotNullOrEmpty(rcRequest.encrptTrgt))
+            taGrp.setEncrptTrgt(Utils.toEnum(EncrptTrgtType.class, rcRequest.encrptTrgt));
+        if (Utils.isNotNullOrEmpty(rcRequest.keyID))
+            taGrp.setKeyID(rcRequest.keyID);
+        if (Utils.isNotNullOrEmpty(rcRequest.encrptBlock))
+            taGrp.setEncrptBlock(rcRequest.encrptBlock);
+        if (Utils.isNotNullOrEmpty(rcRequest.tknType))
+            taGrp.setTknType(rcRequest.tknType);
+        if (Utils.isNotNullOrEmpty(rcRequest.deviceType))
+            taGrp.setDeviceType(rcRequest.deviceType);
+        if (Utils.isNotNullOrEmpty(rcRequest.tkn))
+            taGrp.setTkn(rcRequest.tkn);
         return Utils.valueOrNothing(taGrp);
     }
 

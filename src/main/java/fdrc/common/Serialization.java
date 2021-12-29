@@ -10,10 +10,7 @@ import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import com.fiserv.merchant.gmfv10.GMFMessageVariants;
-import fdrc.Exceptions.InvalidRequest;
 import fdrc.Exceptions.InvalidResponseXml;
-import fdrc.base.Constants;
-import fdrc.xml.Request;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -46,7 +43,6 @@ public class Serialization {
         GMFMessageVariants gmf = null;
         String exceptionMsg = null;
         XmlMapper mapper = getXmlMapperDeserializer(false);
-
         try {
             gmf = (GMFMessageVariants) mapper.readValue(new StringReader(xml), GMFMessageVariants.class);
         } catch (JacksonException e) {
@@ -61,7 +57,6 @@ public class Serialization {
 
         return gmf;
     }
-
     public static XmlMapper getXmlMapperDeserializer(Boolean failOnUnknownProperties) {
         XmlMapper mapper = (XmlMapper) new XmlMapper()
                 .configure(DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS, false)

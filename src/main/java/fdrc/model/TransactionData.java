@@ -1,4 +1,4 @@
-package fdrc.base;
+package fdrc.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

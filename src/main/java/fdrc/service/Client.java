@@ -1,12 +1,12 @@
-package fdrc.model;
+package fdrc.service;
 
 import com.fiserv.merchant.gmfv10.PymtTypeType;
 import com.fiserv.merchant.gmfv10.ReversalIndType;
 import com.fiserv.merchant.gmfv10.TxnTypeType;
 import com.google.gson.JsonSyntaxException;
 import fdrc.Exceptions.UnsupportedEnumValueException;
-import fdrc.base.RCResponse;
-import fdrc.base.RCRequest;
+import fdrc.model.RCResponse;
+import fdrc.model.RCRequest;
 import fdrc.utils.JsonBuilder;
 import fdrc.utils.Utils;
 
@@ -32,7 +32,6 @@ public class Client {
     }
 
     public RCResponse submitRequest(RCRequest RCRequest) {
-        System.out.println("request = xxxxxxx" + RCRequest);
         RCResponse resposne = null;
         String errorMessage = "";
         GenericService requestProcessor = null;

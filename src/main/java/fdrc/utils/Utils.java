@@ -8,7 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fdrc.Exceptions.InvalidNumber;
 import fdrc.Exceptions.UnsupportedEnumValueException;
-import fdrc.base.RCRequest;
+import fdrc.model.RCRequest;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

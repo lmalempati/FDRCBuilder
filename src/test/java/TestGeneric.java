@@ -1,5 +1,5 @@
-import fdrc.base.RCResponse;
-import fdrc.model.Client;
+import fdrc.model.RCResponse;
+import fdrc.service.Client;
 import fdrc.utils.JsonBuilder;
 import static org.junit.Assert.assertEquals;
 

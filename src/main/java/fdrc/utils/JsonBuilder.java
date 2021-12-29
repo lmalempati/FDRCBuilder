@@ -5,8 +5,8 @@ import com.fiserv.merchant.gmfv10.TxnTypeType;
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import fdrc.Exceptions.UnsupportedEnumValueException;
-import fdrc.base.RCRequest;
-import fdrc.base.RCResponse;
+import fdrc.model.RCRequest;
+import fdrc.model.RCResponse;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -70,11 +70,11 @@ public class JsonBuilder {
 
     public static boolean updateCompletionPayload(RCResponse RCResponse, String fileName) {
         RCRequest RCRequest = getRequestFromJson(fileName);
-        RCRequest.origAuthID = RCResponse.origAuthID;
-        RCRequest.origRespCode = RCResponse.origRespCode;
-        RCRequest.origSTAN = RCResponse.origSTAN;
-        RCRequest.origTranDateTime = RCResponse.origTranDateTime;
-        RCRequest.origLocalDateTime = RCResponse.origLocalDateTime;
+        RCRequest.origAuthID = RCResponse.authID;
+        RCRequest.origRespCode = RCResponse.respCode;
+        RCRequest.origSTAN = RCResponse.stan;
+        RCRequest.origTranDateTime = RCResponse.tranDateTime;
+        RCRequest.origLocalDateTime = RCResponse.localDateTime;
         RCRequest.refNum = RCResponse.refNum;
         RCRequest.banknetData = RCResponse.banknetData;
         RCRequest.discNRID = RCResponse.discNRID;

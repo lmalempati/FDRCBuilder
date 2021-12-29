@@ -2,10 +2,10 @@ package fdrc.utils;
 
 import com.fiserv.merchant.gmfv10.ReversalIndType;
 import fdrc.Exceptions.UnsupportedEnumValueException;
-import fdrc.base.Constants;
+import fdrc.common.Constants;
 import com.fiserv.merchant.gmfv10.GMFMessageVariants;
 import com.fiserv.merchant.gmfv10.TxnTypeType;
-import fdrc.base.RCRequest;
+import fdrc.model.RCRequest;
 import fdrc.common.Serialization;
 
 public class RequestUtils {
