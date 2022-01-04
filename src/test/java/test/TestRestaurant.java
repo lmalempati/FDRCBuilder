@@ -1,3 +1,5 @@
+package test;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -7,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 public class TestRestaurant extends TestGeneric {
     public static final String PATH = "src/test/resources/Restaurant/";
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @ValueSource(strings =
             {
                     "BalInq-VisaSaleSwipe-200066500010.json;000",

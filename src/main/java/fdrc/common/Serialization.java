@@ -9,9 +9,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
-import com.fiserv.merchant.gmfv10.GMFMessageVariants;
 import fdrc.Exceptions.InvalidResponseXml;
-
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -39,12 +37,12 @@ public class Serialization {
         }
         return returnValue;
     }
-    public static GMFMessageVariants getObjectXML(String xml) { // , T type
-        GMFMessageVariants gmf = null;
-        String exceptionMsg = null;
+    public static Object getObjectXML(Class<?> C, String xml) { // , T type
+        String exceptionMsg;
         XmlMapper mapper = getXmlMapperDeserializer(false);
         try {
-            gmf = (GMFMessageVariants) mapper.readValue(new StringReader(xml), GMFMessageVariants.class);
+
+            return mapper.readValue(new StringReader(xml), C);
         } catch (JacksonException e) {
             exceptionMsg = e.getMessage();
         } catch (IOException e) {
@@ -54,8 +52,7 @@ public class Serialization {
         }
         if (exceptionMsg != null)
             throw new InvalidResponseXml(exceptionMsg);
-
-        return gmf;
+        return null;
     }
     public static XmlMapper getXmlMapperDeserializer(Boolean failOnUnknownProperties) {
         XmlMapper mapper = (XmlMapper) new XmlMapper()

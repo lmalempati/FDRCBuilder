@@ -23,7 +23,7 @@ public class FDRCRequestService { // todo name
     private final RCRequest RCRequest;
 
     public FDRCRequestService(RCRequest RCRequestPassedIn) {
-        // request alrady checked for null
+        // request already checked for null
         this.RCRequest = RCRequestPassedIn;
     }
 

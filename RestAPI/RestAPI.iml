@@ -16,5 +16,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Maven: commons-httpclient:commons-httpclient:3.0" level="project" />
+    <orderEntry type="module" module-name="FDRCBuilder" />
   </component>
 </module>

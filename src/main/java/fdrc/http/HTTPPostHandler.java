@@ -22,8 +22,6 @@ public class HTTPPostHandler {
      * */
     @SuppressWarnings("deprecation")
     public String Submit(String gmfrequest) throws IOException, HttpException {
-
-        /*Response that will be returned.*/
         String response = "";
         /* Create the instance of the Request that is a class generated from the Rapid connect Transaction
          * Service Schema file [rc.xsd]*/
@@ -33,19 +31,14 @@ public class HTTPPostHandler {
         /* Create the instance of the TransactionType that is a class generated from the Rapid connect Transaction
          * Service Schema file [rc.xsd]*/
         TransactionType transactionType = factory.createTransactionType();
-        /*Set the service ID parameter.*/
         transactionType.setServiceID("160");
 
         /* Create the instance of PayloadType that is a class generated from the Rapid connect Transaction
          * Service Schema file [rc.xsd]*/
         PayloadType payloadType = new PayloadType();
-        /* Set encoding type*/
         payloadType.setEncoding("cdata");
-        /* Assign the XML request data as the pay load value*/
         payloadType.setValue(gmfrequest);
-        /* Set transaction type pay load value*/
         transactionType.setPayload(payloadType);
-        /* Assign transaction type object to the transaction request.*/
         gmfTransactionRequest.setTransaction(transactionType);
         /* Create the instance of ReqClientIDType that is a class generated from the Rapid connect Transaction
          * Service Schema file [rc.xsd]*/
@@ -57,11 +50,9 @@ public class HTTPPostHandler {
         /* Set the DID value*/
         reqClientIDType.setDID(RequestUtils.mapMidToDID(RequestUtils.merchantID));
 
-        /*Assign ReqClientID object value to transaction request*/
         gmfTransactionRequest.setReqClientID(reqClientIDType);
         /*Set client timeout value*/
         gmfTransactionRequest.setClientTimeout(new BigInteger("30"));
-        /*Set version value*/
         gmfTransactionRequest.setVersion("3");
 
         String gmffomattedRequest = "";
@@ -70,9 +61,7 @@ public class HTTPPostHandler {
 
         /* URL that will consume the transaction request.*/
         final String postURL = "https://stg.dw.us.fdcnet.biz/rc"; // todo: hardcoded?
-        /*Instantiate the POST method*/
         final PostMethod post = new PostMethod(postURL);
-        /*Instantiate the HTTP client*/
         final HttpClient httpclient = new HttpClient();
         /*Set various parameters of HTTP requet header*/
         post.setRequestHeader("User-Agent", "TRR-Formatter");
@@ -82,7 +71,6 @@ public class HTTPPostHandler {
         post.setRequestHeader("Content-Length",
                 Integer.toString(gmffomattedRequest.length()));
         post.setRequestHeader("Content-type", "text/xml");
-        /*Set the request body with the XML transaction request*/
         post.setRequestBody(gmffomattedRequest);
 
         try {
@@ -103,7 +91,4 @@ public class HTTPPostHandler {
         }
         return null;
     }
-
-
-
 }

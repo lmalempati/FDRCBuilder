@@ -15,11 +15,37 @@ public class Constants {
     public static final String REQUEST_DEBIT_TRACK2 = "4017779995555556=24041200000000001";
     public static final String REQUEST_DEBIT_PINDATA = "99A14CA1B65D821B";
     public static final String REQUEST_DEBIT_KEYSERIALNUMDATA = "F8765432100015200578";
+    public static final String stgUrl = "https://stg.dw.us.fdcnet.biz/sd/srsxml.rc"; // dev
+    public static final String prodUrl = "https://prod.dw.us.fdcnet.biz/sd/srsxml.rc"; // prod
 
     // Parameters for TCPIP protocol
     public static final String TCP_HOST = "XX.XXX.XX.X";
     public static final int TCP_PORT = 1234;
 
     public static final String HTTP_DID = "00035469814383142846"; /*Restaurant 10001 */
-
+    public static final String ACTIVATION_TEMPLATE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+            "<Request Version=\"3\">\n" +
+            "    <ReqClientID>\n" +
+            "        <DID>{datawireId}</DID>\n" +
+            "        <App>RAPIDCONNECTSRS</App>\n" +
+            "        <Auth>{groupId}{merchantId}|{terminalId}</Auth>\n" +
+            "        <ClientRef>{clientRef}</ClientRef>\n" +
+            "    </ReqClientID>\n" +
+            "    <Activation>\n" +
+            "        <ServiceID>160</ServiceID>\n" +
+            "    </Activation>\n" +
+            "</Request>\n";
+    public static final String REGISTRATION_TEMPLATE =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                    "<Request Version=\"3\">\n" +
+                    "    <ReqClientID>\n" +
+                    "        <DID></DID>\n" +
+                    "        <App>RAPIDCONNECTSRS</App>\n" +
+                    "        <Auth>{groupId}{merchantId}|{terminalId}</Auth>\n" +
+                    "        <ClientRef>{clientRef}</ClientRef>\n" +
+                    "    </ReqClientID>\n" +
+                    "    <Registration>\n" +
+                    "        <ServiceID>160</ServiceID>\n" +
+                    "    </Registration>\n" +
+                    "</Request>\n";
 }

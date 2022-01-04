@@ -9,10 +9,17 @@ import com.google.gson.GsonBuilder;
 import fdrc.Exceptions.InvalidNumber;
 import fdrc.Exceptions.UnsupportedEnumValueException;
 import fdrc.model.RCRequest;
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.regex.Pattern;
@@ -48,6 +55,19 @@ public class Utils {
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    public static boolean isNotNullOrEmpty(Object[] src) {
+        if (src == null) return false;
+        try {
+            for (Object obj : src
+            ) {
+                if (obj == null || obj.toString().trim().equals("")) return false;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return true;
     }
 
     public static String formatAmount(String amount) {
@@ -143,5 +163,42 @@ public class Utils {
         }
         return "";
     }
+
+    public static String upload(String urlPath, String reqXml) {
+        URL url;
+        StringBuilder response = null;
+        try {
+            url = new URL(urlPath); //"https://stg.dw.us.fdcnet.biz/sd/srsxml.rc"
+
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "text/xml; utf-8");
+            con.setRequestProperty("Accept", "text/xml");
+            con.setDoOutput(true);
+            con.connect();
+
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = reqXml.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
+                response = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return response != null ? response.toString() : "";
+    }
+
+
+
 
 }

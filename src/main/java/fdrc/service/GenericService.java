@@ -15,18 +15,18 @@ import fdrc.model.RCResponse;
 import fdrc.utils.Utils;
 import fdrc.xml.ObjectFactory;
 import fdrc.xml.Response;
-
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 abstract class GenericService {
     GMFMessageVariants gmfmv = new GMFMessageVariants();
     String responseXml = "";
-    static Logger log = Logger.getLogger(GenericService.class.getName());
-
+    static Logger logger =  Logger.getLogger(GenericService.class.getName());
     abstract String buildRequest(final RCRequest RCRequest, FDRCRequestService FDRCRequestService);
+
     private String submit() {
         String requestXml = "";
         String errorMsg = "";
@@ -34,11 +34,12 @@ abstract class GenericService {
         /* Jackson does not support */
 //        serialization.validateXMLSchema(requestXml);
         if (!errorMsg.equals("")) throw new InvalidRequest(errorMsg); // todo:
-        log.info("GMF Request == " + requestXml); // todo: use Log4j
+        logger.info("FDRC: GMF Request == " + requestXml); // todo: use Log4j
         try {
             responseXml = new HTTPPostHandler().Submit(requestXml);
-//            responseString = responseString.replaceAll("&gt;", ">").replaceAll("&lt;", "<");
+//            responseXml = responseXml.replaceAll("&gt;", ">").replaceAll("&lt;", "<").replaceAll("&apos;", "'");
         } catch (IOException e) {
+            logger.log(Level.SEVERE, e.getMessage());
             throw new InvalidRequest(e.getMessage());
         }
         return responseXml;
@@ -58,9 +59,9 @@ abstract class GenericService {
         if (Utils.isNotNullOrEmpty(errorMsg))
             return new RCResponse(errorMsg);
         submit();
+        logger.info("FDRC: Successful HTTP POST response: " + "\n" + responseXml + "\n"); // todo: debug purpose only
         // read the response xml and load
         ResponseWrapper responseWrapper = new ResponseWrapper(responseXml, request);
-        log.info("Successful HTTP POST response: " + "\n" + responseWrapper.rcResponse.responseRaw + "\n"); // todo: debug purpose only
         return responseWrapper.rcResponse;
     }
 }
@@ -76,26 +77,27 @@ class ResponseWrapper extends RCResponse {
     AmexGrp amexGrp;
     TAGrp taGrp;
     HostTotGrp hostTotGrp;
-    HostTotDetGrp hostTotDetGrp;
+    List<HostTotDetGrp> hostTotDetGrp;
 
     ResponseWrapper(String respXml, RCRequest request) {
-        loadResponseXml(respXml);
-        if (torRequired()) {
-            rcResponse.addtlRespData = "Timeout";
-            return;
-        }
-        GMFMessageVariants gmfResponse = Serialization.getObjectXML(rcResponse.responseRaw);
+        GMFMessageVariants gmfResponse = (GMFMessageVariants)Serialization.getObjectXML(GMFMessageVariants.class, respXml);
 
         // if rejection, send in errorMsg msg of response
         if (gmfResponse.getRejectResponse() != null) {
             RejectResponseDetails responseDetails = gmfResponse.getRejectResponse();
-            rcResponse.errorMsg = responseDetails.getRespGrp().getErrorData();
+            rcResponse  = new RCResponse(responseDetails.getRespGrp().getErrorData());
             return;
         }
+        loadResponseXml(respXml);
+
+        if (torRequired()) {
+            rcResponse.addtlRespData = "Timeout";
+            return;
+        }
+
         loadGroups(gmfResponse, request);
         loadResponseFromGrps(gmfResponse, request);
     }
-
     private void loadResponseFromGrps(GMFMessageVariants gmfMessageVariants, RCRequest request) {
         rcResponse.respCode = respGrp.getRespCode();
         rcResponse.addtlRespData = respGrp.getAddtlRespData();
@@ -126,6 +128,7 @@ class ResponseWrapper extends RCResponse {
         if (taGrp != null) {
             rcResponse.tkn = taGrp.getTkn();
         }
+        //todo: use cardgrp, hosttotdetgrp
     }
 
     private boolean loadGroups(GMFMessageVariants gmf, RCRequest request) {
@@ -137,14 +140,17 @@ class ResponseWrapper extends RCResponse {
             dsGrp = gmf.getCreditResponse().getDSGrp();
             amexGrp = gmf.getCreditResponse().getAmexGrp();
             taGrp = gmf.getCreditResponse().getTAGrp();
+            cardGrp = gmf.getCreditResponse().getCardGrp();
         } else if (gmf.getDebitResponse() != null) {
             respGrp = gmf.getDebitResponse().getRespGrp();
             commonGrp = gmf.getDebitResponse().getCommonGrp();
             taGrp = gmf.getDebitResponse().getTAGrp();
+            cardGrp = gmf.getCreditResponse().getCardGrp();
         } else if (gmf.getEBTResponse() != null) {
             respGrp = gmf.getEBTResponse().getRespGrp();
             commonGrp = gmf.getEBTResponse().getCommonGrp();
             taGrp = gmf.getEBTResponse().getTAGrp();
+            cardGrp = gmf.getCreditResponse().getCardGrp();
         } else if (gmf.getReversalResponse() != null) {
             respGrp = gmf.getReversalResponse().getRespGrp();
             commonGrp = gmf.getReversalResponse().getCommonGrp();
@@ -153,21 +159,23 @@ class ResponseWrapper extends RCResponse {
             dsGrp = gmf.getReversalResponse().getDSGrp();
             amexGrp = gmf.getReversalResponse().getAmexGrp();
             taGrp = gmf.getReversalResponse().getTAGrp();
+            cardGrp = gmf.getCreditResponse().getCardGrp();
         } else if (gmf.getAdminResponse() != null) {
             respGrp = gmf.getAdminResponse().getRespGrp();
             commonGrp = gmf.getAdminResponse().getCommonGrp();
             taGrp = gmf.getAdminResponse().getTAGrp();
             hostTotGrp = gmf.getAdminResponse().getHostTotGrp();
+            hostTotDetGrp = gmf.getAdminResponse().getHostTotDetGrp();
         } else if (gmf.getTransArmorResponse() != null) {
             respGrp = gmf.getTransArmorResponse().getRespGrp();
             commonGrp = gmf.getTransArmorResponse().getCommonGrp();
             taGrp = gmf.getTransArmorResponse().getTAGrp();
+            cardGrp = gmf.getCreditResponse().getCardGrp();
         }
         return true;
     }
-
     /*The below method takes XML response received after post method execution.
-     * and build Response object; then extract pay load data that is actual
+     * and build RegistrationResponse object; then extract pay load data that is actual
      * transaction response received from Data Wire.*/
     private void loadResponseXml(String xml) {
         Response response;
@@ -207,7 +215,6 @@ class ResponseWrapper extends RCResponse {
             throw new InvalidResponseXml(e.getMessage());
         }
     }
-
     /* Verify if a TOR needs to be submitted. */
     private boolean torRequired() {
         if (rcResponse == null) return true;

@@ -5,10 +5,12 @@ import com.fiserv.merchant.gmfv10.ReversalIndType;
 import com.fiserv.merchant.gmfv10.TxnTypeType;
 import com.google.gson.JsonSyntaxException;
 import fdrc.Exceptions.UnsupportedEnumValueException;
-import fdrc.model.RCResponse;
 import fdrc.model.RCRequest;
+import fdrc.model.RCResponse;
 import fdrc.utils.JsonBuilder;
 import fdrc.utils.Utils;
+
+import java.security.GeneralSecurityException;
 
 public class Client {
     /**
@@ -31,42 +33,39 @@ public class Client {
         client.submitRequest(null);
     }
 
-    public RCResponse submitRequest(RCRequest RCRequest) {
-        RCResponse resposne = null;
+    public RCResponse submitRequest(RCRequest rcRequest) {
+        RCResponse rcResponse = null;
         String errorMessage = "";
         GenericService requestProcessor = null;
-        //todo: temp code, to remove in prod: begin
         try {
-            if (RCRequest == null) RCRequest = JsonBuilder.getRequestFromJson("payload.json");
-            // todo: end
-            if (RCRequest == null) return new RCResponse("invalid payload.");
-//            errorMessage = Utils.validate(request);
+            //todo: temp code, to remove in prod: begin
+            if (rcRequest == null) rcRequest = JsonBuilder.getRequestFromJson("payload.json");
+            //todo: temp code, to remove in prod: end
+            if (rcRequest == null) return new RCResponse("invalid payload.");
+            errorMessage = Utils.validate(rcRequest);
             if (errorMessage != "") return new RCResponse(errorMessage);
 
-            requestProcessor = getCreditDebitEBTService(RCRequest, requestProcessor);
-            requestProcessor = getReversalService(RCRequest, requestProcessor);
+            requestProcessor = getCreditDebitEBTService(rcRequest, requestProcessor);
+            requestProcessor = getReversalService(rcRequest, requestProcessor);
 
-            if (Utils.toEnum(TxnTypeType.class, RCRequest.txnType) == TxnTypeType.HOST_TOTALS)
+            if (Utils.toEnum(TxnTypeType.class, rcRequest.txnType) == TxnTypeType.HOST_TOTALS)
                 requestProcessor = new AdminService();
             if (requestProcessor != null)
-                resposne = requestProcessor.processRequest(RCRequest);
+                rcResponse = requestProcessor.processRequest(rcRequest);
+            else
+                return new RCResponse("Unable to for request for the given request data.");
         } catch (IllegalArgumentException | UnsupportedEnumValueException e) {
             errorMessage = e.getMessage();
         } catch (Exception e) {
             errorMessage = "Error: " + e.getMessage();
-//            Logger logger = Logger.getLogger("FDRCLogger");
-//            logger.logp(Level.SEVERE, e.getStackTrace().getClass().getName(), "", e.getMessage());
-
         }
-        requestProcessor = null; // finally deallocate
-        if (Utils.isNotNullOrEmpty(errorMessage)) if (resposne != null) {
-            resposne.errorMsg = errorMessage;
+        if (Utils.isNotNullOrEmpty(errorMessage)) if (rcResponse != null) {
+            rcResponse.errorMsg = errorMessage;
         } else {
-            resposne = new RCResponse(errorMessage);
+            rcResponse = new RCResponse(errorMessage);
         }
-        return resposne;
+        return rcResponse;
     }
-
     private GenericService getCreditDebitEBTService(RCRequest RCRequest, GenericService requestProcessor) {
         if (Utils.isNotNullOrEmpty(RCRequest.pymtType))
             switch (Utils.toEnum(PymtTypeType.class, RCRequest.pymtType)) {
@@ -96,7 +95,6 @@ public class Client {
             }
         return requestProcessor;
     }
-
     private GenericService getReversalService(RCRequest RCRequest, GenericService requestProcessor) {
         if (Utils.isNotNullOrEmpty(RCRequest.reversalInd))
             switch (Utils.toEnum(ReversalIndType.class, RCRequest.reversalInd)) {

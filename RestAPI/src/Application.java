@@ -1,5 +1,5 @@
 import com.sun.net.httpserver.HttpServer;
-import fdrc.model.Client;
+import fdrc.service.Client;
 import org.apache.commons.httpclient.HttpStatus;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class Application {
             httpServer.createContext(addr, (exchange -> {
                 String respText = "Hello!";
 
-                byte[] reqBody  =  exchange.getRequestBody().readAllBytes();
+                byte[] reqBody = exchange.getRequestBody().readAllBytes();
                 String rawReq = new String(reqBody);
                 respText = CallFDRC(rawReq);
                 exchange.sendResponseHeaders(HttpStatus.SC_OK, respText.getBytes().length);
@@ -31,7 +31,7 @@ public class Application {
                 outputStream.write(respText.getBytes());
                 outputStream.flush();
                 exchange.close();
-                }));
+            }));
             httpServer.setExecutor(null); // creates a default executor
             httpServer.start();
         } catch (IOException e) {
@@ -39,8 +39,8 @@ public class Application {
         }
     }
 
-    static Map<String, List<String>> splitQuery(String query){
-        if (query == null || "".equals(query)){
+    static Map<String, List<String>> splitQuery(String query) {
+        if (query == null || "".equals(query)) {
             return Collections.emptyMap();
         }
 
@@ -49,10 +49,10 @@ public class Application {
                 .collect(groupingBy(s -> s[0], mapping(s -> s[1], toList())));
     }
 
-    static String CallFDRC(String json){
+    static String CallFDRC(String json) {
         Client client = new Client();
         return client.Call(json);
-        }
+    }
 
 
 }

@@ -1,3 +1,5 @@
+package test;
+
 import fdrc.model.RCRequest;
 import fdrc.utils.JsonBuilder;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -8,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 public class TestRetailOrRestaurant extends TestGeneric {
     public static final String PATH = "src/test/resources/RetailOrRestt/";
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @ValueSource(strings =
             {
                     "Credit-Visa-AuthCompl-swipe-200019960020.json;000", "Credit-Visa-AuthCompl-swipe-200019960021.json;000",

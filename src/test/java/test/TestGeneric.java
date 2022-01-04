@@ -1,3 +1,5 @@
+package test;
+
 import fdrc.model.RCResponse;
 import fdrc.service.Client;
 import fdrc.utils.JsonBuilder;
