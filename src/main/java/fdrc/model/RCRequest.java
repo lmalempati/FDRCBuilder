@@ -34,6 +34,8 @@ public class RCRequest {
     public String netAccInd;
     public String merchantMID;
     public String groupID;
+    public String digWltProgType;
+    public String mobileInd;
 
     // card grp
     public String acctNum;

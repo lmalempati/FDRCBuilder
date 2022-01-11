@@ -47,7 +47,7 @@ public class RCResponse {
     public String xCodeResp;
 
     public String errorMsg;
-    public String responseRaw = "";
+    public String responsePayload = "";
     public String trnmsnDateTime; // to store request's trnmsnDateTime
 
     public String DWStatusCode;

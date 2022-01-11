@@ -10,6 +10,8 @@ import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import fdrc.Exceptions.InvalidResponseXml;
+import fdrc.utils.Utils;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -29,7 +31,7 @@ public class Serialization {
             mapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
             mapper.registerModule(new JaxbAnnotationModule()); // to follow xml annotations on model classes
             returnValue = mapper.writeValueAsString(gmfmv);
-            returnValue = returnValue.replaceAll(Constants.GMF, Constants.GMF_NS); // todo: xml not getting namespace, hardcoded?????
+            returnValue = returnValue.replaceAll(Constants.GMF, Constants.GMF_NS); // since xml not getting namespace
         } catch (JacksonException e) {
             error = e.getMessage();
         } catch (Exception e) {
@@ -37,12 +39,13 @@ public class Serialization {
         }
         return returnValue;
     }
-    public static Object getObjectXML(Class<?> C, String xml) { // , T type
+    public static Object getObjectXML(Class<?> aClass, String xml, boolean failOnUnknownProperties) { // ,T type
+        if (!Utils.isNotNullOrEmpty(xml))
+            throw new InvalidResponseXml("Xml to deserialize is blank");
         String exceptionMsg;
-        XmlMapper mapper = getXmlMapperDeserializer(false);
+        XmlMapper mapper = getXmlMapperDeserializer(failOnUnknownProperties);
         try {
-
-            return mapper.readValue(new StringReader(xml), C);
+            return mapper.readValue(new StringReader(xml), aClass);
         } catch (JacksonException e) {
             exceptionMsg = e.getMessage();
         } catch (IOException e) {

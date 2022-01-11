@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fdrc.Exceptions.InvalidNumber;
 import fdrc.Exceptions.UnsupportedEnumValueException;
+import fdrc.common.Constants;
 import fdrc.model.RCRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -130,40 +131,72 @@ public class Utils {
         }
         throw new UnsupportedEnumValueException(errorMsg);
     }
+    /* Generate Client Ref Number in the format <STAN>|<TPPID>, right justified and left padded with "0" */
+    public static String getClientRef() {
+        String clientRef = "";
+        clientRef = String.format("0%sV%s", Utils.getSTAN(), Constants.REQUEST_TPPID);
+        return clientRef;
+    }
+    public static String mapMidToDID(String merchantID){
+        // Todo: MID, DID, MCC, IndustryType so on has to come from caller, builder has no idea.
+        switch(merchantID){
+            case "RCTST1000092382":
+                return "00035606147505719454";
+            case "RCTST1000092383":
+                return "00035606151483882257";
+            case "RCTST1000092384":
+                return "00035606180092691444";
 
-    public static String validate(final RCRequest RCRequest) {
+            case "RCTST1000091636":
+                return "00041372277848179310";
+            case "RCTST1000091637":
+                return "00035488451724571345";
+            case "RCTST1000091638":
+                return "00035488381390525644";
+
+            case "RCTST1000092850":
+                return "00042217876975393171";
+            case "RCTST1000092851":
+                return "00042218039591394672";
+            case "RCTST1000092852":
+                return "00042217833110503539";
+            default:
+                throw new UnsupportedEnumValueException(String.format("merchantID %s", merchantID));
+        }
+    }
+    public static String validate(final RCRequest rcRequest) {
         //todo: what else to validate?
-        if (RCRequest == null)
+        if (rcRequest == null)
             return "invalid or empty request";
-        if (!Utils.isNotNullOrEmpty(RCRequest.pymtType))
+        if (!Utils.isNotNullOrEmpty(rcRequest.pymtType))
             return "Payment type can't be empty";
-        Utils.toEnum(PymtTypeType.class, RCRequest.pymtType);
-        if (!Utils.isNotNullOrEmpty(RCRequest.txnType))
+        Utils.toEnum(PymtTypeType.class, rcRequest.pymtType);
+        if (!Utils.isNotNullOrEmpty(rcRequest.txnType))
             return "Transaction type can't be empty";
-        Utils.toEnum(TxnTypeType.class, RCRequest.txnType);
-        if (!(Utils.toEnum(PymtTypeType.class, RCRequest.pymtType) == PymtTypeType.DEBIT ||
-                Utils.toEnum(PymtTypeType.class, RCRequest.pymtType) == PymtTypeType.EBT)) {
+        Utils.toEnum(TxnTypeType.class, rcRequest.txnType);
+        if (!(Utils.toEnum(PymtTypeType.class, rcRequest.pymtType) == PymtTypeType.DEBIT ||
+                Utils.toEnum(PymtTypeType.class, rcRequest.pymtType) == PymtTypeType.EBT)) {
 //            if (!Utils.isNotNullOrEmpty(request.cardType))
 //                return "Card type can't be empty";
 //            else
-            Utils.toEnum(CardTypeType.class, RCRequest.cardType);
+            Utils.toEnum(CardTypeType.class, rcRequest.cardType);
         }
 
-        if (!Utils.isNotNullOrEmpty(RCRequest.cardCaptCap)) // todo: this can't be on request as we need to derive it..
+        if (!Utils.isNotNullOrEmpty(rcRequest.cardCaptCap)) // todo: this can't be on request as we need to derive it..
             return "Invalid cardCaptCap";
 
-        if (Utils.isNotNullOrEmpty(RCRequest.ccvInd))
-            Utils.toEnum(CCVIndType.class, RCRequest.ccvInd);
-        if (Utils.isNotNullOrEmpty(RCRequest.merchantMID))
-            RequestUtils.merchantID = RequestUtils.mapMidToDID(RCRequest.merchantMID); // todo: no need in prod
+        if (Utils.isNotNullOrEmpty(rcRequest.ccvInd))
+            Utils.toEnum(CCVIndType.class, rcRequest.ccvInd);
+        if (!Utils.isNotNullOrEmpty(rcRequest.merchantMID))
+            return "Invalid MID";
+//            RequestUtils.merchantID = RequestUtils.mapMidToDID(rcRequest.merchantMID); // todo: no need in prod
 
         Pattern pattern = Pattern.compile("\\d+(\\.\\d+)?");
-        if (RCRequest.txnAmt == null || !pattern.matcher(RCRequest.txnAmt.toString()).matches()) {
+        if (rcRequest.txnAmt == null || !pattern.matcher(rcRequest.txnAmt.toString()).matches()) {
             return "Invalid amount.";
         }
         return "";
     }
-
     public static String upload(String urlPath, String reqXml) {
         URL url;
         StringBuilder response = null;
@@ -197,8 +230,4 @@ public class Utils {
         }
         return response != null ? response.toString() : "";
     }
-
-
-
-
 }

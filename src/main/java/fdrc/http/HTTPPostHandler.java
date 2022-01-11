@@ -1,15 +1,12 @@
 package fdrc.http;
 
-import com.fasterxml.jackson.core.JacksonException;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import fdrc.Exceptions.InvalidResponseXml;
 import fdrc.common.Constants;
-import fdrc.model.RCResponse;
+import fdrc.service.FDRCRequestService;
 import fdrc.common.Serialization;
-import fdrc.utils.RequestUtils;
+import fdrc.utils.Utils;
 import fdrc.xml.*;
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
 
@@ -17,11 +14,10 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 public class HTTPPostHandler {
-
     /* The below method will take the XML request and returns the XML response received from Data wire.
      * */
     @SuppressWarnings("deprecation")
-    public String Submit(String gmfrequest) throws IOException, HttpException {
+    public String Submit(String gmfrequest) throws IOException {
         String response = "";
         /* Create the instance of the Request that is a class generated from the Rapid connect Transaction
          * Service Schema file [rc.xsd]*/
@@ -44,11 +40,11 @@ public class HTTPPostHandler {
          * Service Schema file [rc.xsd]*/
         ReqClientIDType reqClientIDType = new ReqClientIDType();
         reqClientIDType.setApp("RAPIDCONNECTSRS");
-        reqClientIDType.setAuth(String.format("%s%s|%s", Constants.REQUEST_GROUPID, RequestUtils.merchantID, Constants.REQUEST_TERMID));
+        reqClientIDType.setAuth(String.format("%s%s|%s", FDRCRequestService.getRcRequest().groupID, FDRCRequestService.getRcRequest().merchantMID, Constants.REQUEST_TERMID)); // todo: user termid off Request
         /* Set the clientRef value*/
-        reqClientIDType.setClientRef(RequestUtils.getClientRef());
+        reqClientIDType.setClientRef(Utils.getClientRef());
         /* Set the DID value*/
-        reqClientIDType.setDID(RequestUtils.mapMidToDID(RequestUtils.merchantID));
+        reqClientIDType.setDID(Utils.mapMidToDID(FDRCRequestService.getRcRequest().merchantMID));
 
         gmfTransactionRequest.setReqClientID(reqClientIDType);
         /*Set client timeout value*/
@@ -60,7 +56,7 @@ public class HTTPPostHandler {
         gmffomattedRequest = Serialization.getXmlObject(gmfTransactionRequest, null);
 
         /* URL that will consume the transaction request.*/
-        final String postURL = "https://stg.dw.us.fdcnet.biz/rc"; // todo: hardcoded?
+        final String postURL = Constants.STG_POST_URL;
         final PostMethod post = new PostMethod(postURL);
         final HttpClient httpclient = new HttpClient();
         /*Set various parameters of HTTP requet header*/
