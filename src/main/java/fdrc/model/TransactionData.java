@@ -2,7 +2,9 @@ package fdrc.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-
+/***
+ * This is not in use, given by Karthick in the beginning. To wait until integration with POS.
+ */
 public class TransactionData implements Serializable {
     public String ARQC;
     public String ATC;

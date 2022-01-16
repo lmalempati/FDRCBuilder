@@ -14,14 +14,12 @@ import fdrc.utils.Utils;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.io.StringWriter;
 
 public class Serialization {
     /* The below method will transform the transaction request object to an XML string in UTF-8 encoding.
      * It will convert gmfmv object into serialized XML data which will be sent to Data wire.
      * */
-    public static String getXmlObject(Object gmfmv, String error) {
-        StringWriter stringWriter = new StringWriter();
+    public static String getXmlFromObj(Object gmfmv, String error) {
         String returnValue = "";
         try {
             JacksonXmlModule xmlModule = new JacksonXmlModule();
@@ -39,7 +37,7 @@ public class Serialization {
         }
         return returnValue;
     }
-    public static Object getObjectXML(Class<?> aClass, String xml, boolean failOnUnknownProperties) { // ,T type
+    public static Object getObjectFromXML(Class<?> aClass, String xml, boolean failOnUnknownProperties) { // ,T type
         if (!Utils.isNotNullOrEmpty(xml))
             throw new InvalidResponseXml("Xml to deserialize is blank");
         String exceptionMsg;

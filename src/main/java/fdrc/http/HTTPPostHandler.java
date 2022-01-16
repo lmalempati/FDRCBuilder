@@ -12,12 +12,15 @@ import org.apache.commons.httpclient.methods.PostMethod;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.UnknownHostException;
 
 public class HTTPPostHandler {
+
+
     /* The below method will take the XML request and returns the XML response received from Data wire.
      * */
     @SuppressWarnings("deprecation")
-    public String Submit(String gmfrequest) throws IOException {
+    public String Submit(String gmfrequest) {
         String response = "";
         /* Create the instance of the Request that is a class generated from the Rapid connect Transaction
          * Service Schema file [rc.xsd]*/
@@ -27,7 +30,7 @@ public class HTTPPostHandler {
         /* Create the instance of the TransactionType that is a class generated from the Rapid connect Transaction
          * Service Schema file [rc.xsd]*/
         TransactionType transactionType = factory.createTransactionType();
-        transactionType.setServiceID("160");
+        transactionType.setServiceID(Constants.SERVICE_ID);
 
         /* Create the instance of PayloadType that is a class generated from the Rapid connect Transaction
          * Service Schema file [rc.xsd]*/
@@ -39,7 +42,7 @@ public class HTTPPostHandler {
         /* Create the instance of ReqClientIDType that is a class generated from the Rapid connect Transaction
          * Service Schema file [rc.xsd]*/
         ReqClientIDType reqClientIDType = new ReqClientIDType();
-        reqClientIDType.setApp("RAPIDCONNECTSRS");
+        reqClientIDType.setApp(Constants.APP);
         reqClientIDType.setAuth(String.format("%s%s|%s", FDRCRequestService.getRcRequest().groupID, FDRCRequestService.getRcRequest().merchantMID, Constants.REQUEST_TERMID)); // todo: user termid off Request
         /* Set the clientRef value*/
         reqClientIDType.setClientRef(Utils.getClientRef());
@@ -51,9 +54,8 @@ public class HTTPPostHandler {
         gmfTransactionRequest.setClientTimeout(new BigInteger("30"));
         gmfTransactionRequest.setVersion("3");
 
-        String gmffomattedRequest = "";
         //Transform the gmfTransactionRequest object into XML string.
-        gmffomattedRequest = Serialization.getXmlObject(gmfTransactionRequest, null);
+        String gmffomattedRequest = Serialization.getXmlFromObj(gmfTransactionRequest, null);
 
         /* URL that will consume the transaction request.*/
         final String postURL = Constants.STG_POST_URL;
@@ -80,8 +82,12 @@ public class HTTPPostHandler {
             } else if (returnCode == HttpStatus.SC_OK) {
                 return post.getResponseBodyAsString();
             }
-        } catch (Exception e) {
-            throw new InvalidResponseXml(e.getMessage());
+        }
+        catch (UnknownHostException e){
+            throw new RuntimeException(" Unknown host exception: " +e.getMessage());
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         } finally {
             post.releaseConnection();
         }

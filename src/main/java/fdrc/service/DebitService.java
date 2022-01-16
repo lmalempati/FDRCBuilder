@@ -2,47 +2,42 @@ package fdrc.service;
 
 import com.fiserv.merchant.gmfv10.AddtlAmtGrp;
 import com.fiserv.merchant.gmfv10.DebitRequestDetails;
-import com.fiserv.merchant.gmfv10.DebitResponseDetails;
-import com.fiserv.merchant.gmfv10.GMFMessageVariants;
-import fdrc.Exceptions.InvalidResponseXml;
 import fdrc.model.RCRequest;
-import fdrc.model.RCResponse;
-import fdrc.common.FDRCRequestService;
 
 import java.io.Serializable;
 import java.util.List;
 
-class DebitService extends GenericService implements Serializable {
+class DebitService extends BaseService implements Serializable {
     /* builds request object, if */
-    public String buildRequest(RCRequest RCRequest, FDRCRequestService FDRCRequestService) {
+    public String buildRequest(RCRequest RCRequest, FDRCRequestService requestService) {
         String message = "";
         try {
-            DebitRequestDetails debitReqDtl = getDebitRequestDetails(FDRCRequestService);
+            DebitRequestDetails debitReqDtl = getDebitRequestDetails(requestService);
 
-            List<AddtlAmtGrp> addtlAmtGr = null;
-            List<AddtlAmtGrp> addlGrps = FDRCRequestService.getAddtlAmtGrp();
+            List<AddtlAmtGrp> addlGrps = requestService.getAddtlAmtGrp();
             if (addlGrps != null) {
-                addtlAmtGr = debitReqDtl.getAddtlAmtGrp();
+                List<AddtlAmtGrp> addtlAmtGr = debitReqDtl.getAddtlAmtGrp();
                 for (AddtlAmtGrp grp : addlGrps
                 ) {
                     addtlAmtGr.add(grp);
                 }
             }
             /* Add the Debit request object to GMF message variant object */
-            gmfmv.setDebitRequest(debitReqDtl);
+            getGmfmv().setDebitRequest(debitReqDtl);
         } catch (Exception e) {
             message = e.getMessage();
         }
         return message;
     }
 
-    private DebitRequestDetails getDebitRequestDetails(FDRCRequestService FDRCRequestService) {
+    private DebitRequestDetails getDebitRequestDetails(FDRCRequestService requestService) {
         DebitRequestDetails debitReqDtl = new DebitRequestDetails();
-        debitReqDtl.setCommonGrp(FDRCRequestService.getCommonGrp());
+        debitReqDtl.setCommonGrp(requestService.getCommonGrp());
         /* Card Group */
         /* Populate values for Card Group */
-        debitReqDtl.setCardGrp(FDRCRequestService.getCardGrp());
-        debitReqDtl.setPINGrp(FDRCRequestService.getPINGrp());
+        debitReqDtl.setCardGrp(requestService.getCardGrp());
+        debitReqDtl.setPINGrp(requestService.getPINGrp());
+        debitReqDtl.setTAGrp(requestService.getTAGrp());
         return debitReqDtl;
     }
 }

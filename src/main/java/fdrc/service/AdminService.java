@@ -1,22 +1,16 @@
 package fdrc.service;
 
 import com.fiserv.merchant.gmfv10.AdminRequestDetails;
-import com.fiserv.merchant.gmfv10.AdminResponseDetails;
-import com.fiserv.merchant.gmfv10.GMFMessageVariants;
-import fdrc.Exceptions.InvalidResponseXml;
 import fdrc.model.RCRequest;
-import fdrc.model.RCResponse;
-import fdrc.common.FDRCRequestService;
 
-class AdminService extends GenericService {
+class AdminService extends BaseService {
 
     @Override
-    public String buildRequest(RCRequest RCRequest, FDRCRequestService FDRCRequestService) {
+    String buildRequest(RCRequest RCRequest, FDRCRequestService requestService) {
         String message = "";
         try {
-            AdminRequestDetails adminRequestDetails = getAdminRequestDetails(FDRCRequestService);
-
-            gmfmv.setAdminRequest(adminRequestDetails);
+            AdminRequestDetails adminRequestDetails = getAdminRequestDetails(requestService);
+            getGmfmv().setAdminRequest(adminRequestDetails);
         } catch (Exception e) {
             message = e.getMessage();
         }

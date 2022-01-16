@@ -1,26 +1,22 @@
 package fdrc.service;
 
 import com.fiserv.merchant.gmfv10.*;
-import fdrc.Exceptions.InvalidResponseXml;
 import fdrc.model.RCRequest;
-import fdrc.model.RCResponse;
-import fdrc.common.FDRCRequestService;
 import fdrc.utils.Utils;
 
 import java.io.Serializable;
 import java.util.List;
 
-class ReversalService extends GenericService implements Serializable {
+class ReversalService extends BaseService implements Serializable {
 
     @Override
-    public String buildRequest(RCRequest request, FDRCRequestService requestService) {
+    String buildRequest(RCRequest request, FDRCRequestService requestService) {
         String message = "";
         try {
             VoidTOReversalRequestDetails reversalRequestDetails = populateReversalRequestDetails(requestService);
-            List<AddtlAmtGrp> addtlAmtGr = null;
             List<AddtlAmtGrp> addlGrps = requestService.getAddtlAmtGrp();
             if (addlGrps != null) {
-                addtlAmtGr = reversalRequestDetails.getAddtlAmtGrp();
+                List<AddtlAmtGrp> addtlAmtGr = reversalRequestDetails.getAddtlAmtGrp();
                 for (AddtlAmtGrp grp : addlGrps
                 ) {
                     addtlAmtGr.add(grp);
@@ -43,7 +39,7 @@ class ReversalService extends GenericService implements Serializable {
                         reversalRequestDetails.setAmexGrp(requestService.getAmexGrp());
                         break;
                 }
-            gmfmv.setReversalRequest(reversalRequestDetails);
+            getGmfmv().setReversalRequest(reversalRequestDetails);
         } catch (Exception e) {
             message = e.getMessage();
         }

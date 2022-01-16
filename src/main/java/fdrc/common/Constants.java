@@ -20,11 +20,13 @@ public class Constants {
     public static final String STG_POST_URL = "https://stg.dw.us.fdcnet.biz/rc";
 
     public static final String HTTP_DID = "00035469814383142846"; /*Restaurant 10001 */
+    public static final String APP = "RAPIDCONNECTSRS";
+    public static final String SERVICE_ID = "160";
     public static final String ACTIVATION_TEMPLATE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
             "<Request Version=\"3\">\n" +
             "    <ReqClientID>\n" +
             "        <DID>{datawireId}</DID>\n" +
-            "        <App>RAPIDCONNECTSRS</App>\n" +
+            "        <App>" + APP + "</App>\n" +
             "        <Auth>{groupId}{merchantId}|{terminalId}</Auth>\n" +
             "        <ClientRef>{clientRef}</ClientRef>\n" +
             "    </ReqClientID>\n" +
@@ -37,7 +39,7 @@ public class Constants {
                     "<Request Version=\"3\">\n" +
                     "    <ReqClientID>\n" +
                     "        <DID></DID>\n" +
-                    "        <App>RAPIDCONNECTSRS</App>\n" +
+                    "        <App>" + APP + "</App>\n" +
                     "        <Auth>{groupId}{merchantId}|{terminalId}</Auth>\n" +
                     "        <ClientRef>{clientRef}</ClientRef>\n" +
                     "    </ReqClientID>\n" +

@@ -10,6 +10,7 @@ import fdrc.Exceptions.InvalidNumber;
 import fdrc.Exceptions.UnsupportedEnumValueException;
 import fdrc.common.Constants;
 import fdrc.model.RCRequest;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -131,15 +132,17 @@ public class Utils {
         }
         throw new UnsupportedEnumValueException(errorMsg);
     }
+
     /* Generate Client Ref Number in the format <STAN>|<TPPID>, right justified and left padded with "0" */
     public static String getClientRef() {
         String clientRef = "";
         clientRef = String.format("0%sV%s", Utils.getSTAN(), Constants.REQUEST_TPPID);
         return clientRef;
     }
-    public static String mapMidToDID(String merchantID){
+
+    public static String mapMidToDID(String merchantID) {
         // Todo: MID, DID, MCC, IndustryType so on has to come from caller, builder has no idea.
-        switch(merchantID){
+        switch (merchantID) {
             case "RCTST1000092382":
                 return "00035606147505719454";
             case "RCTST1000092383":
@@ -164,6 +167,7 @@ public class Utils {
                 throw new UnsupportedEnumValueException(String.format("merchantID %s", merchantID));
         }
     }
+
     public static String validate(final RCRequest rcRequest) {
         //todo: what else to validate?
         if (rcRequest == null)
@@ -191,12 +195,14 @@ public class Utils {
             return "Invalid MID";
 //            RequestUtils.merchantID = RequestUtils.mapMidToDID(rcRequest.merchantMID); // todo: no need in prod
 
-        Pattern pattern = Pattern.compile("\\d+(\\.\\d+)?");
-        if (rcRequest.txnAmt == null || !pattern.matcher(rcRequest.txnAmt.toString()).matches()) {
-            return "Invalid amount.";
+        if (Utils.isNotNullOrEmpty(rcRequest.txnAmt)) {
+            Pattern pattern = Pattern.compile("\\d+(\\.\\d+)?");
+            if (!pattern.matcher(rcRequest.txnAmt.toString()).matches())
+                return "Invalid amount.";
         }
         return "";
     }
+
     public static String upload(String urlPath, String reqXml) {
         URL url;
         StringBuilder response = null;
