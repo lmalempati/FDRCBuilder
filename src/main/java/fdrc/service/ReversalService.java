@@ -53,6 +53,7 @@ class ReversalService extends BaseService implements Serializable {
         reversalRequestDetails.setCardGrp(requestService.getCardGrp());
         reversalRequestDetails.setEcommGrp(requestService.getEcommGrp());
         reversalRequestDetails.setOrigAuthGrp(requestService.getOrigAuthGrp());
+        reversalRequestDetails.setEbtGrp(requestService.getEBTGrp());
         return reversalRequestDetails;
     }
 }
