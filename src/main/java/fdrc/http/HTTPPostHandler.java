@@ -1,9 +1,8 @@
 package fdrc.http;
 
-import fdrc.Exceptions.InvalidResponseXml;
 import fdrc.common.Constants;
-import fdrc.service.FDRCRequestService;
 import fdrc.common.Serialization;
+import fdrc.service.FDRCRequestService;
 import fdrc.utils.Utils;
 import fdrc.xml.*;
 import org.apache.commons.httpclient.HttpClient;
@@ -12,7 +11,6 @@ import org.apache.commons.httpclient.methods.PostMethod;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.net.UnknownHostException;
 
 public class HTTPPostHandler {
 
@@ -45,13 +43,13 @@ public class HTTPPostHandler {
         reqClientIDType.setApp(Constants.APP);
         reqClientIDType.setAuth(String.format("%s%s|%s", FDRCRequestService.getRcRequest().groupID, FDRCRequestService.getRcRequest().merchantMID, Constants.REQUEST_TERMID)); // todo: user termid off Request
         /* Set the clientRef value*/
-        reqClientIDType.setClientRef(Utils.getClientRef());
+        reqClientIDType.setClientRef(Utils.getClientRef(""));
         /* Set the DID value*/
         reqClientIDType.setDID(Utils.mapMidToDID(FDRCRequestService.getRcRequest().merchantMID));
 
         gmfTransactionRequest.setReqClientID(reqClientIDType);
         /*Set client timeout value*/
-        gmfTransactionRequest.setClientTimeout(new BigInteger("30"));
+        gmfTransactionRequest.setClientTimeout(new BigInteger("35"));
         gmfTransactionRequest.setVersion("3");
 
         //Transform the gmfTransactionRequest object into XML string.
@@ -62,7 +60,7 @@ public class HTTPPostHandler {
         final PostMethod post = new PostMethod(postURL);
         final HttpClient httpclient = new HttpClient();
         /*Set various parameters of HTTP requet header*/
-        post.setRequestHeader("User-Agent", "TRR-Formatter");
+        post.setRequestHeader("User-Agent", "SUNMI-POS");
         post.setRequestHeader("Host", postURL);
         post.setRequestHeader("Connection", "Keep-Alive");
         post.setRequestHeader("Cache-Control", "no-cache");
@@ -83,7 +81,7 @@ public class HTTPPostHandler {
                 return post.getResponseBodyAsString();
             }
         }
-        catch (UnknownHostException e){
+        catch (IOException e){
             throw new RuntimeException(" Unknown host exception: " +e.getMessage());
         }
         catch (Exception e) {
@@ -91,6 +89,6 @@ public class HTTPPostHandler {
         } finally {
             post.releaseConnection();
         }
-        return null;
+        return "";
     }
 }
