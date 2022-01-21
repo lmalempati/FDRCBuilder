@@ -3,7 +3,7 @@ package fdrc.service;
 import com.fiserv.merchant.gmfv10.*;
 import fdrc.Exceptions.InvalidRequest;
 import fdrc.Exceptions.InvalidResponseXml;
-import fdrc.Exceptions.UnsupportedEnumValueException;
+import fdrc.Exceptions.UnsupportedValueException;
 import fdrc.common.Constants;
 import fdrc.common.Serialization;
 import fdrc.http.HTTPPostHandler;
@@ -21,20 +21,17 @@ import java.util.logging.Logger;
 import static com.fiserv.merchant.gmfv10.TxnTypeType.TA_KEY_REQUEST;
 
 abstract class BaseService {
-    private GMFMessageVariants gmfmv;
+    private final GMFMessageVariants gmfmv;
     private RCResponse rcResponse;
     private String responseXml = "";
     private static Logger logger = Logger.getLogger(BaseService.class.getName());
 
     protected BaseService() {
-        this.gmfmv = new GMFMessageVariants();
+        gmfmv = new GMFMessageVariants();
     }
 
     protected GMFMessageVariants getGmfmv() {
-        if (this.gmfmv != null)
-            return gmfmv;
-        else
-            throw new NullPointerException("GMFMessageVariants is null");
+        return gmfmv;
     }
 
     abstract String buildRequest(final RCRequest RCRequest, FDRCRequestService requestService);
@@ -126,9 +123,15 @@ abstract class BaseService {
             if (dsGrp != null) {
                 rcResponse.discNRID = dsGrp.getDiscNRID();
                 rcResponse.discTransQualifier = dsGrp.getDiscTransQualifier();
+                rcResponse.discPOSEntry = dsGrp.getDiscPOSEntry();
+                rcResponse.discPOSData = dsGrp.getDiscPOSData();
+                rcResponse.discRespCode = dsGrp.getDiscRespCode();
+                rcResponse.discProcCode = dsGrp.getDiscProcCode();
+                rcResponse.motoInd = dsGrp.getMOTOInd();
             }
             if (amexGrp != null) {
                 rcResponse.amexTranID = amexGrp.getAmExTranID();
+                rcResponse.amExPOSData = amexGrp.getAmExPOSData();
             }
             if (taGrp != null) {
                 rcResponse.tkn = taGrp.getTkn();
@@ -190,7 +193,6 @@ abstract class BaseService {
             Response response;
 //            XmlMapper mapper = Serialization.getXmlMapperDeserializer(true);
             ObjectFactory factory = null;
-            //                response = (Response) mapper.readValue(responseXml, Response.class);
             response = (Response) Serialization.getObjectFromXML(Response.class, responseXml, true);
             if (response != null && response.getStatus() != null
                     && response.getStatus().getStatusCode() != null) {
@@ -280,24 +282,24 @@ class ServiceUtil {
                 case EBT:
                     return new EBTService();
                 default:
-                    throw new UnsupportedEnumValueException(String.format("payment type %s", RCRequest.pymtType));
+                    throw new UnsupportedValueException(String.format("payment type %s", RCRequest.pymtType));
             }
         return null;
     }
 
     private BaseService getReversalService(RCRequest RCRequest) {
         if (Utils.isNotNullOrEmpty(RCRequest.reversalInd))
-            switch (Utils.toEnum(TxnTypeType.class, RCRequest.txnType)) {
-                case REFUND:
-                    switch (Utils.toEnum(ReversalIndType.class, RCRequest.reversalInd)) {
-                        case VOID:
-                        case PARTIAL:
-                        case TIMEOUT:
-                            return new ReversalService();
-                        default:
-                            throw new UnsupportedEnumValueException(String.format("reversalInd %s", RCRequest.reversalInd));
-                    }
+//            switch (Utils.toEnum(TxnTypeType.class, RCRequest.txnType)) {
+//                case REFUND:
+            switch (Utils.toEnum(ReversalIndType.class, RCRequest.reversalInd)) {
+                case VOID:
+                case PARTIAL:
+                case TIMEOUT:
+                    return new ReversalService();
+                default:
+                    throw new UnsupportedValueException(String.format("reversalInd %s", RCRequest.reversalInd));
             }
+//            }
         return null;
     }
 }
