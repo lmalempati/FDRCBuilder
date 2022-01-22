@@ -6,16 +6,15 @@ import com.fiserv.merchant.gmfv10.CreditRequestDetails;
 import fdrc.model.RCRequest;
 import fdrc.utils.Utils;
 
-import java.io.Serializable;
 import java.util.List;
 
-class CreditService extends BaseService implements Serializable {
+class CreditService extends BaseService {
 
     @Override
     String buildRequest(final RCRequest RCRequest, FDRCRequestService requestService) {
         String message = "";
         try {
-            CreditRequestDetails creditReqDtl = getCreditRequestDetails(RCRequest, requestService);
+            CreditRequestDetails creditReqDtl = populateCreditRequestDetails(RCRequest, requestService);
             // CardTypeType.valueOf(request.cardInfo.cardType.toUpperCase())
             if (Utils.isNotNullOrEmpty(RCRequest.cardType))
                 switch (Utils.toEnum(CardTypeType.class, RCRequest.cardType)) {
@@ -53,7 +52,7 @@ class CreditService extends BaseService implements Serializable {
         }
         return message;
     }
-    private CreditRequestDetails getCreditRequestDetails(RCRequest RCRequest, FDRCRequestService requestService) {
+    private CreditRequestDetails populateCreditRequestDetails(RCRequest RCRequest, FDRCRequestService requestService) {
         CreditRequestDetails creditReqDtl = new CreditRequestDetails();
         creditReqDtl.setOrigAuthGrp(requestService.getOrigAuthGrp());
         creditReqDtl.setCommonGrp(requestService.getCommonGrp());

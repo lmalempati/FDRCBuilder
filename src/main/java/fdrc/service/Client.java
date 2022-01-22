@@ -1,17 +1,12 @@
 package fdrc.service;
 
-import com.fiserv.merchant.gmfv10.PymtTypeType;
-import com.fiserv.merchant.gmfv10.ReversalIndType;
-import com.fiserv.merchant.gmfv10.TxnTypeType;
 import com.google.gson.JsonSyntaxException;
 import fdrc.Exceptions.InvalidRequest;
-import fdrc.Exceptions.UnsupportedEnumValueException;
+import fdrc.Exceptions.UnsupportedValueException;
 import fdrc.model.RCRequest;
 import fdrc.model.RCResponse;
 import fdrc.utils.JsonBuilder;
 import fdrc.utils.Utils;
-
-import static com.fiserv.merchant.gmfv10.TxnTypeType.TA_KEY_REQUEST;
 
 public class Client {
     /**
@@ -40,14 +35,14 @@ public class Client {
         BaseService baseService;
         try {
             //todo: temp code, to remove in prod: begin
-            if (rcRequest == null) rcRequest = JsonBuilder.getRequestFromJson("payload.json");
+            //if (rcRequest == null) rcRequest = JsonBuilder.getRequestFromJson("payload.json");
             //todo: temp code, to remove in prod: end
             baseService = new ServiceUtil().getGMFServiceFromRequest(rcRequest);
             if (baseService != null)
                 rcResponse = baseService.processRequest(rcRequest);
             else
                 return new RCResponse("Unable to submit request for the given request data.");
-        } catch (IllegalArgumentException | UnsupportedEnumValueException | InvalidRequest e) {
+        } catch (IllegalArgumentException | UnsupportedValueException | InvalidRequest e) {
             errorMessage = e.getMessage();
         } catch (Exception e) {
             errorMessage = "Error: " + e.getMessage();

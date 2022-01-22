@@ -1,6 +1,6 @@
 package fdrc.service;
 
-import com.fiserv.merchant.gmfv10.*;
+import com.fiserv.merchant.gmfv10.TARequestDetails;
 import fdrc.model.RCRequest;
 
 class TransArmorService extends BaseService {
@@ -9,11 +9,7 @@ class TransArmorService extends BaseService {
     String buildRequest(RCRequest RCRequest, FDRCRequestService requestService) {
         String message = null;
         try {
-            TARequestDetails taReqDetails = new TARequestDetails();
-            taReqDetails.setCommonGrp(requestService.getCommonGrp());
-            taReqDetails.setAltMerchNameAndAddrGrp(requestService.getAltMerchNameAndAddrGrp());
-            taReqDetails.setCardGrp(requestService.getCardGrp());
-            taReqDetails.setTAGrp(requestService.getTAGrp());
+            TARequestDetails taReqDetails = populateTaRequestDetails(requestService);
             getGmfmv().setTransArmorRequest(taReqDetails);
         } catch (IllegalArgumentException e) {
             message = e.getMessage();
@@ -21,5 +17,14 @@ class TransArmorService extends BaseService {
             message = e.getMessage();
         }
         return message;
+    }
+
+    private TARequestDetails populateTaRequestDetails(FDRCRequestService requestService) {
+        TARequestDetails taReqDetails = new TARequestDetails();
+        taReqDetails.setCommonGrp(requestService.getCommonGrp());
+        taReqDetails.setAltMerchNameAndAddrGrp(requestService.getAltMerchNameAndAddrGrp());
+        taReqDetails.setCardGrp(requestService.getCardGrp());
+        taReqDetails.setTAGrp(requestService.getTAGrp());
+        return taReqDetails;
     }
 }

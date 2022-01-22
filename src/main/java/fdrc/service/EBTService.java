@@ -12,7 +12,7 @@ class EBTService extends BaseService implements Serializable {
     String buildRequest(RCRequest RCRequest, FDRCRequestService requestService) {
         String errorMsg = null;
         EBTRequestDetails ebtReqDtl = null;
-        ebtReqDtl = getEbtRequestDetails(requestService);
+        ebtReqDtl = populateEbtRequestDetails(requestService);
 
         List<AddtlAmtGrp> addlGrps = requestService.getAddtlAmtGrp();
         if (addlGrps != null) {
@@ -26,7 +26,7 @@ class EBTService extends BaseService implements Serializable {
         return errorMsg;
     }
 
-    private EBTRequestDetails getEbtRequestDetails(FDRCRequestService requestService) {
+    private EBTRequestDetails populateEbtRequestDetails(FDRCRequestService requestService) {
         EBTRequestDetails ebtReqDtl;
         ebtReqDtl = new EBTRequestDetails();
         ebtReqDtl.setCommonGrp(requestService.getCommonGrp());
