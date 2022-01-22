@@ -30,10 +30,15 @@ public class RCResponse {
     // Discover grp
     public String discNRID;
     public String discTransQualifier;
-
+    public String discPOSEntry;
+    public String discPOSData;
+    public String discRespCode;
+    public String discProcCode;
+    public String motoInd;
     // Amex grp
     public String amexTranID;
     public String sctyLvl;
+    public String amExPOSData;
 
     // Secure Trxn grp
     public String cavvResultCode; // not in use
