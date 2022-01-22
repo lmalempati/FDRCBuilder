@@ -4,7 +4,7 @@ import com.fiserv.merchant.gmfv10.ReversalIndType;
 import com.fiserv.merchant.gmfv10.TxnTypeType;
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
-import fdrc.Exceptions.UnsupportedEnumValueException;
+import fdrc.Exceptions.UnsupportedValueException;
 import fdrc.model.RCRequest;
 import fdrc.model.RCResponse;
 
@@ -52,7 +52,7 @@ public class JsonBuilder {
             e.printStackTrace();
         }
         finally {
-            if (RCRequest == null) throw new UnsupportedEnumValueException("Json payload.");
+            if (RCRequest == null) throw new UnsupportedValueException("Json payload.");
         }
         return RCRequest;
     }
@@ -68,28 +68,35 @@ public class JsonBuilder {
         return RCRequest;
     }
 
-    public static boolean updateCompletionPayload(RCResponse RCResponse, String fileName) {
-        RCRequest RCRequest = getRequestFromJson(fileName);
-        RCRequest.origAuthID = RCResponse.authID;
-        RCRequest.origRespCode = RCResponse.respCode;
-        RCRequest.origSTAN = RCResponse.stan;
-        RCRequest.origTranDateTime = RCResponse.tranDateTime;
-        RCRequest.origLocalDateTime = RCResponse.localDateTime;
-        RCRequest.refNum = RCResponse.refNum;
-        RCRequest.banknetData = RCResponse.banknetData;
-        RCRequest.discNRID = RCResponse.discNRID;
-        RCRequest.discTransQualifier = RCResponse.discTransQualifier;
-        RCRequest.transID = RCResponse.transID;
-        RCRequest.cardLevelResult = RCResponse.cardLevelResult;
-        RCRequest.aci = RCResponse.aci;
-        RCRequest.amexTranID = RCResponse.amexTranID;
-        RCRequest.spendQInd = RCResponse.spendQInd;
-        if (Utils.toEnum(TxnTypeType.class, RCRequest.txnType) == TxnTypeType.COMPLETION ||
-        Utils.isNotNullOrEmpty(RCRequest.reversalInd) && Utils.toEnum(ReversalIndType.class, RCRequest.reversalInd) == ReversalIndType.VOID)
-            RCRequest.orderNum = RCResponse.orderNum;
-        RCRequest.tkn = RCResponse.tkn;
+    public static boolean updateCompletionPayload(RCResponse response, String fileName) {
+        RCRequest request = getRequestFromJson(fileName);
+        request.origAuthID = response.authID;
+        request.origRespCode = response.respCode;
+        request.origSTAN = response.stan;
+        request.origTranDateTime = response.tranDateTime;
+        request.origLocalDateTime = response.localDateTime;
+        request.refNum = response.refNum;
+        request.banknetData = response.banknetData;
 
-        getJsonFromRequest(RCRequest, fileName);
+        request.discNRID = response.discNRID;
+        request.discPOSData = response.discPOSData;
+        request.discPOSEntry = response.discPOSEntry;
+        request.discRespCode= response.discRespCode;
+        request.discProcCode = response.discProcCode;
+        request.motoInd = response.motoInd;
+
+        request.discTransQualifier = response.discTransQualifier;
+        request.transID = response.transID;
+        request.cardLevelResult = response.cardLevelResult;
+        request.aci = response.aci;
+        request.amexTranID = response.amexTranID;
+        request.spendQInd = response.spendQInd;
+        if (Utils.toEnum(TxnTypeType.class, request.txnType) == TxnTypeType.COMPLETION ||
+        Utils.isNotNullOrEmpty(request.reversalInd) && Utils.toEnum(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID)
+            request.orderNum = response.orderNum;
+        request.tkn = response.tkn;
+
+        getJsonFromRequest(request, fileName);
         return true;
     }
 
