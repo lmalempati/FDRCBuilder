@@ -13,7 +13,6 @@ import fdrc.utils.Utils;
 import fdrc.xml.ObjectFactory;
 import fdrc.xml.Response;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -206,21 +205,24 @@ abstract class BaseService {
                         rcResponse.DWReturnCode = response.getTransactionResponse().getReturnCode();
                         if (response.getTransactionResponse().getPayload()
                                 .getEncoding().equals("cdata")) {
-                            /*Extract pay load data that is the transaction response for cdata type encoded message.*/
-                            rcResponse.responsePayload = response.getTransactionResponse()
-                                    .getPayload().getValue()
-                                    .replaceAll("&gt;", ">")
-                                    .replaceAll("&lt;", "<")
-                                    .replaceAll("&amp;", "&");
+                            if (response.getTransactionResponse().getPayload().getValue() != null)
+                                /*Extract pay load data that is the transaction response for cdata type encoded message.*/
+                                rcResponse.responsePayload = response.getTransactionResponse()
+                                        .getPayload().getValue()
+                                        .replaceAll("&gt;", ">")
+                                        .replaceAll("&lt;", "<")
+                                        .replaceAll("&amp;", "&");
                         } else if (response.getTransactionResponse()
                                 .getPayload().getEncoding()
                                 .equalsIgnoreCase("xml_escape")) {
-                            /*Extract pay load data that is the transaction response for xml_escape type encoded message.*/
-                            rcResponse.responsePayload = response.getTransactionResponse()
-                                    .getPayload().getValue()
-                                    .replaceAll("&gt;", ">")
-                                    .replaceAll("&lt;", "<")
-                                    .replaceAll("&amp;", "&");
+                            if (response.getTransactionResponse().getPayload().getValue() != null)
+
+                                /*Extract pay load data that is the transaction response for xml_escape type encoded message.*/
+                                rcResponse.responsePayload = response.getTransactionResponse()
+                                        .getPayload().getValue()
+                                        .replaceAll("&gt;", ">")
+                                        .replaceAll("&lt;", "<")
+                                        .replaceAll("&amp;", "&");
                         }
                     }
                 } else
@@ -231,8 +233,8 @@ abstract class BaseService {
         /* Verify if a TOR needs to be submitted. */
         private boolean torRequired() {
             if (rcResponse == null) return true;
-            if (Arrays.asList(Constants.ReturnCodesToReverse).contains(rcResponse.DWReturnCode)) return true;
-            if (Arrays.asList(Constants.StatusCodesToReverse).contains(rcResponse.DWStatusCode)) return true;
+            if (Utils.containsInArray(Constants.ReturnCodesToReverse, rcResponse.DWReturnCode)) return true;
+            if (Utils.containsInArray(Constants.StatusCodesToReverse, rcResponse.DWStatusCode)) return true;
             if (Utils.isNotNullOrEmpty(rcResponse.DWReturnCode) && Utils.isNotNullOrEmpty(rcResponse.DWStatusCode))
                 if (!rcResponse.DWReturnCode.equals("000") && !rcResponse.DWStatusCode.equals("AuthenticationError"))
                     return true;

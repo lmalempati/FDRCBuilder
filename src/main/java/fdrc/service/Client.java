@@ -56,7 +56,11 @@ public class Client {
         return rcResponse;
     }
     public String submitDatawireSRS(boolean stagOrProd, String merchantId, String terminalId, String groupId, String tppId) {
-        DatawireRegistrationService datawireRegistrationService = new DatawireRegistrationService();
-        return datawireRegistrationService.doDatawireSRS(stagOrProd, merchantId, terminalId, groupId, tppId);
+        try {
+            DatawireRegistrationService datawireRegistrationService = new DatawireRegistrationService();
+            return datawireRegistrationService.doDatawireSRS(stagOrProd, merchantId, terminalId, groupId, tppId);
+        } catch (Exception e) {
+            return "DatawireSRS failure: " + e.getMessage();
+        }
     }
 }

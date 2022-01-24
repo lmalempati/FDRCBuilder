@@ -7,7 +7,7 @@ import com.fiserv.merchant.gmfv10.TxnTypeType;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fdrc.Exceptions.InvalidNumber;
-import fdrc.Exceptions.UnsupportedEnumValueException;
+import fdrc.Exceptions.UnsupportedValueException;
 import fdrc.common.Constants;
 import fdrc.model.RCRequest;
 
@@ -73,7 +73,7 @@ public class Utils {
     }
 
     public static String formatAmount(String amount) {
-        if (amount == null) return null;
+        if (!Utils.isNotNullOrEmpty(amount)) return null;
         Pattern pattern = Pattern.compile("\\d+(\\.\\d+)?");
         if (!pattern.matcher(amount).matches()) {
             throw new InvalidNumber("Invalid amount.");
@@ -124,19 +124,36 @@ public class Utils {
                 try {
                     return Enum.valueOf(type, envVal.toUpperCase());
                 } catch (IllegalArgumentException ex) {
-                    throw new UnsupportedEnumValueException(String.format("%s for %s", envVal, type.getName()));
+                    throw new UnsupportedValueException(String.format("%s for %s", envVal, type.getName()));
                 }
             }
         } catch (ClassNotFoundException e) {
             errorMsg = String.format("Invalid type: %s", type);
         }
-        throw new UnsupportedEnumValueException(errorMsg);
+        throw new UnsupportedValueException(errorMsg);
+    }
+
+    public static boolean contains(String data, String toFind, char seperator){
+        if (data == null || data.trim().equals("")) return false;
+        String[] elements = data.split(String.valueOf(seperator));
+        if (containsInArray(elements, toFind)) return true;
+        return false;
+    }
+
+    public static boolean containsInArray(String[] values, String toFind) {
+
+        for (String s:
+             values) {
+            if (toFind.equalsIgnoreCase(s))
+                return true;
+        }
+        return false;
     }
 
     /* Generate Client Ref Number in the format <STAN>|<TPPID>, right justified and left padded with "0" */
-    public static String getClientRef() {
+    public static String getClientRef(String tppId) {
         String clientRef = "";
-        clientRef = String.format("0%sV%s", Utils.getSTAN(), Constants.REQUEST_TPPID);
+        clientRef = String.format("0%sV%s", Utils.getSTAN(), tppId == "" ? Constants.REQUEST_TPPID : tppId);
         return clientRef;
     }
 
@@ -163,8 +180,15 @@ public class Utils {
                 return "00042218039591394672";
             case "RCTST1000092852":
                 return "00042217833110503539";
+
+            case "RCTST1000094637":
+                return "00036210301822023952";
+            case "RCTST1000094638":
+                return "00036210376926985110";
+            case "RCTST1000094639":
+                return "00036210427078008910";
             default:
-                throw new UnsupportedEnumValueException(String.format("merchantID %s", merchantID));
+                throw new UnsupportedValueException(String.format("merchantID %s", merchantID));
         }
     }
 
@@ -172,6 +196,10 @@ public class Utils {
         //todo: what else to validate?
         if (rcRequest == null)
             return "invalid or empty request";
+        if (!Utils.isNotNullOrEmpty(rcRequest.groupID))
+            return "Group Id type can't be empty";
+        if (!Utils.isNotNullOrEmpty(rcRequest.merchantMID))
+            return "Merchant Id type can't be empty";
         if (!Utils.isNotNullOrEmpty(rcRequest.pymtType))
             return "Payment type can't be empty";
         Utils.toEnum(PymtTypeType.class, rcRequest.pymtType);
@@ -216,15 +244,16 @@ public class Utils {
             con.setDoOutput(true);
             con.connect();
 
-            try (OutputStream os = con.getOutputStream()) {
-                byte[] input = reqXml.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
-            }
+            if (!reqXml.equals(""))
+                try (OutputStream os = con.getOutputStream()) {
+                    byte[] input = reqXml.getBytes(StandardCharsets.UTF_8);
+                    os.write(input, 0, input.length);
+                }
 
             try (BufferedReader br = new BufferedReader(
                     new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
                 response = new StringBuilder();
-                String responseLine = null;
+                String responseLine;
                 while ((responseLine = br.readLine()) != null) {
                     response.append(responseLine.trim());
                 }
@@ -235,5 +264,9 @@ public class Utils {
             e.printStackTrace();
         }
         return response != null ? response.toString() : "";
+    }
+
+    public static void main(String[] args) {
+        System.out.println(contains("a;b;c", "d", ';'));
     }
 }
