@@ -21,7 +21,7 @@ import java.util.Map;
  * */
 
 public class JsonBuilder {
-    public static String getJsonFromRequest(RCRequest RCRequest, String fileName) {
+    public static boolean updateJsonFromRequest(RCRequest RCRequest, String fileName) {
         String resultJson = null;
         try {
             Gson gson = new GsonBuilder().serializeNulls().create();
@@ -33,7 +33,7 @@ public class JsonBuilder {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return resultJson;
+        return true;
     }
 
     public static RCRequest getRequestFromJson(String filePath) {
@@ -90,13 +90,14 @@ public class JsonBuilder {
         request.cardLevelResult = response.cardLevelResult;
         request.aci = response.aci;
         request.amexTranID = response.amexTranID;
+        request.amexPOSData = response.amexPOSData;
         request.spendQInd = response.spendQInd;
         if (Utils.toEnum(TxnTypeType.class, request.txnType) == TxnTypeType.COMPLETION ||
         Utils.isNotNullOrEmpty(request.reversalInd) && Utils.toEnum(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID)
             request.orderNum = response.orderNum;
         request.tkn = response.tkn;
 
-        getJsonFromRequest(request, fileName);
+        updateJsonFromRequest(request, fileName);
         return true;
     }
 
