@@ -215,6 +215,8 @@ public class FDRCRequestService { // todo name
         AmexGrp amexGrp = new AmexGrp();
         if (Utils.isNotNullOrEmpty(rcRequest.amexTranID))
             amexGrp.setAmExTranID(rcRequest.amexTranID);
+        if(Utils.isNotNullOrEmpty(rcRequest.amexPOSData))
+            amexGrp.setAmExPOSData(rcRequest.amexPOSData);
         return Utils.valueOrNothing(amexGrp);
     }
 

@@ -130,7 +130,7 @@ abstract class BaseService {
             }
             if (amexGrp != null) {
                 rcResponse.amexTranID = amexGrp.getAmExTranID();
-                rcResponse.amExPOSData = amexGrp.getAmExPOSData();
+                rcResponse.amexPOSData = amexGrp.getAmExPOSData();
             }
             if (taGrp != null) {
                 rcResponse.tkn = taGrp.getTkn();
@@ -190,7 +190,6 @@ abstract class BaseService {
         private void loadResponseXml() {
             if (responseXml.isEmpty()) throw new InvalidResponseXml("Empty Response");
             Response response;
-//            XmlMapper mapper = Serialization.getXmlMapperDeserializer(true);
             ObjectFactory factory = null;
             response = (Response) Serialization.getObjectFromXML(Response.class, responseXml, true);
             if (response != null && response.getStatus() != null
