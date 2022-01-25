@@ -9,6 +9,7 @@ import com.google.gson.GsonBuilder;
 import fdrc.Exceptions.InvalidNumber;
 import fdrc.Exceptions.UnsupportedValueException;
 import fdrc.common.Constants;
+import fdrc.types.HttpMethod;
 import fdrc.model.RCRequest;
 
 import java.io.BufferedReader;
@@ -231,14 +232,14 @@ public class Utils {
         return "";
     }
 
-    public static String upload(String urlPath, String reqXml) {
+    public static String upload(String urlPath, String reqXml, HttpMethod httpMethod) {
         URL url;
         StringBuilder response = null;
         try {
             url = new URL(urlPath); //"https://stg.dw.us.fdcnet.biz/sd/srsxml.rc"
 
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("POST");
+            con.setRequestMethod(httpMethod.val);
             con.setRequestProperty("Content-Type", "text/xml; utf-8");
             con.setRequestProperty("Accept", "text/xml");
             con.setDoOutput(true);
