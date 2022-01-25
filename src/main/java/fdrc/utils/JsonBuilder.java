@@ -73,7 +73,7 @@ public class JsonBuilder {
         request.origAuthID = response.authID;
         request.origRespCode = response.respCode;
         request.origSTAN = response.stan;
-        request.origTranDateTime = response.tranDateTime;
+        request.origTranDateTime = response.trnmsnDateTime;
         request.origLocalDateTime = response.localDateTime;
         request.refNum = response.refNum;
         request.banknetData = response.banknetData;
