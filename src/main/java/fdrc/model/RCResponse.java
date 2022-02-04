@@ -17,15 +17,18 @@ public class RCResponse {
     public String refNum;
     public String orderNum;
     public String netAccInd;
+    public String plPOSDebitFlg;
 
     // MC grp
     public String banknetData;
+    public String mcMSDI;
 
     // Visa grp
     public String aci;
     public String transID;
     public String cardLevelResult;
     public String spendQInd;
+    public String mrktSpecificDataInd;
 
     // Discover grp
     public String discNRID;
@@ -37,13 +40,13 @@ public class RCResponse {
     public String motoInd;
     // Amex grp
     public String amexTranID;
-    public String sctyLvl;
-    public String amExPOSData;
+    public String amexPOSData;
 
     // Secure Trxn grp
     public String cavvResultCode; // not in use
     // TA grp
     public String tkn;
+    public String sctyLvl;
 
     // Token Grp
     public String tknReqID;

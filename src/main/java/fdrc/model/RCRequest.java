@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class RCRequest {
     // no param constructor
-    public RCRequest(){} // todo:tmp code, we can remove in prod. without this, json de-serialization expects all fields to be present!
+    public RCRequest(){} // TODO:tmp code, we can remove in prod. without this, json de-serialization expects all fields to be present!
     // config
     public String tppID;
     public String termID;
@@ -13,7 +13,7 @@ public class RCRequest {
     public String DigWltProgType;
     public String MobileInd;
     public String DfrdAuthInd;
-    public String merchFNSNum; // ToDo: This has to come from setup
+    public String merchFNSNum; // TODO: This has to come from setup
 
     // common grp
     public String posCondCode;
@@ -27,7 +27,7 @@ public class RCRequest {
     public String reversalInd;
     public String termCatCode;
     public String termEntryCapablt;
-    public String txnAmt; // todo: should we use BigDecimal?
+    public String txnAmt; // TODO: should we use BigDecimal?
     public String txnCrncy;
     public String termLocInd;
     public String cardCaptCap;
@@ -36,6 +36,7 @@ public class RCRequest {
     public String groupID;
     public String digWltProgType;
     public String mobileInd;
+    public String plPOSDebitFlg;
 
     // card grp
     public String acctNum;
@@ -81,14 +82,14 @@ public class RCRequest {
     public String transID;
     public String cardLevelResult;
     public String spendQInd;
+    public String mrktSpecificDataInd;
 
-    // SecrTxnGrp
-    public String cavvResultCode;
 
     // MC grp
     public String finAuthInd;
     public String banknetData;
     public String mcACI;
+    public String mcMSDI;
 
     // Discover grp
     public String discProcCode;
@@ -101,7 +102,7 @@ public class RCRequest {
 
     //Amex grp
     public String amexTranID;
-
+    public String amexPOSData;
     // TAGrp - Transarmor group
     public String sctyLvl;
     public String encrptType;
@@ -114,6 +115,10 @@ public class RCRequest {
 
     // Ecomm Grp
     public String custSvcPhoneNumber;
+
+    // SecrTxnGrp
+    public String cavvResultCode;
+
     //CustInfoGrp
     public String avsBillingAddr;
     public String avsBillingPostalCode;
@@ -133,7 +138,7 @@ public class RCRequest {
     public String totReqDate;
     public String password;
     public String netSettleAmt;
-    //todo: not required in prod
+    //TODO: not required in prod
 
     // EBT Grp
     public String ebtType;
