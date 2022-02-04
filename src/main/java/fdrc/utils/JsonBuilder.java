@@ -96,7 +96,10 @@ public class JsonBuilder {
         Utils.isNotNullOrEmpty(request.reversalInd) && Utils.toEnum(ReversalIndType.class, request.reversalInd) == ReversalIndType.VOID)
             request.orderNum = response.orderNum;
         request.tkn = response.tkn;
-
+        request.cavvResultCode = response.cavvResultCode;
+        request.plPOSDebitFlg = response.plPOSDebitFlg;
+        request.mrktSpecificDataInd = response.mrktSpecificDataInd;
+        request.mcMSDI = response.mcMSDI;
         updateJsonFromRequest(request, fileName);
         return true;
     }
