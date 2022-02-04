@@ -23,6 +23,7 @@ public class FDRCRequestService { // todo name
     public static RCRequest getRcRequest() {
         return rcRequest;
     }
+
     private static RCRequest rcRequest = null;
 
     public FDRCRequestService(RCRequest RCRequestPassedIn) {
@@ -107,6 +108,8 @@ public class FDRCRequestService { // todo name
             cmnGrp.setDigWltProgType(Utils.toEnum(DigWltProgTypeType.class, rcRequest.digWltProgType));
         if (Utils.isNotNullOrEmpty(rcRequest.mobileInd))
             cmnGrp.setMobileInd(Utils.toEnum(MobileIndType.class, rcRequest.mobileInd));
+        if (Utils.isNotNullOrEmpty(rcRequest.plPOSDebitFlg))
+            cmnGrp.setPLPOSDebitFlg(rcRequest.plPOSDebitFlg);
         return cmnGrp;
     }
 
@@ -164,6 +167,9 @@ public class FDRCRequestService { // todo name
             visaGrp.setTransID(rcRequest.transID);
         if (Utils.isNotNullOrEmpty(rcRequest.spendQInd))
             visaGrp.setSpendQInd(rcRequest.spendQInd);
+        if (Utils.isNotNullOrEmpty(rcRequest.mrktSpecificDataInd)) {
+            visaGrp.setMrktSpecificDataInd(Utils.toEnum(MrktSpecificDataIndType.class, rcRequest.mrktSpecificDataInd));
+        }
 
         return Utils.valueOrNothing(visaGrp);
     }
@@ -186,6 +192,9 @@ public class FDRCRequestService { // todo name
 
         if (Utils.isNotNullOrEmpty(rcRequest.mcACI)) {
             mcGrp.setMCACI(rcRequest.mcACI);
+        }
+        if (Utils.isNotNullOrEmpty(rcRequest.mcMSDI)) {
+            mcGrp.setMCMSDI(Utils.toEnum(MCMSDIType.class, rcRequest.mcMSDI));
         }
         return Utils.valueOrNothing(mcGrp);
     }
@@ -215,7 +224,7 @@ public class FDRCRequestService { // todo name
         AmexGrp amexGrp = new AmexGrp();
         if (Utils.isNotNullOrEmpty(rcRequest.amexTranID))
             amexGrp.setAmExTranID(rcRequest.amexTranID);
-        if(Utils.isNotNullOrEmpty(rcRequest.amexPOSData))
+        if (Utils.isNotNullOrEmpty(rcRequest.amexPOSData))
             amexGrp.setAmExPOSData(rcRequest.amexPOSData);
         return Utils.valueOrNothing(amexGrp);
     }
@@ -354,6 +363,7 @@ public class FDRCRequestService { // todo name
             taGrp.setDeviceType(rcRequest.deviceType);
         if (Utils.isNotNullOrEmpty(rcRequest.tkn))
             taGrp.setTkn(rcRequest.tkn);
+
         return Utils.valueOrNothing(taGrp);
     }
 
@@ -365,6 +375,7 @@ public class FDRCRequestService { // todo name
 
         return hostTotGrp;
     }
+
     // moved from RequestUtils
     boolean origAuthGrpRequired() {
         // FDRC expecting origGrp to be present in reversals
