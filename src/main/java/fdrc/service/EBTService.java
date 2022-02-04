@@ -9,7 +9,7 @@ import java.util.List;
 
 class EBTService extends BaseService implements Serializable {
     @Override
-    String buildRequest(RCRequest RCRequest, FDRCRequestService requestService) {
+    String buildFDRCRequest(RCRequest RCRequest, FDRCRequestService requestService) {
         String errorMsg = null;
         EBTRequestDetails ebtReqDtl = null;
         ebtReqDtl = populateEbtRequestDetails(requestService);

@@ -9,7 +9,7 @@ import java.util.List;
 
 class DebitService extends BaseService implements Serializable {
     /* builds request object, if */
-    public String buildRequest(RCRequest RCRequest, FDRCRequestService requestService) {
+    public String buildFDRCRequest(RCRequest RCRequest, FDRCRequestService requestService) {
         String message = "";
         try {
             DebitRequestDetails debitReqDtl = getDebitRequestDetails(requestService);

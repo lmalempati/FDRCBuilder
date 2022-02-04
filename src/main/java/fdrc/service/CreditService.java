@@ -11,7 +11,7 @@ import java.util.List;
 class CreditService extends BaseService {
 
     @Override
-    String buildRequest(final RCRequest RCRequest, FDRCRequestService requestService) {
+    String buildFDRCRequest(final RCRequest RCRequest, FDRCRequestService requestService) {
         String message = "";
         try {
             CreditRequestDetails creditReqDtl = populateCreditRequestDetails(RCRequest, requestService);
@@ -65,6 +65,7 @@ class CreditService extends BaseService {
         creditReqDtl.setCustInfoGrp(requestService.getCustInfoGrp());
         // TA grp
         creditReqDtl.setTAGrp(requestService.getTAGrp());
+        creditReqDtl.setSecrTxnGrp(requestService.getSecrTxnGrp());
         return creditReqDtl;
     }
 }

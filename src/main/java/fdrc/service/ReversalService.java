@@ -10,7 +10,7 @@ import java.util.List;
 class ReversalService extends BaseService implements Serializable {
 
     @Override
-    String buildRequest(RCRequest request, FDRCRequestService requestService) {
+    String buildFDRCRequest(RCRequest request, FDRCRequestService requestService) {
         String message = "";
         try {
             VoidTOReversalRequestDetails reversalRequestDetails = populateReversalRequestDetails(requestService);
@@ -54,6 +54,7 @@ class ReversalService extends BaseService implements Serializable {
         reversalRequestDetails.setEcommGrp(requestService.getEcommGrp());
         reversalRequestDetails.setOrigAuthGrp(requestService.getOrigAuthGrp());
         reversalRequestDetails.setEbtGrp(requestService.getEBTGrp());
+        reversalRequestDetails.setSecrTxnGrp(requestService.getSecrTxnGrp());
         return reversalRequestDetails;
     }
 }

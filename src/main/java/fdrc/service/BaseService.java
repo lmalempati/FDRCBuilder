@@ -33,12 +33,12 @@ abstract class BaseService {
         return gmfmv;
     }
 
-    abstract String buildRequest(final RCRequest RCRequest, FDRCRequestService requestService);
+    abstract String buildFDRCRequest(final RCRequest RCRequest, FDRCRequestService requestService);
 
     RCResponse processRequest(RCRequest request) {
         FDRCRequestService fdrcRequestService = new FDRCRequestService(request);
         String errorMsg = null;
-        errorMsg = buildRequest(request, fdrcRequestService);
+        errorMsg = buildFDRCRequest(request, fdrcRequestService);
 
         if (Utils.isNotNullOrEmpty(errorMsg))
             return new RCResponse(errorMsg);
@@ -76,7 +76,9 @@ abstract class BaseService {
         private TAGrp taGrp;
         private HostTotGrp hostTotGrp;
         private List<HostTotDetGrp> hostTotDetGrp;
+        private SecrTxnGrp secrTxnGrp;
         private GMFMessageVariants gmfResponse;
+        String errorMsg = "";
 
         ResponseWrapper(RCRequest request) {
             loadResponseXml();
@@ -92,96 +94,120 @@ abstract class BaseService {
             gmfResponse = (GMFMessageVariants) Serialization.getObjectFromXML(GMFMessageVariants.class, rcResponse.responsePayload, false); // false because, loading rejection response is failing..
             loadGroups(gmfResponse, request);
             loadResponseFromGrps(gmfResponse, request);
+            if (errorMsg != "") {
+                rcResponse.errorMsg = errorMsg;
+            }
         }
 
         private void loadResponseFromGrps(GMFMessageVariants gmfMessageVariants, RCRequest request) {
-            if (respGrp != null) {
-                rcResponse.respCode = respGrp.getRespCode();
-                rcResponse.addtlRespData = respGrp.getAddtlRespData();
-                rcResponse.authID = respGrp.getAuthID();
-                rcResponse.respCode = respGrp.getRespCode();
-                rcResponse.errorMsg = respGrp.getErrorData();
+            try {
+                if (respGrp != null) {
+                    rcResponse.respCode = respGrp.getRespCode();
+                    rcResponse.addtlRespData = respGrp.getAddtlRespData();
+                    rcResponse.authID = respGrp.getAuthID();
+                    rcResponse.errorMsg = respGrp.getErrorData();
+                }
+                if (commonGrp != null) {
+                    rcResponse.stan = commonGrp.getSTAN();
+                    rcResponse.localDateTime = commonGrp.getLocalDateTime();
+                    rcResponse.tranDateTime = commonGrp.getTrnmsnDateTime();
+                    rcResponse.trnmsnDateTime = request.trnsmitDateTime;
+                    rcResponse.refNum = commonGrp.getRefNum();
+                    rcResponse.orderNum = commonGrp.getOrderNum();
+                    rcResponse.plPOSDebitFlg = commonGrp.getPLPOSDebitFlg();
+                }
+                if (visaGrp != null) {
+                    rcResponse.transID = visaGrp.getTransID();
+                    rcResponse.cardLevelResult = visaGrp.getCardLevelResult();
+                    rcResponse.aci = visaGrp.getACI();
+                    rcResponse.spendQInd = visaGrp.getSpendQInd();
+                    if (visaGrp.getMrktSpecificDataInd() != null) {
+                        rcResponse.mrktSpecificDataInd = visaGrp.getMrktSpecificDataInd().value();
+                    }
+                }
+                if (mcGrp != null) {
+                    rcResponse.banknetData = mcGrp.getBanknetData();
+                    if (mcGrp.getMCMSDI() != null) {
+                        rcResponse.mcMSDI = mcGrp.getMCMSDI().value();
+                    }
+                }
+                if (dsGrp != null) {
+                    rcResponse.discNRID = dsGrp.getDiscNRID();
+                    rcResponse.discTransQualifier = dsGrp.getDiscTransQualifier();
+                    rcResponse.discPOSEntry = dsGrp.getDiscPOSEntry();
+                    rcResponse.discPOSData = dsGrp.getDiscPOSData();
+                    rcResponse.discRespCode = dsGrp.getDiscRespCode();
+                    rcResponse.discProcCode = dsGrp.getDiscProcCode();
+                    rcResponse.motoInd = dsGrp.getMOTOInd();
+                }
+                if (amexGrp != null) {
+                    rcResponse.amexTranID = amexGrp.getAmExTranID();
+                    rcResponse.amexPOSData = amexGrp.getAmExPOSData();
+                }
+                if (taGrp != null) {
+                    rcResponse.tkn = taGrp.getTkn();
+                }
+                if (secrTxnGrp != null) {
+                    rcResponse.cavvResultCode = secrTxnGrp.getCAVVResultCode();
+                }
+            } catch (NullPointerException e) {
+                logger.log(Level.SEVERE, "error in loadResponseFromGrps: NullPointerException");
+                errorMsg = "LoadResponse From Groups failure";
             }
-            if (commonGrp != null) {
-                rcResponse.stan = commonGrp.getSTAN();
-                rcResponse.localDateTime = commonGrp.getLocalDateTime();
-                rcResponse.tranDateTime = commonGrp.getTrnmsnDateTime();
-                rcResponse.trnmsnDateTime = request.trnsmitDateTime;
-                rcResponse.refNum = commonGrp.getRefNum();
-                rcResponse.orderNum = commonGrp.getOrderNum();
-            }
-            if (visaGrp != null) {
-                rcResponse.transID = visaGrp.getTransID();
-                rcResponse.cardLevelResult = visaGrp.getCardLevelResult();
-                rcResponse.aci = visaGrp.getACI();
-                rcResponse.spendQInd = visaGrp.getSpendQInd();
-            }
-            if (mcGrp != null) {
-                rcResponse.banknetData = mcGrp.getBanknetData();
-            }
-            if (dsGrp != null) {
-                rcResponse.discNRID = dsGrp.getDiscNRID();
-                rcResponse.discTransQualifier = dsGrp.getDiscTransQualifier();
-                rcResponse.discPOSEntry = dsGrp.getDiscPOSEntry();
-                rcResponse.discPOSData = dsGrp.getDiscPOSData();
-                rcResponse.discRespCode = dsGrp.getDiscRespCode();
-                rcResponse.discProcCode = dsGrp.getDiscProcCode();
-                rcResponse.motoInd = dsGrp.getMOTOInd();
-            }
-            if (amexGrp != null) {
-                rcResponse.amexTranID = amexGrp.getAmExTranID();
-                rcResponse.amexPOSData = amexGrp.getAmExPOSData();
-            }
-            if (taGrp != null) {
-                rcResponse.tkn = taGrp.getTkn();
-            }
-            //todo: use cardgrp, hosttotdetgrp
         }
 
-        private boolean loadGroups(GMFMessageVariants gmf, RCRequest request) {
-            if (gmf.getCreditResponse() != null) {
-                respGrp = gmf.getCreditResponse().getRespGrp();
-                commonGrp = gmf.getCreditResponse().getCommonGrp();
-                visaGrp = gmf.getCreditResponse().getVisaGrp();
-                mcGrp = gmf.getCreditResponse().getMCGrp();
-                dsGrp = gmf.getCreditResponse().getDSGrp();
-                amexGrp = gmf.getCreditResponse().getAmexGrp();
-                taGrp = gmf.getCreditResponse().getTAGrp();
-                cardGrp = gmf.getCreditResponse().getCardGrp();
-            } else if (gmf.getDebitResponse() != null) {
-                respGrp = gmf.getDebitResponse().getRespGrp();
-                commonGrp = gmf.getDebitResponse().getCommonGrp();
-                taGrp = gmf.getDebitResponse().getTAGrp();
-                cardGrp = gmf.getDebitResponse().getCardGrp();
-            } else if (gmf.getEBTResponse() != null) {
-                respGrp = gmf.getEBTResponse().getRespGrp();
-                commonGrp = gmf.getEBTResponse().getCommonGrp();
-                taGrp = gmf.getEBTResponse().getTAGrp();
-                cardGrp = gmf.getEBTResponse().getCardGrp();
-            } else if (gmf.getReversalResponse() != null) {
-                respGrp = gmf.getReversalResponse().getRespGrp();
-                commonGrp = gmf.getReversalResponse().getCommonGrp();
-                visaGrp = gmf.getReversalResponse().getVisaGrp();
-                mcGrp = gmf.getReversalResponse().getMCGrp();
-                dsGrp = gmf.getReversalResponse().getDSGrp();
-                amexGrp = gmf.getReversalResponse().getAmexGrp();
-                taGrp = gmf.getReversalResponse().getTAGrp();
-                cardGrp = gmf.getReversalResponse().getCardGrp();
-            } else if (gmf.getAdminResponse() != null) {
-                respGrp = gmf.getAdminResponse().getRespGrp();
-                commonGrp = gmf.getAdminResponse().getCommonGrp();
-                taGrp = gmf.getAdminResponse().getTAGrp();
-                hostTotGrp = gmf.getAdminResponse().getHostTotGrp();
-                hostTotDetGrp = gmf.getAdminResponse().getHostTotDetGrp();
-            } else if (gmf.getTransArmorResponse() != null) {
-                respGrp = gmf.getTransArmorResponse().getRespGrp();
-                commonGrp = gmf.getTransArmorResponse().getCommonGrp();
-                taGrp = gmf.getTransArmorResponse().getTAGrp();
-            } else if (gmf.getRejectResponse() != null) {
-                respGrp = gmf.getRejectResponse().getRespGrp();
-                commonGrp = gmf.getRejectResponse().getCommonGrp();
+        private String loadGroups(GMFMessageVariants gmf, RCRequest request) {
+            String errorMsg = "";
+
+            try {
+                if (gmf.getCreditResponse() != null) {
+                    respGrp = gmf.getCreditResponse().getRespGrp();
+                    commonGrp = gmf.getCreditResponse().getCommonGrp();
+                    visaGrp = gmf.getCreditResponse().getVisaGrp();
+                    mcGrp = gmf.getCreditResponse().getMCGrp();
+                    dsGrp = gmf.getCreditResponse().getDSGrp();
+                    amexGrp = gmf.getCreditResponse().getAmexGrp();
+                    taGrp = gmf.getCreditResponse().getTAGrp();
+                    cardGrp = gmf.getCreditResponse().getCardGrp();
+                    secrTxnGrp = gmf.getCreditResponse().getSecrTxnGrp();
+                } else if (gmf.getDebitResponse() != null) {
+                    respGrp = gmf.getDebitResponse().getRespGrp();
+                    commonGrp = gmf.getDebitResponse().getCommonGrp();
+                    taGrp = gmf.getDebitResponse().getTAGrp();
+                    cardGrp = gmf.getDebitResponse().getCardGrp();
+                } else if (gmf.getEBTResponse() != null) {
+                    respGrp = gmf.getEBTResponse().getRespGrp();
+                    commonGrp = gmf.getEBTResponse().getCommonGrp();
+                    taGrp = gmf.getEBTResponse().getTAGrp();
+                    cardGrp = gmf.getEBTResponse().getCardGrp();
+                } else if (gmf.getReversalResponse() != null) {
+                    respGrp = gmf.getReversalResponse().getRespGrp();
+                    commonGrp = gmf.getReversalResponse().getCommonGrp();
+                    visaGrp = gmf.getReversalResponse().getVisaGrp();
+                    mcGrp = gmf.getReversalResponse().getMCGrp();
+                    dsGrp = gmf.getReversalResponse().getDSGrp();
+                    amexGrp = gmf.getReversalResponse().getAmexGrp();
+                    taGrp = gmf.getReversalResponse().getTAGrp();
+                    cardGrp = gmf.getReversalResponse().getCardGrp();
+                } else if (gmf.getAdminResponse() != null) {
+                    respGrp = gmf.getAdminResponse().getRespGrp();
+                    commonGrp = gmf.getAdminResponse().getCommonGrp();
+                    taGrp = gmf.getAdminResponse().getTAGrp();
+                    hostTotGrp = gmf.getAdminResponse().getHostTotGrp();
+                    hostTotDetGrp = gmf.getAdminResponse().getHostTotDetGrp();
+                } else if (gmf.getTransArmorResponse() != null) {
+                    respGrp = gmf.getTransArmorResponse().getRespGrp();
+                    commonGrp = gmf.getTransArmorResponse().getCommonGrp();
+                    taGrp = gmf.getTransArmorResponse().getTAGrp();
+                } else if (gmf.getRejectResponse() != null) {
+                    respGrp = gmf.getRejectResponse().getRespGrp();
+                    commonGrp = gmf.getRejectResponse().getCommonGrp();
+                }
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, "error in loadResponseFromGrps: NullPointerException");
+                errorMsg = "Load Groups failure";
             }
-            return true;
+            return errorMsg;
         }
 
         /*The below method takes XML response received after post method execution.

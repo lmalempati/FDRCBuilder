@@ -6,7 +6,7 @@ import fdrc.model.RCRequest;
 class AdminService extends BaseService {
 
     @Override
-    String buildRequest(RCRequest RCRequest, FDRCRequestService requestService) {
+    String buildFDRCRequest(RCRequest RCRequest, FDRCRequestService requestService) {
         String message = "";
         try {
             AdminRequestDetails adminRequestDetails = getAdminRequestDetails(requestService);

@@ -6,7 +6,7 @@ import fdrc.model.RCRequest;
 class TransArmorService extends BaseService {
 
     @Override
-    String buildRequest(RCRequest RCRequest, FDRCRequestService requestService) {
+    String buildFDRCRequest(RCRequest RCRequest, FDRCRequestService requestService) {
         String message = null;
         try {
             TARequestDetails taReqDetails = populateTaRequestDetails(requestService);
