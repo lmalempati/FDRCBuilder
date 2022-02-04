@@ -15,6 +15,9 @@ public class DatawireRegistrationService {
 
     public String doDatawireSRS(boolean stagOrProd, String merchantId, String terminalId, String groupId, String tppId) {
         String DID;
+        String response;
+        DatawireSRSActivationResponse activationResponse;
+        DatawireSRSRegistrationResponse regResp;
         if (!Utils.isNotNullOrEmpty(new Object[]{stagOrProd, merchantId, terminalId, groupId, tppId}))
             return "All parameters must be provided.";
         if (groupId.length() + merchantId.length() > 32)
@@ -38,9 +41,11 @@ public class DatawireRegistrationService {
 
         // register merchant using the discovery url
         String xml = getRegistrationRequest(merchantId, terminalId, groupId, tppId);
-        String response = Utils.upload(discoveryResponseUrl, xml, HttpMethod.POST);
-        logger.log(Level.INFO, "Registration Response" + response);
-        DatawireSRSRegistrationResponse regResp = (DatawireSRSRegistrationResponse) Serialization.getObjectFromXML(DatawireSRSRegistrationResponse.class, response, true);
+        do {
+            response = Utils.upload(discoveryResponseUrl, xml, HttpMethod.POST);
+            logger.log(Level.INFO, "Registration Response" + response);
+            regResp = (DatawireSRSRegistrationResponse) Serialization.getObjectFromXML(DatawireSRSRegistrationResponse.class, response, true);
+        }while (retryNeeded(regResp.status.StatusCode));
         if (regResp.status.StatusCode.equalsIgnoreCase("OK")) {
             DID = response.substring(response.lastIndexOf("<DID>") + 5, response.lastIndexOf("</DID>"));
         } else {
@@ -51,9 +56,11 @@ public class DatawireRegistrationService {
         // example DID: "00041836971547330349")
         if (DID != "") {
             xml = getActivationRequest(merchantId, terminalId, groupId, tppId, DID);
-            response = Utils.upload(discoveryResponseUrl, xml, HttpMethod.POST);
+            do {
+                response = Utils.upload(discoveryResponseUrl, xml, HttpMethod.POST);
+                activationResponse = (DatawireSRSActivationResponse) Serialization.getObjectFromXML(DatawireSRSActivationResponse.class, response, true);
+            }while (retryNeeded(activationResponse.status.StatusCode));
             logger.log(Level.INFO, "Activation Response" + response);
-            DatawireSRSActivationResponse activationResponse = (DatawireSRSActivationResponse) Serialization.getObjectFromXML(DatawireSRSActivationResponse.class, response, true);
             if (activationResponse.status.StatusCode.equalsIgnoreCase("OK")) {
                 return "Success;" + DID;
             } else
@@ -62,8 +69,19 @@ public class DatawireRegistrationService {
             return String.format("DID empty, Activation request failed, status: %s and statuscode: %s", regResp.status.Status, regResp.status.StatusCode);
         }
     }
+    
+    private boolean retryNeeded(String StatusCode) {
+        if (Utils.containsInArray(Constants.RetryCodes, StatusCode)) {
+            try {
+                Thread.sleep(30000);
+            } catch (InterruptedException e) {
+                logger.log(Level.SEVERE, e.getMessage());
+            }
+        }
+        return false;
+    }
 
-    private static String getRegistrationRequest(String merchantId, String terminalId, String groupId, String tppId) {
+    private String getRegistrationRequest(String merchantId, String terminalId, String groupId, String tppId) {
         String regReq = Constants.REGISTRATION_TEMPLATE;
         return regReq.replace("{groupId}", groupId)
                 .replace("{merchantId}", merchantId)
@@ -71,7 +89,7 @@ public class DatawireRegistrationService {
                 .replace("{clientRef}", Utils.getClientRef(tppId));
     }
 
-    private static String getActivationRequest(String merchantId, String terminalId, String groupId, String tppId, String datawireId) {
+    private String getActivationRequest(String merchantId, String terminalId, String groupId, String tppId, String datawireId) {
         if (datawireId == null)
             datawireId = "";
         String activationTemplate = Constants.ACTIVATION_TEMPLATE;
