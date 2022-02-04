@@ -5,6 +5,7 @@ public class Constants {
     public static final String GMF_NS = "<GMF xmlns=\"com/fiserv/Merchant/gmfV10.02\">";
     public static final String[] StatusCodesToReverse = {"Timeout"};
     public static final String[] ReturnCodesToReverse = {"203", "204", "205", "206", "405", "505", "008"};
+    public static final String[] RetryCodes = { "Retry", "InternalError", "OtherError"};
 
     // Parameters for transaction request
     public static final String REQUEST_TPPID = "RSU005";
