@@ -210,9 +210,8 @@ abstract class BaseService {
             return errorMsg;
         }
 
-        /*The below method takes XML response received after post method execution.
-         * and build RegistrationResponse object; then extract pay load data that is actual
-         * transaction response received from Data Wire.*/
+        /*The below method takes XML response received after post method execution
+         * and extracts pay load data that is actual transaction response received .*/
         private void loadResponseXml() {
             if (responseXml.isEmpty()) throw new InvalidResponseXml("Empty Response");
             Response response;
