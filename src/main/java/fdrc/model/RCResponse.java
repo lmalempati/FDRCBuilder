@@ -54,7 +54,7 @@ public class RCResponse {
     // EMV Grp
     public String xCodeResp;
 
-    public String errorMsg;
+    public String errorMsg = "";
     public String responsePayload = "";
     public String trnmsnDateTime; // to store request's trnmsnDateTime
 
