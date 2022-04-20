@@ -82,6 +82,7 @@ abstract class BaseService {
 
         ResponseWrapper(RCRequest request) {
             loadResponseXml();
+            if (rcResponse.errorMsg != "") throw new InvalidResponseXml(rcResponse.errorMsg);
             if (torRequired()) {
                 if (rcResponse == null) // possible when blank response
                     rcResponse = new RCResponse("Timeout");
