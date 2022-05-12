@@ -2,7 +2,7 @@ package test;
 
 import com.fiserv.merchant.gmfv10.*;
 import fdrc.Exceptions.InvalidNumber;
-import fdrc.Exceptions.UnsupportedEnumValueException;
+import fdrc.Exceptions.UnsupportedValueException;
 import fdrc.types.CardCaptCapType;
 import fdrc.types.MOTOIndType;
 import fdrc.utils.Utils;
@@ -37,25 +37,25 @@ class UtilsTest {
 
     @Test
     void getEnumValue() {
-        assertThrows(UnsupportedEnumValueException.class, () -> {Utils.toEnum(CardTypeType.class, "MASTERCARD");});
+        assertThrows(UnsupportedValueException.class, () -> {Utils.toEnum(CardTypeType.class, "MASTERCARD");});
         assertTrue(Utils.toEnum(TxnTypeType.class, "Verification") == TxnTypeType.VERIFICATION);
         assertTrue(Utils.toEnum(TxnTypeType.class, "Activation") == TxnTypeType.ACTIVATION);
         assertTrue(Utils.toEnum(CCVIndType.class, "Prvded") == CCVIndType.PRVDED);
         assertTrue(Utils.toEnum(ReversalIndType.class, "Partial") == ReversalIndType.PARTIAL);
-        assertThrows(UnsupportedEnumValueException.class, () -> {Utils.toEnum(CardTypeType.class, "JunkValue");});
+        assertThrows(UnsupportedValueException.class, () -> {Utils.toEnum(CardTypeType.class, "JunkValue");});
         assertThrows(NullPointerException.class, () -> {Utils.toEnum(CardTypeType.class, null);});
 
         assertTrue(Utils.toEnum(CardCaptCapType.class, "0").val == "0");
         assertTrue(Utils.toEnum(CardCaptCapType.class, "1").val == "1");
-        assertThrows(UnsupportedEnumValueException.class, () -> {Utils.toEnum(CardCaptCapType.class, "2");});
+        assertThrows(UnsupportedValueException.class, () -> {Utils.toEnum(CardCaptCapType.class, "2");});
 
         assertTrue(Utils.toEnum(MOTOIndType.class, "1").val == "1");
         assertTrue(Utils.toEnum(MOTOIndType.class, "2").val == "2");
-        assertThrows(UnsupportedEnumValueException.class, () -> {Utils.toEnum(MOTOIndType.class, "3");});
+        assertThrows(UnsupportedValueException.class, () -> {Utils.toEnum(MOTOIndType.class, "3");});
 
         assertTrue(Utils.toEnum(RefundTypeType.class, "Online") == RefundTypeType.ONLINE);
         assertTrue(Utils.toEnum(RefundTypeType.class, "AuthOnly") == RefundTypeType.AUTH_ONLY);
-        assertThrows(UnsupportedEnumValueException.class, () -> {Utils.toEnum(RefundTypeType.class, "Invalid");});
+        assertThrows(UnsupportedValueException.class, () -> {Utils.toEnum(RefundTypeType.class, "Invalid");});
     }
 
     class ABC{

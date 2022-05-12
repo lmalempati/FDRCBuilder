@@ -21,55 +21,54 @@ public class DatawireRegistrationService {
         if (!Utils.isNotNullOrEmpty(new Object[]{stagOrProd, merchantId, terminalId, groupId, tppId}))
             return "All parameters must be provided.";
         if (groupId.length() + merchantId.length() > 32)
-         return "COMBINED LENGTH OF GROUPID AND MID CANNOT EXCEED 32 CHARACTERS";
+            return "COMBINED LENGTH OF GROUPID AND MID CANNOT EXCEED 32 CHARACTERS";
         if (terminalId.length() > 8)
             return "TID CANNOT EXCEED 8 CHARACTERS";
         // validate terminal id.
-        try {
-            Integer.parseInt(terminalId);
-        } catch (Exception e) {
-            return "INVALID TERMINAL ID";
-        }
-        // check the discovery of the url
-        String discResp = Utils.upload(stagOrProd ? Constants.prodUrl : Constants.stgUrl, "", HttpMethod.GET);
-        String discoveryResponseUrl;
-        if (discResp.indexOf("<URL>") > 0) {
-            discoveryResponseUrl = discResp.substring(discResp.indexOf("<URL>") + 5, discResp.indexOf("</URL>"));
-        }
-        else
-            return "Service discovery failure.";
-
-        // register merchant using the discovery url
-        String xml = getRegistrationRequest(merchantId, terminalId, groupId, tppId);
-        do {
-            response = Utils.upload(discoveryResponseUrl, xml, HttpMethod.POST);
-            logger.log(Level.INFO, "Registration Response" + response);
-            regResp = (DatawireSRSRegistrationResponse) Serialization.getObjectFromXML(DatawireSRSRegistrationResponse.class, response, true);
-        }while (retryNeeded(regResp.status.StatusCode));
-        if (regResp.status.StatusCode.equalsIgnoreCase("OK")) {
-            DID = response.substring(response.lastIndexOf("<DID>") + 5, response.lastIndexOf("</DID>"));
-        } else {
-            return String.format("Registration request failed, status: %s and statuscode: %s", regResp.status.Status, regResp.status.StatusCode);
-        }
+//        try {
+//            Integer.parseInt(terminalId);
+//        } catch (Exception e) {
+//            return "INVALID TERMINAL ID";
+//        }
+//        // check the discovery of the url
+//        String discResp = Utils.upload(stagOrProd ? Constants.prodUrl : Constants.stgUrl, "", HttpMethod.GET);
+//        String discoveryResponseUrl;
+//        if (discResp.indexOf("<URL>") > 0) {
+//            discoveryResponseUrl = discResp.substring(discResp.indexOf("<URL>") + 5, discResp.indexOf("</URL>"));
+//        }
+//        else
+//            return "Service discovery failure.";
+//
+//        // register merchant using the discovery url
+//        String xml = getRegistrationRequest(merchantId, terminalId, groupId, tppId);
+//        do {
+//            response = Utils.upload(discoveryResponseUrl, xml, HttpMethod.POST);
+//            logger.log(Level.INFO, "Registration Response" + response);
+//            regResp = (DatawireSRSRegistrationResponse) Serialization.getObjectFromXML(DatawireSRSRegistrationResponse.class, response, true);
+//        }while (retryNeeded(regResp.status.StatusCode));
+//        if (regResp.status.StatusCode.equalsIgnoreCase("OK")) {
+//            DID = response.substring(response.lastIndexOf("<DID>") + 5, response.lastIndexOf("</DID>"));
+//        } else {
+//            return String.format("Registration request failed, status: %s and statuscode: %s", regResp.status.Status, regResp.status.StatusCode);
+//        }
 
         // SRS activation
         // example DID: "00041836971547330349")
-        if (DID != "") {
-            xml = getActivationRequest(merchantId, terminalId, groupId, tppId, DID);
-            do {
-                response = Utils.upload(discoveryResponseUrl, xml, HttpMethod.POST);
-                activationResponse = (DatawireSRSActivationResponse) Serialization.getObjectFromXML(DatawireSRSActivationResponse.class, response, true);
-            }while (retryNeeded(activationResponse.status.StatusCode));
-            logger.log(Level.INFO, "Activation Response" + response);
-            if (activationResponse.status.StatusCode.equalsIgnoreCase("OK")) {
-                return "Success;" + DID;
-            } else
-                return activationResponse.status.StatusCode;
-        } else {
-            return String.format("DID empty, Activation request failed, status: %s and statuscode: %s", regResp.status.Status, regResp.status.StatusCode);
-        }
+        String xml = getActivationRequest("RCTST1000096442", "00000003", "10001", "RSU005", "00043816825221507852");
+        do {
+            response = Utils.upload("https://stg.dw.us.fdcnet.biz/rc", xml, HttpMethod.POST);
+            activationResponse = (DatawireSRSActivationResponse) Serialization.getObjectFromXML(DatawireSRSActivationResponse.class, response, true);
+        } while (retryNeeded(activationResponse.status.StatusCode));
+        logger.log(Level.INFO, "Activation Response" + response);
+        if (activationResponse.status.StatusCode.equalsIgnoreCase("OK")) {
+            return "Success;" + "DID";
+        } else
+            return activationResponse.status.StatusCode;
+//        } else {
+//            return String.format("DID empty, Activation request failed, status: %s and statuscode: %s", regResp.status.Status, regResp.status.StatusCode);
+//        }
     }
-    
+
     private boolean retryNeeded(String StatusCode) {
         if (Utils.containsInArray(Constants.RetryCodes, StatusCode)) {
             try {
