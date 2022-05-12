@@ -2,8 +2,8 @@ package fdrc.model;
 
 
 public class DatawireSRSRegistrationResponse {
-    public String Version;
-    public RespClientID respClientID;
-    public Status status;
-    public String RegistrationResponse;
+    public Response Response;
+    public RespClientID RespClientID;
+    public Status Status;
+    public RegistrationResponse RegistrationResponse;
 }
