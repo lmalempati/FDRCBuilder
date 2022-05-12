@@ -14,9 +14,10 @@ class DatawireRegistrationServiceTest {
 //        result = client.submitDatawireSRS(false, "", "3", "10001", "RSU005");
 //        assertEquals("All parameters must be provided.", result.split(";")[0]);
         // Already on boarded mid
-        result = client.submitDatawireSRS(false, "RCTST1000094637", "00003", "10001", "RSU005");
+        result = client.submitDatawireSRS(false, "RCTST1000094637", "", "10001", "RSU005");
         // "Registration request failed, status: Merchant Already Provisioned and statuscode: AccessDenied"
-        boolean found = result.indexOf("Merchant Already Provisioned") >= 0;
-        assertEquals(found, true);
+//        boolean found = result.indexOf("Merchant Already Provisioned") >= 0;
+        boolean found1 = result.indexOf("AccessDenied") >= 0;
+        assertEquals(found1, true);
     }
 }
