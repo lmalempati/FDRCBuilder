@@ -376,6 +376,13 @@ public class FDRCRequestService { // todo name
         return hostTotGrp;
     }
 
+    EMVGrp getEmvGrp() {
+        EMVGrp emvGrp = new EMVGrp();
+        if (Utils.isNotNullOrEmpty(rcRequest.emvData))
+            emvGrp.setEMVData(rcRequest.emvData);
+        return Utils.valueOrNothing(emvGrp);
+    }
+
     // moved from RequestUtils
     boolean origAuthGrpRequired() {
         // FDRC expecting origGrp to be present in reversals

@@ -66,6 +66,9 @@ class CreditService extends BaseService {
         // TA grp
         creditReqDtl.setTAGrp(requestService.getTAGrp());
         creditReqDtl.setSecrTxnGrp(requestService.getSecrTxnGrp());
+
+        // EMV grp
+        creditReqDtl.setEMVGrp(requestService.getEmvGrp());
         return creditReqDtl;
     }
 }

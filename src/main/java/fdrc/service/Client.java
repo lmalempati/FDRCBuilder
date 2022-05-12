@@ -3,6 +3,8 @@ package fdrc.service;
 import com.google.gson.JsonSyntaxException;
 import fdrc.Exceptions.InvalidRequest;
 import fdrc.Exceptions.UnsupportedValueException;
+import fdrc.model.DatawireSRSRequest;
+import fdrc.model.DatawireSRSResponse;
 import fdrc.model.RCRequest;
 import fdrc.model.RCResponse;
 import fdrc.utils.JsonBuilder;
@@ -55,12 +57,12 @@ public class Client {
         }
         return rcResponse;
     }
-    public String submitDatawireSRS(boolean stagOrProd, String merchantId, String terminalId, String groupId, String tppId) {
+    public DatawireSRSResponse submitDatawireSRS(DatawireSRSRequest dw) {
         try {
             DatawireRegistrationService datawireRegistrationService = new DatawireRegistrationService();
-            return datawireRegistrationService.doDatawireSRS(stagOrProd, merchantId, terminalId, groupId, tppId);
+            return datawireRegistrationService.doDatawireSRS(dw);
         } catch (Exception e) {
-            return "DatawireSRS failure: " + e.getMessage();
+            return new DatawireSRSResponse("DatawireSRS failure: " + e.getMessage());
         }
     }
 }

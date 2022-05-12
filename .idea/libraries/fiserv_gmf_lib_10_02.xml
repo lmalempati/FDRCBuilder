@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="fiserv-gmf-lib-10.02">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/fiserv-gmf-lib-10.02.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
