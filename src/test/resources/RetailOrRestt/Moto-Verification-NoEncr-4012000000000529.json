@@ -15,9 +15,11 @@
   "cardCaptCap": "1",
   "merchCatCode": "5399",
   "partAuthrztnApprvlCapablt": null,
-  "merchantMID": "RCTST1000092382",
+  "merchantMID": "RCTST1000096443",
   "ccvInd": "Prvded",
   "ccvData": "123",
   "avsBillingAddr": "1307 Broad Hollow Road",
-  "avsBillingPostalCode":"11747"
+  "avsBillingPostalCode":"11747",
+  "groupID": "10001",
+  "dataWireID": "00043816982538419256"
 }
