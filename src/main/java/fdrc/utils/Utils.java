@@ -201,6 +201,8 @@ public class Utils {
             return "Group Id type can't be empty";
         if (!Utils.isNotNullOrEmpty(rcRequest.merchantMID))
             return "Merchant Id type can't be empty";
+        if (!Utils.isNotNullOrEmpty(rcRequest.dataWireID))
+            return "Datawire Id type can't be empty";
         if (!Utils.isNotNullOrEmpty(rcRequest.pymtType))
             return "Payment type can't be empty";
         Utils.toEnum(PymtTypeType.class, rcRequest.pymtType);
@@ -260,9 +262,9 @@ public class Utils {
                 }
             }
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
         return response != null ? response.toString() : "";
     }

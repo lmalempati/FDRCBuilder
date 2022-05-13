@@ -3,13 +3,10 @@ package fdrc.http;
 import fdrc.common.Constants;
 import fdrc.common.Serialization;
 import fdrc.service.FDRCRequestService;
+import fdrc.types.HttpMethod;
 import fdrc.utils.Utils;
 import fdrc.xml.*;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.PostMethod;
 
-import java.io.IOException;
 import java.math.BigInteger;
 
 public class HTTPPostHandler {
@@ -45,50 +42,23 @@ public class HTTPPostHandler {
         /* Set the clientRef value*/
         reqClientIDType.setClientRef(Utils.getClientRef(""));
         /* Set the DID value*/
-        reqClientIDType.setDID(Utils.mapMidToDID(FDRCRequestService.getRcRequest().merchantMID));
+        reqClientIDType.setDID(FDRCRequestService.getRcRequest().dataWireID);
 
         gmfTransactionRequest.setReqClientID(reqClientIDType);
         /*Set client timeout value*/
-        gmfTransactionRequest.setClientTimeout(new BigInteger("35"));
+        gmfTransactionRequest.setClientTimeout(new BigInteger("10"));
         gmfTransactionRequest.setVersion("3");
 
         //Transform the gmfTransactionRequest object into XML string.
         String gmffomattedRequest = Serialization.getXmlFromObj(gmfTransactionRequest, null);
 
-        /* URL that will consume the transaction request.*/
-        final String postURL = Constants.STG_POST_URL;
-        final PostMethod post = new PostMethod(postURL);
-        final HttpClient httpclient = new HttpClient();
-        /*Set various parameters of HTTP requet header*/
-        post.setRequestHeader("User-Agent", "SUNMI-POS");
-        post.setRequestHeader("Host", postURL);
-        post.setRequestHeader("Connection", "Keep-Alive");
-        post.setRequestHeader("Cache-Control", "no-cache");
-        post.setRequestHeader("Content-Length",
-                Integer.toString(gmffomattedRequest.length()));
-        post.setRequestHeader("Content-type", "text/xml");
-        post.setRequestBody(gmffomattedRequest);
-
         try {
             /*Call executeMethod to post the data to the designated URL.*/
-            final int returnCode = httpclient.executeMethod(post);
-
-            /*Do error handling and parse the response before returning.*/
-            if (returnCode == HttpStatus.SC_NOT_IMPLEMENTED) {
-                System.err.println("The Post method is not implemented by this URI");
-                return null;
-            } else if (returnCode == HttpStatus.SC_OK) {
-                return post.getResponseBodyAsString();
-            }
-        }
-        catch (IOException e){
-            throw new RuntimeException(" Unknown host exception: " +e.getMessage());
+            return Utils.upload(Constants.STG_POST_URL, gmffomattedRequest, HttpMethod.POST);
         }
         catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         } finally {
-            post.releaseConnection();
         }
-        return "";
     }
 }
