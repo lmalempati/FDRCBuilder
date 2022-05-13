@@ -1,7 +1,5 @@
 package fdrc.model;
 
-import java.math.BigDecimal;
-
 public class RCRequest {
     // no param constructor
     public RCRequest(){} // TODO:tmp code, we can remove in prod. without this, json de-serialization expects all fields to be present!
@@ -14,6 +12,7 @@ public class RCRequest {
     public String MobileInd;
     public String DfrdAuthInd;
     public String merchFNSNum; // TODO: This has to come from setup
+    public String dataWireID;
 
     // common grp
     public String posCondCode;

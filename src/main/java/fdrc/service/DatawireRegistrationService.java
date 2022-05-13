@@ -17,6 +17,8 @@ public class DatawireRegistrationService {
 
     public DatawireSRSResponse doDatawireSRS(DatawireSRSRequest dw) {
         String DID = "";
+        String xml = "";
+        String discoveryResponseUrl = "";
         String response;
         DatawireSRSActivationResponse activationResponse;
         DatawireSRSRegistrationResponse regResp;
@@ -40,7 +42,6 @@ public class DatawireRegistrationService {
         }
         // 1. check the discovery of the url
         String discResp = Utils.upload(dw.stagOrProd ? Constants.prodUrl : Constants.stgUrl, "", HttpMethod.GET);
-        String discoveryResponseUrl;
         if (discResp.indexOf("<URL>") > 0) {
             discoveryResponseUrl = discResp.substring(discResp.indexOf("<URL>") + 5, discResp.indexOf("</URL>"));
         } else {
@@ -49,7 +50,7 @@ public class DatawireRegistrationService {
         }
 
         // 2. register merchant using the discovery url
-        String xml = getRegistrationRequest(dw.merchantId, dw.terminalId, dw.groupId, dw.tppId);
+        xml = getRegistrationRequest(dw.merchantId, dw.terminalId, dw.groupId, dw.tppId);
         do {
             logger.log(Level.INFO, "Registration Request" + xml);
             response = Utils.upload(discoveryResponseUrl, xml, HttpMethod.POST);
@@ -58,6 +59,7 @@ public class DatawireRegistrationService {
         } while (retryNeeded(regResp.Status.StatusCode));
         if (regResp.Status.StatusCode.equalsIgnoreCase("OK")) {
             DID = response.substring(response.lastIndexOf("<DID>") + 5, response.lastIndexOf("</DID>"));
+//            DID = regResp.RegistrationResponse.DID;
             srsResponse.setDid(DID);
         } else {
              srsResponse.errorMsg = String.format("Registration request failed, statuscode: %s", regResp.Status.StatusCode);
@@ -73,7 +75,7 @@ public class DatawireRegistrationService {
         xml = getActivationRequest(dw.merchantId, dw.terminalId, dw.groupId, dw.tppId, DID);
         do {
             logger.log(Level.INFO, "Activation Request " + xml);
-            response = Utils.upload("https://stg.dw.us.fdcnet.biz/rc", xml, HttpMethod.POST);
+            response = Utils.upload(discoveryResponseUrl, xml, HttpMethod.POST);
             logger.log(Level.INFO, "Activation Response" + response);
             activationResponse = (DatawireSRSActivationResponse) Serialization.getObjectFromXML(DatawireSRSActivationResponse.class, response, false);
         } while (retryNeeded(activationResponse.Status.StatusCode));
@@ -115,19 +117,5 @@ public class DatawireRegistrationService {
                 .replace("{terminalId}", String.format("%8S", terminalId).replaceAll(" ", "0"))
                 .replace("{tppId}", tppId)
                 .replace("{clientRef}", Utils.getClientRef(tppId));
-    }
-
-    public static void main(String[] args) {
-        String xml = getActivationRequest("RCTST1000096442", "00000003", "10001", "RSU005", "00043816825221507852");
-        String resp = Utils.upload("https://stg.dw.us.fdcnet.biz/rc", xml, HttpMethod.POST);
-
-
-        String response = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE Response PUBLIC \"-//Datawire Communication Networks INC//DTD VXN API Self-Registration 3.0//EN\" \"http://www.datawire.net/xmldtd/srs.dtd\"><Response Version=\"3\"><RespClientID><DID>00043816825221507852</DID><ClientRef>0164704VRSU005</ClientRef></RespClientID><Status StatusCode=\"OK\"/><RegistrationResponse><DID>00043816825221507852</DID><URL>https://stg.dw.us.fdcnet.biz/rc</URL><URL>https://stg.dw.us.fdcnet.biz/rc</URL></RegistrationResponse></Response>\n" +
-                "\n";
-        String actResp = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE Response PUBLIC \"-//Datawire Communication Networks INC//DTD VXN API Self-Registration 3.0//EN\" \"http://www.datawire.net/xmldtd/srs.dtd\"><Response Version=\"3\"><RespClientID><DID/><ClientRef>935406V1RSU005</ClientRef></RespClientID><Status StatusCode=\"OK\"/><ActivationResponse/></Response>";
-
-        DatawireSRSRegistrationResponse regResp = (DatawireSRSRegistrationResponse) Serialization.getObjectFromXML(DatawireSRSRegistrationResponse.class, response, false);
-
-        DatawireSRSRegistrationResponse regResp1 = (DatawireSRSRegistrationResponse) Serialization.getObjectFromXML(DatawireSRSRegistrationResponse.class, actResp, false);
     }
 }
