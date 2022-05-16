@@ -1,0 +1,940 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SCOPE_TYPE" value="4" />
+  </component>
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="FDRCBuilder:jar" />
+    </artifacts-to-build>
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="99ded157-bace-4013-8d99-c42b488d6931" name="Changes" comment="Updated tests and json test data files">
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fdrc/common/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fdrc/common/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fdrc/http/HTTPPostHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fdrc/http/HTTPPostHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fdrc/service/BaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fdrc/service/BaseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fdrc/service/FDRCRequestService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fdrc/service/FDRCRequestService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fdrc/utils/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fdrc/utils/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/test/TestRetail.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/test/TestRetail.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/test/TestsMoto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/test/TestsMoto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/RetailOrRestt/Credit-Visa-AuthCompl-swipe-200019960020.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/RetailOrRestt/Credit-Visa-AuthCompl-swipe-200019960020.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/RetailOrRestt/Credit-Visa-AuthCompl-swipe-200019960021.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/RetailOrRestt/Credit-Visa-AuthCompl-swipe-200019960021.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/RetailOrRestt/Moto-Verification-NoEncr-4012000000000529.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/RetailOrRestt/Moto-Verification-NoEncr-4012000000000529.json" afterDir="false" />
+    </list>
+    <list id="492508a2-220e-49aa-b011-5c093f4c3a6b" name="Unversioned" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" show_ignored="true">
+    <option name="groupingKeys">
+      <option value="directory" />
+      <option value="module" />
+    </option>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="package-info" />
+        <option value="JUnit5 Test Class" />
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="origin/master" />
+  </component>
+  <component name="Git.Rebase.Settings">
+    <option name="NEW_BASE" value="Working" />
+    <option name="OPTIONS">
+      <set>
+        <option value="INTERACTIVE" />
+      </set>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIEW_PUSH_PROTECTED_ONLY" value="true" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitRewordedCommitMessages">
+    <option name="onto" value="cd108050fdb5d658e0a224c1fecf2dd274a3f5b5" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="recentNewPullRequestHead">
+      <RepoCoordinatesHolder>
+        <option name="owner" value="lmalempati" />
+        <option name="repository" value="FDRCBuilder" />
+      </RepoCoordinatesHolder>
+    </option>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/main/java/fdrc/utils/Utils.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/fdrc/common/Serialization.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar!/org/apache/commons/lang3/StringUtils.class" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/pom.xml" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="myId2FirstActivated">
+      <map>
+        <entry key="JPA Structure" value="true" />
+      </map>
+    </option>
+    <option name="myId2Visible">
+      <map>
+        <entry key="JPA Structure" value="false" />
+      </map>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1yAzAXblpXdG2IwYieEhCS73kBU" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="flattenPackages" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
+    <property name="create.test.in.the.same.root" value="true" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/java/fdrc" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/test/resources/Retail" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.13157892" />
+    <property name="project.structure.side.proportion" value="0.32594937" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="preferences.externalResources" />
+    <property name="two.files.diff.last.used.file" value="$PROJECT_DIR$/pom.xml" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="fdrc.base" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Java\FDRC-Datawire-SRS\FDRCBuilder\src\test\resources\Retail" />
+      <recent name="D:\Java\FDRC-Datawire-SRS\FDRCBuilder\lib" />
+      <recent name="D:\Java\FDRC-Datawire-SRS\FDRCBuilder\src\test\resources\Restaurant" />
+      <recent name="D:\Java\FDRC-Datawire-SRS\FDRCBuilder\src\test\resources\Moto" />
+      <recent name="D:\Java\FDRC-Datawire-SRS\FDRCBuilder" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Java\FDRC-Datawire-SRS\FDRCBuilder\src\test\resources\Retail" />
+      <recent name="D:\Java\FDRC-Datawire-SRS\FDRCBuilder\src\test\resources\Miscellaneous" />
+      <recent name="D:\Java\FDRC-Datawire-SRS\FDRCBuilder\src\test\resources\Restaurant" />
+      <recent name="D:\Java\FDRC-Datawire-SRS\FDRCBuilder\src\test\resources" />
+      <recent name="D:\Java\FDRC-Datawire-SRS\FDRCBuilder\src\test\resources\Moto" />
+    </key>
+    <key name="MoveMembersDialog.RECENTS_KEY">
+      <recent name="fdrc.common.EnumIndustryType" />
+      <recent name="fdrc.common.EnumEngineEntryMethod" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="fdrc.service" />
+      <recent name="fdrc.base" />
+    </key>
+    <key name="IntroduceConstantDialog.RECENTS_KEY">
+      <recent name="fdrc.common.Constants" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
+      <recent name="fdrc.base" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="test" />
+      <recent name="fdrc.utils" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="fdrc.model" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.TestRetailOrRestaurant">
+    <configuration name="DatawireRegistrationServiceTest.testRegistrationRespSerilization" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FDRCBuilder" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="test" />
+      <option name="MAIN_CLASS_NAME" value="test.DatawireRegistrationServiceTest" />
+      <option name="METHOD_NAME" value="testRegistrationRespSerilization" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DatawireRegistrationServiceTest.testactivationRespSerilization" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FDRCBuilder" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="test" />
+      <option name="MAIN_CLASS_NAME" value="test.DatawireRegistrationServiceTest" />
+      <option name="METHOD_NAME" value="testactivationRespSerilization" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RunAllTests" type="JUnit" factoryName="JUnit">
+      <module name="FDRCBuilder" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="ALTERNATIVE_JRE_PATH" value="11" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestRetail" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FDRCBuilder" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="test" />
+      <option name="MAIN_CLASS_NAME" value="test.TestRetail" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestRetailOrRestaurant" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FDRCBuilder" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="test" />
+      <option name="MAIN_CLASS_NAME" value="test.TestRetailOrRestaurant" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestsMoto" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FDRCBuilder" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="test" />
+      <option name="MAIN_CLASS_NAME" value="test.TestsMoto" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="JUnit.RunAllTests" />
+      <item itemvalue="JUnit.TestsMoto" />
+      <item itemvalue="JUnit.TestRetail" />
+      <item itemvalue="JUnit.TestRetailOrRestaurant" />
+      <item itemvalue="JUnit.DatawireRegistrationServiceTest.testRegistrationRespSerilization" />
+      <item itemvalue="JUnit.DatawireRegistrationServiceTest.testactivationRespSerilization" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.TestRetailOrRestaurant" />
+        <item itemvalue="JUnit.TestRetail" />
+        <item itemvalue="JUnit.DatawireRegistrationServiceTest.testactivationRespSerilization" />
+        <item itemvalue="JUnit.DatawireRegistrationServiceTest.testRegistrationRespSerilization" />
+        <item itemvalue="JUnit.TestsMoto" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="99ded157-bace-4013-8d99-c42b488d6931" name="Changes" comment="" />
+      <changelist id="492508a2-220e-49aa-b011-5c093f4c3a6b" name="Unversioned" comment="" />
+      <created>1631709040349</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1631709040349</updated>
+      <workItem from="1631709041527" duration="961000" />
+      <workItem from="1631710021652" duration="2442000" />
+      <workItem from="1631712497837" duration="6024000" />
+      <workItem from="1631772233162" duration="44623000" />
+      <workItem from="1632119344151" duration="3637000" />
+      <workItem from="1632145337225" duration="53644000" />
+      <workItem from="1632308152640" duration="55628000" />
+      <workItem from="1632494146333" duration="74257000" />
+      <workItem from="1632889127238" duration="28714000" />
+      <workItem from="1632977011744" duration="14522000" />
+      <workItem from="1633003189493" duration="10394000" />
+      <workItem from="1633063899504" duration="30625000" />
+      <workItem from="1633323104569" duration="12605000" />
+      <workItem from="1633398414710" duration="16900000" />
+      <workItem from="1633431706940" duration="16229000" />
+      <workItem from="1633506367524" duration="12018000" />
+      <workItem from="1633533893251" duration="1246000" />
+      <workItem from="1633601401203" duration="3906000" />
+      <workItem from="1633668096673" duration="6914000" />
+      <workItem from="1633677633013" duration="10145000" />
+      <workItem from="1633692824961" duration="6742000" />
+      <workItem from="1633928066922" duration="24992000" />
+      <workItem from="1633964869392" duration="1235000" />
+      <workItem from="1634002002369" duration="45969000" />
+      <workItem from="1634532369068" duration="11543000" />
+      <workItem from="1634554882174" duration="1352000" />
+      <workItem from="1634556508385" duration="1698000" />
+      <workItem from="1634565297270" duration="2088000" />
+      <workItem from="1634628619683" duration="719000" />
+      <workItem from="1634631277236" duration="4054000" />
+      <workItem from="1634642374114" duration="9660000" />
+      <workItem from="1634660918487" duration="3119000" />
+      <workItem from="1634703835119" duration="33701000" />
+      <workItem from="1634794360026" duration="3458000" />
+      <workItem from="1634798008954" duration="49489000" />
+      <workItem from="1634992426461" duration="606000" />
+      <workItem from="1635072664357" duration="5617000" />
+      <workItem from="1635080210738" duration="208000" />
+      <workItem from="1635080449288" duration="2114000" />
+      <workItem from="1635136733333" duration="794000" />
+      <workItem from="1635137643916" duration="17488000" />
+      <workItem from="1635173644064" duration="1513000" />
+      <workItem from="1635227416185" duration="3448000" />
+      <workItem from="1635231338924" duration="12147000" />
+      <workItem from="1635265591113" duration="1440000" />
+      <workItem from="1635315953392" duration="19651000" />
+      <workItem from="1635396986671" duration="8639000" />
+      <workItem from="1635415436886" duration="9132000" />
+      <workItem from="1635431143458" duration="9677000" />
+      <workItem from="1635498485590" duration="11667000" />
+      <workItem from="1635828003851" duration="19355000" />
+      <workItem from="1635920041680" duration="11687000" />
+      <workItem from="1636160433661" duration="12958000" />
+      <workItem from="1636363405057" duration="34261000" />
+      <workItem from="1636463887980" duration="12282000" />
+      <workItem from="1636526838894" duration="19456000" />
+      <workItem from="1636623594011" duration="7189000" />
+      <workItem from="1636632176638" duration="29994000" />
+      <workItem from="1636723703717" duration="10576000" />
+      <workItem from="1636869220322" duration="3426000" />
+      <workItem from="1636954686541" duration="618000" />
+      <workItem from="1636966385471" duration="621000" />
+      <workItem from="1636971671504" duration="8018000" />
+      <workItem from="1637040070981" duration="59578000" />
+      <workItem from="1637555465006" duration="1809000" />
+      <workItem from="1637568221056" duration="818000" />
+      <workItem from="1637580049415" duration="3138000" />
+      <workItem from="1637645597382" duration="12742000" />
+      <workItem from="1637731341043" duration="11252000" />
+      <workItem from="1637755431392" duration="6815000" />
+      <workItem from="1637827129403" duration="19172000" />
+      <workItem from="1638086264263" duration="19446000" />
+      <workItem from="1638184462871" duration="9478000" />
+      <workItem from="1638197732501" duration="17012000" />
+      <workItem from="1638279557083" duration="9985000" />
+      <workItem from="1638361264557" duration="224000" />
+      <workItem from="1638361604910" duration="954000" />
+      <workItem from="1638362653573" duration="10387000" />
+      <workItem from="1638423468271" duration="12627000" />
+      <workItem from="1638509494232" duration="18336000" />
+      <workItem from="1638776183778" duration="404000" />
+      <workItem from="1638777023820" duration="1996000" />
+      <workItem from="1638781101373" duration="2231000" />
+      <workItem from="1638785886475" duration="612000" />
+      <workItem from="1638788344867" duration="1861000" />
+      <workItem from="1638795826507" duration="227000" />
+      <workItem from="1638796115479" duration="5622000" />
+      <workItem from="1638802163004" duration="3769000" />
+      <workItem from="1638855305072" duration="45421000" />
+      <workItem from="1639038412759" duration="6974000" />
+      <workItem from="1639114833259" duration="49177000" />
+      <workItem from="1639545733921" duration="16468000" />
+      <workItem from="1639634549178" duration="4367000" />
+      <workItem from="1639717062341" duration="6266000" />
+      <workItem from="1639741887154" duration="5616000" />
+      <workItem from="1639978713037" duration="10921000" />
+      <workItem from="1639998279670" duration="4205000" />
+      <workItem from="1640085195623" duration="35114000" />
+      <workItem from="1640581792158" duration="7401000" />
+      <workItem from="1640596939951" duration="42493000" />
+      <workItem from="1640754062533" duration="13810000" />
+      <workItem from="1640777948502" duration="6024000" />
+      <workItem from="1640843779126" duration="16438000" />
+      <workItem from="1641186819463" duration="46899000" />
+      <workItem from="1641446175290" duration="18453000" />
+      <workItem from="1641794168358" duration="12412000" />
+      <workItem from="1641818258955" duration="28916000" />
+      <workItem from="1641950407645" duration="24333000" />
+      <workItem from="1642310075156" duration="8723000" />
+      <workItem from="1642398158863" duration="5540000" />
+      <workItem from="1642425463598" duration="584000" />
+      <workItem from="1642479401283" duration="24138000" />
+      <workItem from="1642567873742" duration="38187000" />
+      <workItem from="1642747161738" duration="4763000" />
+      <workItem from="1642776360820" duration="3503000" />
+      <workItem from="1642989715080" duration="18539000" />
+      <workItem from="1643086774037" duration="18557000" />
+      <workItem from="1643122580748" duration="9442000" />
+      <workItem from="1643283777629" duration="4930000" />
+      <workItem from="1643345427333" duration="10499000" />
+      <workItem from="1643608908086" duration="7360000" />
+      <workItem from="1643694450854" duration="8053000" />
+      <workItem from="1643776472105" duration="16942000" />
+      <workItem from="1643948854919" duration="498000" />
+      <workItem from="1643951571934" duration="13545000" />
+      <workItem from="1644230927440" duration="11459000" />
+      <workItem from="1644471203876" duration="4513000" />
+      <workItem from="1644582480359" duration="4903000" />
+      <workItem from="1644760634800" duration="3333000" />
+      <workItem from="1646207855307" duration="368000" />
+      <workItem from="1647850182200" duration="4858000" />
+      <workItem from="1648452549003" duration="6881000" />
+      <workItem from="1648619258419" duration="6859000" />
+      <workItem from="1648791437391" duration="4600000" />
+      <workItem from="1649065944925" duration="5108000" />
+      <workItem from="1649135852363" duration="3767000" />
+      <workItem from="1649221534987" duration="3331000" />
+      <workItem from="1650289725525" duration="3923000" />
+      <workItem from="1650451757121" duration="9098000" />
+      <workItem from="1650524397187" duration="214000" />
+      <workItem from="1650535109288" duration="2648000" />
+      <workItem from="1650543069121" duration="2147000" />
+      <workItem from="1650560002787" duration="635000" />
+      <workItem from="1650600872846" duration="2622000" />
+      <workItem from="1650607013009" duration="4268000" />
+      <workItem from="1650614474339" duration="13607000" />
+      <workItem from="1650721290522" duration="17284000" />
+      <workItem from="1650971323794" duration="4729000" />
+      <workItem from="1651033264854" duration="7331000" />
+      <workItem from="1651041359707" duration="31370000" />
+      <workItem from="1651213138034" duration="753000" />
+      <workItem from="1651475868566" duration="6148000" />
+      <workItem from="1652249508281" duration="3043000" />
+      <workItem from="1652274432090" duration="2149000" />
+      <workItem from="1652354660434" duration="844000" />
+      <workItem from="1652355629924" duration="826000" />
+      <workItem from="1652356665417" duration="1110000" />
+      <workItem from="1652357830056" duration="167000" />
+      <workItem from="1652358005080" duration="3210000" />
+      <workItem from="1652361683261" duration="18354000" />
+      <workItem from="1652433593969" duration="6034000" />
+      <workItem from="1652442820751" duration="73000" />
+      <workItem from="1652442900110" duration="22000" />
+      <workItem from="1652442933395" duration="2404000" />
+      <workItem from="1652692465534" duration="12066000" />
+    </task>
+    <task id="LOCAL-00031" summary="Added InvalidResponseXml exception">
+      <created>1638966980851</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1638966980851</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Added TestGeneric.java and the cascading changes. &#10;Added EncrptTypeType.java">
+      <created>1639025734203</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1639025734203</updated>
+    </task>
+    <task id="LOCAL-00033" summary="POM - (ProjectObjectModel) changes to remove un-necessary dependencies.&#10;AdminRequest.java added.">
+      <created>1639483690230</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1639483690230</updated>
+    </task>
+    <task id="LOCAL-00034" summary="&gt; Refactorings:&#10;1. renaming the request classes to services.&#10;2. And moved them to model package&#10;3. GenericService.java:: Implemented TORRequired functionality.&#10;4. Renamed Request and Response to RCRequest.java, RCResponse.java respectively.">
+      <created>1640605981743</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1640605981743</updated>
+    </task>
+    <task id="LOCAL-00035" summary="1. GenericService.java: Added WrapperResponse class and load response common methods to avoid it in every subclass.&#10;2. Renamed package model to service.&#10;3. Introduced new pkg model and added RCRequest.java, RCResponse.java classes into it.">
+      <created>1640775544759</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1640775544759</updated>
+    </task>
+    <task id="LOCAL-00036" summary="1. GenericService.java: Added WrapperResponse class and load response common methods to avoid it in every subclass.&#10;2. Renamed package model to service.&#10;3. Introduced new pkg model and added RCRequest.java, RCResponse.java classes into it.">
+      <created>1640775672476</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1640775672476</updated>
+    </task>
+    <task id="LOCAL-00037" summary="1. GenericService.java: Added WrapperResponse class and load response common methods to avoid it in every subclass.&#10;2. Renamed package model to service.&#10;3. Introduced new pkg model and added RCRequest.java, RCResponse.java classes into it.">
+      <created>1640778383347</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1640778383347</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Add gmf lib to repository">
+      <created>1640778503057</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1640778503057</updated>
+    </task>
+    <task id="LOCAL-00039" summary="&gt; getObjectXML: made generic&#10;&gt; Add DatawireRegistrationService.java&#10;&gt; Added DatawireRegistrationServiceTest.java">
+      <created>1641306168383</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1641306168383</updated>
+    </task>
+    <task id="LOCAL-00040" summary="&gt; changes to POM.xml">
+      <created>1641306224484</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1641306224484</updated>
+    </task>
+    <task id="LOCAL-00041" summary="&gt; java version update to 11">
+      <created>1641306300586</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1641306300586</updated>
+    </task>
+    <task id="LOCAL-00042" summary="&gt; java version update to 11">
+      <created>1641306321172</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1641306321172</updated>
+    </task>
+    <task id="LOCAL-00043" summary="&gt; Removed RequestUtils.java. Moved its methods to Utils.java.&#10;&gt; FDRCRequestService.java moved to fdrc.service package from common pkg&#10;&gt; RCRequest.java: added digWltProgType, mobileInd and changes to send them through FDRC.&#10;&gt; RCResponse.java: rename responseRaw to responsePayload.&#10;&gt; HTTPPostHandler.java: used mid, tid like data from RCRequest as opposed to RequestUtils.java.&#10;&gt; Constants.java: STG_POST_URL added url used to post trxn to STG envt.&#10;&gt; Serialization.java: getObjectXML: added boolean param: failOnUnknownProperties.">
+      <created>1641900008016</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1641900008016</updated>
+    </task>
+    <task id="LOCAL-00044" summary="&gt; Removed RequestUtils.java. Moved its methods to Utils.java.&#10;&gt; FDRCRequestService.java moved to fdrc.service package from common pkg&#10;&gt; RCRequest.java: added digWltProgType, mobileInd and changes to send them through FDRC.&#10;&gt; RCResponse.java: rename responseRaw to responsePayload.&#10;&gt; HTTPPostHandler.java: used mid, tid like data from RCRequest as opposed to RequestUtils.java.&#10;&gt; Constants.java: STG_POST_URL added url used to post trxn to STG envt.&#10;&gt; Serialization.java: getObjectXML: added boolean param: failOnUnknownProperties.">
+      <created>1641900940562</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1641900940562</updated>
+    </task>
+    <task id="LOCAL-00045" summary="&gt; Removed CardInfo.java, OrigAuthInfo.java">
+      <created>1641964728720</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1641964728720</updated>
+    </task>
+    <task id="LOCAL-00046" summary="&gt; pom.xml: removed unused log4j-core.&#10;&gt; Renamed GenericService.java to BaseService.java and the cascaded changes&#10;&gt; Maded gmf in BaseService.java a private member and added getter; and added constructor for BaseService.java.&#10;&gt; Added DatawireRegistrationService changes and tests also.">
+      <created>1642342385626</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1642342385627</updated>
+    </task>
+    <task id="LOCAL-00047" summary="&gt; SD-174 fix">
+      <created>1642676465230</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1642676465325</updated>
+    </task>
+    <task id="LOCAL-00048" summary="&gt; Changes related to SRS: made TID to be 8 digit long.&#10;&gt; Test cases changes to DatawireRegistrationServiceTest.java">
+      <created>1642692759771</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1642692759771</updated>
+    </task>
+    <task id="LOCAL-00049" summary="&gt; Updated gmf lib to add tostring() method for required Enums.">
+      <created>1642748000458</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1642748000458</updated>
+    </task>
+    <task id="LOCAL-00050" summary="&gt; Renames UnsupportedEnumValueException.java to UnsupportedValueException">
+      <created>1642748072665</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1642748072665</updated>
+    </task>
+    <task id="LOCAL-00051" summary="&gt; HTTPPostHandler.java: &#10;1. Catch IOException rather than UnknownHostException.&#10;2. User-Agent set to &quot;SUNMI-POS&quot;&#10;3. Timeout to 35 sec from 30">
+      <created>1642748243374</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1642748243374</updated>
+    </task>
+    <task id="LOCAL-00052" summary="&gt; ServiceUtil: getReversalService -&gt; removed checking trxnType; if reversalInd is present, returning ReversalService.&#10;&gt; SD-175 changes&#10;&gt; getGmfmv: Removed check for null.">
+      <created>1642776699431</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1642776699437</updated>
+    </task>
+    <task id="LOCAL-00053" summary="&gt; Renamed to / introduced  PopulateXXXRequestDetails method to populate respective Request.">
+      <created>1642826635861</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1642826635861</updated>
+    </task>
+    <task id="LOCAL-00054" summary="&gt; RCResponse.java: added discPOSEntry&#10;        discPOSData;&#10;        discRespCode&#10;        discProcCode&#10;        motoInd;   &#10;        amExPOSData">
+      <created>1642827408525</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1642827408525</updated>
+    </task>
+    <task id="LOCAL-00055" summary="&gt; JsonBuilder.java: Set discPOSEntry&#10;        discPOSData;&#10;        discRespCode&#10;        discProcCode&#10;        motoInd;   &#10;        amExPOSData, from Parent trxn Response.">
+      <created>1642827488942</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1642827488942</updated>
+    </task>
+    <task id="LOCAL-00056" summary="&gt; Utils.java: Added Utils.containsInArray, Utils.contains methods.&#10;&gt; BaseService.java: check response Payload against null to avoid NullPointerException.&#10;&gt; replace Arrays.asList with Utils.contains.&#10;&gt; Client.java: add exception handling to submitDatawireSRS">
+      <created>1643020810684</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1643020810686</updated>
+    </task>
+    <task id="LOCAL-00057" summary="&gt; JsonBuilder.java: renamed getJsonFromRequest to updateJsonFromRequest.">
+      <created>1643087049999</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1643087050000</updated>
+    </task>
+    <task id="LOCAL-00058" summary="&gt; Added HttpMethod.java&#10;&gt; Utils.java: Added HttpMethod param to Upload method.&#10;&gt; DatawireRegistrationService.java: Updated Upload with HttpMethod param.">
+      <created>1643111237612</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1643111237612</updated>
+    </task>
+    <task id="LOCAL-00059" summary="&gt; JsonBuilder.java: origTranDateTime now uses trnmsnDateTime off RCRequest.">
+      <created>1643111317659</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1643111317659</updated>
+    </task>
+    <task id="LOCAL-00060" summary="&gt; FDRCRequestService.java: read amexPOSData from response.">
+      <created>1643111552463</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1643111552463</updated>
+    </task>
+    <task id="LOCAL-00061" summary="&gt; DatawireRegistrationService.java: Added retry mechanism.">
+      <created>1643961648246</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1643961648247</updated>
+    </task>
+    <task id="LOCAL-00062" summary="&gt; FDRCRequestService.java: wired up: &quot;mcMSDI&quot;, &quot;mrktSpecificDataInd&quot;, &quot;plPOSDebitFlg&quot;">
+      <created>1643961909859</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1643961909859</updated>
+    </task>
+    <task id="LOCAL-00063" summary="&gt; renamed &quot;buildRequest&quot; to &quot;buildFDRCRequest&quot;.">
+      <created>1643961956758</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1643961956758</updated>
+    </task>
+    <task id="LOCAL-00064" summary="&gt; updateCompletionPayload: updated with new mappings.">
+      <created>1643962098169</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1643962098170</updated>
+    </task>
+    <task id="LOCAL-00065" summary="&gt; Constants.java: added RetryCodes.">
+      <created>1643964389780</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1643964389780</updated>
+    </task>
+    <task id="LOCAL-00066" summary="&gt; Added plPOSDebitFlg, mcMSDI, mrktSpecificDataInd, amexPOSData,  sctyLvl">
+      <created>1643964467189</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1643964467189</updated>
+    </task>
+    <task id="LOCAL-00067" summary="&gt; Added changes to support EMV Credit trxns">
+      <created>1648622852774</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1648622852774</updated>
+    </task>
+    <task id="LOCAL-00068" summary="errorMsg default to empty string">
+      <created>1650456229177</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1650456229178</updated>
+    </task>
+    <task id="LOCAL-00069" summary="In case of no response, get error and stop processing response. eg: Authentication error.">
+      <created>1650456294573</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1650456294573</updated>
+    </task>
+    <task id="LOCAL-00070" summary="In case of no response, get error and stop processing response. eg: Authentication error.">
+      <created>1652356708928</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1652356708929</updated>
+    </task>
+    <task id="LOCAL-00071" summary="In case of no response, get error and stop processing response. eg: Authentication error.">
+      <created>1652357107513</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1652357107513</updated>
+    </task>
+    <task id="LOCAL-00072" summary="In case of no response, get error and stop processing response. eg: Authentication error.">
+      <created>1652357914481</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1652357914481</updated>
+    </task>
+    <task id="LOCAL-00073" summary="In case of no response, get error and stop processing response. eg: Authentication error.">
+      <created>1652362613962</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1652362613963</updated>
+    </task>
+    <task id="LOCAL-00074" summary="In case of no response, get error and stop processing response. eg: Authentication error.">
+      <created>1652362793745</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1652362793745</updated>
+    </task>
+    <task id="LOCAL-00075" summary="In case of no response, get error and stop processing response. eg: Authentication error.">
+      <created>1652362808733</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1652362808733</updated>
+    </task>
+    <task id="LOCAL-00076" summary="DataWireSRS: &#10;Updated to use DataWireSRS request and response objects.">
+      <created>1652366653209</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1652366653209</updated>
+    </task>
+    <task id="LOCAL-00077" summary="DataWireSRS: &#10;1 Added tests for deserialization of regstrn and activn responses&#10;1.a changes to the required classes so that deserialization works fine&#10;1.b DatawireRegistrationService.java:  Serialization.getObjectFromXML called with 'FailOnUnknownProperties' false.&#10;2. Added dataWireID on RCRequest.java">
+      <created>1652442142745</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1652442142746</updated>
+    </task>
+    <task id="LOCAL-00078" summary="HTTPPostHandler.java: removed httpclient and using Util.Upload which uses HttpUrlConenction. Reaason: httpclient not working on Android.">
+      <created>1652442236804</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1652442236804</updated>
+    </task>
+    <task id="LOCAL-00079" summary="Updated tests and json test data files">
+      <created>1652442276848</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1652442276848</updated>
+    </task>
+    <option name="localTasksCounter" value="80" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+        <option value="Space.CommitStatus" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="IntegrationIssues" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="&gt; Updated gmf lib to add tostring() method for required Enums." />
+    <MESSAGE value="&gt; Renames UnsupportedEnumValueException.java to UnsupportedValueException" />
+    <MESSAGE value="&gt; HTTPPostHandler.java: &#10;1. Catch IOException rather than UnknownHostException.&#10;2. User-Agent set to &quot;SUNMI-POS&quot;&#10;3. Timeout to 35 sec from 30" />
+    <MESSAGE value="&gt; ServiceUtil: getReversalService -&gt; removed checking trxnType; if reversalInd is present, returning ReversalService.&#10;&gt; SD-175 changes&#10;&gt; getGmfmv: Removed check for null." />
+    <MESSAGE value="&gt; Renamed to / introduced  PopulateXXXRequestDetails method to populate respective Request." />
+    <MESSAGE value="&gt; RCResponse.java: added discPOSEntry&#10;        discPOSData;&#10;        discRespCode&#10;        discProcCode&#10;        motoInd;   &#10;        amExPOSData" />
+    <MESSAGE value="&gt; JsonBuilder.java: Set discPOSEntry&#10;        discPOSData;&#10;        discRespCode&#10;        discProcCode&#10;        motoInd;   &#10;        amExPOSData, from Parent trxn Response." />
+    <MESSAGE value="&gt; Utils.java: Added Utils.containsInArray, Utils.contains methods.&#10;&gt; BaseService.java: check response Payload against null to avoid NullPointerException.&#10;&gt; replace Arrays.asList with Utils.contains.&#10;&gt; Client.java: add exception handling to submitDatawireSRS" />
+    <MESSAGE value="&gt; JsonBuilder.java: renamed getJsonFromRequest to updateJsonFromRequest." />
+    <MESSAGE value="&gt; Added HttpMethod.java&#10;&gt; Utils.java: Added HttpMethod param to Upload method.&#10;&gt; DatawireRegistrationService.java: Updated Upload with HttpMethod param." />
+    <MESSAGE value="&gt; JsonBuilder.java: origTranDateTime now uses trnmsnDateTime off RCRequest." />
+    <MESSAGE value="&gt; FDRCRequestService.java: read amexPOSData from response." />
+    <MESSAGE value="&gt; DatawireRegistrationService.java: Added retry mechanism." />
+    <MESSAGE value="&gt; FDRCRequestService.java: wired up: &quot;mcMSDI&quot;, &quot;mrktSpecificDataInd&quot;, &quot;plPOSDebitFlg&quot;" />
+    <MESSAGE value="&gt; renamed &quot;buildRequest&quot; to &quot;buildFDRCRequest&quot;." />
+    <MESSAGE value="&gt; updateCompletionPayload: updated with new mappings." />
+    <MESSAGE value="&gt; Constants.java: added RetryCodes." />
+    <MESSAGE value="&gt; Added plPOSDebitFlg, mcMSDI, mrktSpecificDataInd, amexPOSData,  sctyLvl" />
+    <MESSAGE value="&gt; Added changes to support EMV Credit trxns" />
+    <MESSAGE value="errorMsg default to empty string" />
+    <MESSAGE value="In case of no response, get error and stop processing response. eg: Authentication error." />
+    <MESSAGE value="DataWireSRS: &#10;Updated to use DataWireSRS request and response objects." />
+    <MESSAGE value="DataWireSRS: &#10;1 Added tests for deserialization of regstrn and activn responses&#10;1.a changes to the required classes so that deserialization works fine&#10;1.b DatawireRegistrationService.java:  Serialization.getObjectFromXML called with 'FailOnUnknownProperties' false.&#10;2. Added dataWireID on RCRequest.java" />
+    <MESSAGE value="HTTPPostHandler.java: removed httpclient and using Util.Upload which uses HttpUrlConenction. Reaason: httpclient not working on Android." />
+    <MESSAGE value="Updated tests and json test data files" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated tests and json test data files" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Test-FDRCBuilder/src/Test.java</url>
+          <line>9</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/RestAPI/src/Application.java</url>
+          <line>25</line>
+          <option name="timeStamp" value="457" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/fdrc/service/BaseService.java</url>
+          <line>221</line>
+          <option name="timeStamp" value="494" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="java.lang.String" memberName="value" />
+      </pinned-members>
+    </pin-to-top-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="envVal" />
+        <watch expression="gmfTransactionRequest" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/FDRCBuilder$Client.ic" NAME="Client Coverage Results" MODIFIED="1650290405184" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>fdrc.service.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/FDRCBuilder$SRSRegistrationService.ic" NAME="SRSRegistrationService Coverage Results" MODIFIED="1640882538005" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>fdrc.service.*</FILTER>
+    </SUITE>
+  </component>
+</project>

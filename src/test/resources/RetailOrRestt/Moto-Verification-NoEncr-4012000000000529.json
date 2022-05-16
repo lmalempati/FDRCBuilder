@@ -21,5 +21,7 @@
   "avsBillingAddr": "1307 Broad Hollow Road",
   "avsBillingPostalCode":"11747",
   "groupID": "10001",
-  "dataWireID": "00043816982538419256"
+  "dataWireID": "00043816982538419256",
+  "termID": "00000003",
+  "tppID": "RSU005"
 }
