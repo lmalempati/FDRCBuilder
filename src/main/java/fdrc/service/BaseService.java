@@ -216,8 +216,10 @@ abstract class BaseService {
         private void loadResponseXml() {
             if (responseXml.isEmpty()) throw new InvalidResponseXml("Empty Response");
             Response response;
+//            RejectResponseDetails
             ObjectFactory factory = null;
-            response = (Response) Serialization.getObjectFromXML(Response.class, responseXml, true);
+            String respXml = responseXml.replaceAll("&apos", "").replaceAll("&gt;", ">").replaceAll("    ack2Data", "</Track2Data>");
+            response = (Response) Serialization.getObjectFromXML(Response.class, respXml, false);
             if (response != null && response.getStatus() != null
                     && response.getStatus().getStatusCode() != null) {
                 rcResponse = new RCResponse();

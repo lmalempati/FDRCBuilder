@@ -31,6 +31,7 @@ public class HTTPPostHandler {
          * Service Schema file [rc.xsd]*/
         PayloadType payloadType = new PayloadType();
         payloadType.setEncoding("cdata");
+gmfrequest = "<GMF xmlns=\"com/fiserv/Merchant/gmfV10.02\"><CreditRequest><CommonGrp><PymtType>Credit</PymtType><TxnType>Sale</TxnType><LocalDateTime>20220516172138</LocalDateTime><TrnmsnDateTime>20220516115138</TrnmsnDateTime><STAN>172138</STAN><RefNum>652701873861</RefNum><OrderNum>00000014</OrderNum><TPPID>RSU005</TPPID><TermID>00000002</TermID><MerchID>RCTST1000096443</MerchID><MerchCatCode>5399</MerchCatCode><POSEntryMode>012</POSEntryMode><POSCondCode>00</POSCondCode><TermCatCode>01</TermCatCode><TermEntryCapablt>12</TermEntryCapablt><TxnAmt>000000005000</TxnAmt><TxnCrncy>840</TxnCrncy><TermLocInd>0</TermLocInd><CardCaptCap>1</CardCaptCap><GroupID>10001</GroupID></CommonGrp><AltMerchNameAndAddrGrp><MerchName>ry</MerchName></AltMerchNameAndAddrGrp><CardGrp><Track2Data> </Track2Data><CardType>Visa</CardType></CardGrp></CreditRequest></GMF>";
         payloadType.setValue(gmfrequest);
         transactionType.setPayload(payloadType);
         gmfTransactionRequest.setTransaction(transactionType);
@@ -38,15 +39,15 @@ public class HTTPPostHandler {
          * Service Schema file [rc.xsd]*/
         ReqClientIDType reqClientIDType = new ReqClientIDType();
         reqClientIDType.setApp(Constants.APP);
-        reqClientIDType.setAuth(String.format("%s%s|%s", FDRCRequestService.getRcRequest().groupID, FDRCRequestService.getRcRequest().merchantMID, Constants.REQUEST_TERMID)); // todo: user termid off Request
+        reqClientIDType.setAuth(String.format("%s%s|%s", FDRCRequestService.getRcRequest().groupID, FDRCRequestService.getRcRequest().merchantMID, FDRCRequestService.getRcRequest().termID)); // todo: user termid off Request
         /* Set the clientRef value*/
-        reqClientIDType.setClientRef(Utils.getClientRef(""));
+        reqClientIDType.setClientRef(Utils.getClientRef(FDRCRequestService.getRcRequest().tppID));
         /* Set the DID value*/
         reqClientIDType.setDID(FDRCRequestService.getRcRequest().dataWireID);
 
         gmfTransactionRequest.setReqClientID(reqClientIDType);
         /*Set client timeout value*/
-        gmfTransactionRequest.setClientTimeout(new BigInteger("10"));
+        gmfTransactionRequest.setClientTimeout(new BigInteger("35"));
         gmfTransactionRequest.setVersion("3");
 
         //Transform the gmfTransactionRequest object into XML string.
@@ -58,7 +59,6 @@ public class HTTPPostHandler {
         }
         catch (Exception e) {
             throw new RuntimeException(e.getMessage());
-        } finally {
         }
     }
 }
