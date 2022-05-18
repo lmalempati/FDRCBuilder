@@ -13,17 +13,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99ded157-bace-4013-8d99-c42b488d6931" name="Changes" comment="Updated tests and json test data files">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fdrc/common/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fdrc/common/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fdrc/http/HTTPPostHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fdrc/http/HTTPPostHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fdrc/service/BaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fdrc/service/BaseService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fdrc/service/FDRCRequestService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fdrc/service/FDRCRequestService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fdrc/utils/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fdrc/utils/Utils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/test/TestRetail.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/test/TestRetail.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/test/TestsMoto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/test/TestsMoto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/resources/RetailOrRestt/Credit-Visa-AuthCompl-swipe-200019960020.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/RetailOrRestt/Credit-Visa-AuthCompl-swipe-200019960020.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/resources/RetailOrRestt/Credit-Visa-AuthCompl-swipe-200019960021.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/RetailOrRestt/Credit-Visa-AuthCompl-swipe-200019960021.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/resources/RetailOrRestt/Moto-Verification-NoEncr-4012000000000529.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/RetailOrRestt/Moto-Verification-NoEncr-4012000000000529.json" afterDir="false" />
     </list>
     <list id="492508a2-220e-49aa-b011-5c093f4c3a6b" name="Unversioned" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -188,7 +182,7 @@
       <recent name="fdrc.model" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.TestRetailOrRestaurant">
+  <component name="RunManager" selected="JUnit.TestsMoto">
     <configuration name="DatawireRegistrationServiceTest.testRegistrationRespSerilization" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FDRCBuilder" />
       <extension name="coverage">
@@ -299,11 +293,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.TestsMoto" />
         <item itemvalue="JUnit.TestRetailOrRestaurant" />
         <item itemvalue="JUnit.TestRetail" />
         <item itemvalue="JUnit.DatawireRegistrationServiceTest.testactivationRespSerilization" />
         <item itemvalue="JUnit.DatawireRegistrationServiceTest.testRegistrationRespSerilization" />
-        <item itemvalue="JUnit.TestsMoto" />
       </list>
     </recent_temporary>
   </component>
@@ -481,6 +475,8 @@
       <workItem from="1652442900110" duration="22000" />
       <workItem from="1652442933395" duration="2404000" />
       <workItem from="1652692465534" duration="12066000" />
+      <workItem from="1652769827421" duration="2868000" />
+      <workItem from="1652854003205" duration="1897000" />
     </task>
     <task id="LOCAL-00031" summary="Added InvalidResponseXml exception">
       <created>1638966980851</created>
@@ -907,9 +903,9 @@
           <option name="timeStamp" value="457" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/fdrc/service/BaseService.java</url>
-          <line>221</line>
-          <option name="timeStamp" value="494" />
+          <url>file://$PROJECT_DIR$/src/test/java/test/TestGeneric.java</url>
+          <line>15</line>
+          <option name="timeStamp" value="460" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
