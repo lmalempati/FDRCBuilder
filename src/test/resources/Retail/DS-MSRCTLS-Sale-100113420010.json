@@ -1,0 +1,20 @@
+{
+  "merchantMID": "RCTST1000094639",
+  "txnCrncy": "840",
+  "termLocInd": "0",
+  "acctNum": "6011000994462780",
+  "groupID": "10001",
+  "cardType": "Discover",
+  "merchCatCode": "5812",
+  "pymtType": "Credit",
+  "txnType": "Sale",
+  "cardExpiryDate": "20251231",
+  "posEntryMode": "911",
+  "termCatCode": "01",
+  "cardCaptCap": "1",
+  "txnAmt": "141.16",
+  "posCondCode": "00",
+  "termEntryCapablt": "03",
+  "digWltProgType": "ApplePay",
+  "mobileInd": "Mobile"
+}
