@@ -19,7 +19,7 @@ public class Client {
         new Client().submitRequest(rcRequest);
     }
 
-    public String Call(String json) {
+    private String Call(String json) {
         RCRequest RCRequest = null;
         try {
             RCRequest = JsonBuilder.getRequestFromJsonString(json);

@@ -12,12 +12,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99ded157-bace-4013-8d99-c42b488d6931" name="Changes" comment="Updated tests and json test data files">
+    <list default="true" id="99ded157-bace-4013-8d99-c42b488d6931" name="Changes" comment="Fix for Parsing Rejection response issue: A workaround is provided.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fdrc/http/HTTPPostHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fdrc/http/HTTPPostHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fdrc/service/BaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fdrc/service/BaseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fdrc/service/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fdrc/service/Client.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/test/TestsMoto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/test/TestsMoto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/resources/RetailOrRestt/Credit-Visa-AuthCompl-swipe-200019960021.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/RetailOrRestt/Credit-Visa-AuthCompl-swipe-200019960021.json" afterDir="false" />
     </list>
     <list id="492508a2-220e-49aa-b011-5c093f4c3a6b" name="Unversioned" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -476,14 +474,10 @@
       <workItem from="1652442933395" duration="2404000" />
       <workItem from="1652692465534" duration="12066000" />
       <workItem from="1652769827421" duration="2868000" />
-      <workItem from="1652854003205" duration="1897000" />
-    </task>
-    <task id="LOCAL-00031" summary="Added InvalidResponseXml exception">
-      <created>1638966980851</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1638966980851</updated>
+      <workItem from="1652854003205" duration="5831000" />
+      <workItem from="1652883357571" duration="1315000" />
+      <workItem from="1653658987952" duration="1383000" />
+      <workItem from="1653825643373" duration="231000" />
     </task>
     <task id="LOCAL-00032" summary="Added TestGeneric.java and the cascading changes. &#10;Added EncrptTypeType.java">
       <created>1639025734203</created>
@@ -821,7 +815,14 @@
       <option name="project" value="LOCAL" />
       <updated>1652442276848</updated>
     </task>
-    <option name="localTasksCounter" value="80" />
+    <task id="LOCAL-00080" summary="Fix for Parsing Rejection response issue: A workaround is provided.">
+      <created>1652859892411</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1652859892412</updated>
+    </task>
+    <option name="localTasksCounter" value="81" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -862,7 +863,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="&gt; Updated gmf lib to add tostring() method for required Enums." />
     <MESSAGE value="&gt; Renames UnsupportedEnumValueException.java to UnsupportedValueException" />
     <MESSAGE value="&gt; HTTPPostHandler.java: &#10;1. Catch IOException rather than UnknownHostException.&#10;2. User-Agent set to &quot;SUNMI-POS&quot;&#10;3. Timeout to 35 sec from 30" />
     <MESSAGE value="&gt; ServiceUtil: getReversalService -&gt; removed checking trxnType; if reversalInd is present, returning ReversalService.&#10;&gt; SD-175 changes&#10;&gt; getGmfmv: Removed check for null." />
@@ -887,7 +887,8 @@
     <MESSAGE value="DataWireSRS: &#10;1 Added tests for deserialization of regstrn and activn responses&#10;1.a changes to the required classes so that deserialization works fine&#10;1.b DatawireRegistrationService.java:  Serialization.getObjectFromXML called with 'FailOnUnknownProperties' false.&#10;2. Added dataWireID on RCRequest.java" />
     <MESSAGE value="HTTPPostHandler.java: removed httpclient and using Util.Upload which uses HttpUrlConenction. Reaason: httpclient not working on Android." />
     <MESSAGE value="Updated tests and json test data files" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated tests and json test data files" />
+    <MESSAGE value="Fix for Parsing Rejection response issue: A workaround is provided." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix for Parsing Rejection response issue: A workaround is provided." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -903,9 +904,24 @@
           <option name="timeStamp" value="457" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/test/TestGeneric.java</url>
-          <line>15</line>
-          <option name="timeStamp" value="460" />
+          <url>file://$PROJECT_DIR$/src/main/java/fdrc/service/BaseService.java</url>
+          <line>221</line>
+          <option name="timeStamp" value="458" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/fdrc/service/BaseService.java</url>
+          <line>216</line>
+          <option name="timeStamp" value="461" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/fdrc/service/BaseService.java</url>
+          <line>59</line>
+          <option name="timeStamp" value="463" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/fdrc/http/HTTPPostHandler.java</url>
+          <line>56</line>
+          <option name="timeStamp" value="464" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
