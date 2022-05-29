@@ -215,9 +215,19 @@ abstract class BaseService {
          * and extracts pay load data that is actual transaction response received .*/
         private void loadResponseXml() {
             if (responseXml.isEmpty()) throw new InvalidResponseXml("Empty Response");
+            String respXml = responseXml;
             Response response;
             ObjectFactory factory = null;
-            response = (Response) Serialization.getObjectFromXML(Response.class, responseXml, true);
+            /* TODO: jackson is unable to parse the RejectResponse Because there are two 'CDATA' elements (nested) one for RejectResponse which has other CDATA for the Request submitted. Note: This is a work-around only */
+            if (responseXml.indexOf("<RejectResponse>") > 0)
+            {
+                int start = responseXml.lastIndexOf("<![CDATA[<GMF");
+                int end = responseXml.lastIndexOf("</RejectResponse>");
+                if (start > 0 && end > 0 && end > start)
+                    respXml = responseXml.replace(responseXml.substring(start, end), "");
+            }
+            response = (Response) Serialization.getObjectFromXML(Response.class, respXml, false);
+
             if (response != null && response.getStatus() != null
                     && response.getStatus().getStatusCode() != null) {
                 rcResponse = new RCResponse();

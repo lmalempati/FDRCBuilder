@@ -154,7 +154,7 @@ public class Utils {
     /* Generate Client Ref Number in the format <STAN>|<TPPID>, right justified and left padded with "0" */
     public static String getClientRef(String tppId) {
         String clientRef = "";
-        clientRef = String.format("0%sV%s", Utils.getSTAN(), tppId == "" ? Constants.REQUEST_TPPID : tppId);
+        clientRef = String.format("0%sV%s", Utils.getSTAN(), tppId);
         return clientRef;
     }
 
@@ -197,6 +197,10 @@ public class Utils {
         //todo: what else to validate?
         if (rcRequest == null)
             return "invalid or empty request";
+        if (!Utils.isNotNullOrEmpty(rcRequest.termID))
+            return "Terminal Id type can't be empty";
+        if (!Utils.isNotNullOrEmpty(rcRequest.tppID))
+            return "TPP Id type can't be empty";
         if (!Utils.isNotNullOrEmpty(rcRequest.groupID))
             return "Group Id type can't be empty";
         if (!Utils.isNotNullOrEmpty(rcRequest.merchantMID))

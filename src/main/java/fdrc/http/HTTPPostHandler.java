@@ -38,15 +38,15 @@ public class HTTPPostHandler {
          * Service Schema file [rc.xsd]*/
         ReqClientIDType reqClientIDType = new ReqClientIDType();
         reqClientIDType.setApp(Constants.APP);
-        reqClientIDType.setAuth(String.format("%s%s|%s", FDRCRequestService.getRcRequest().groupID, FDRCRequestService.getRcRequest().merchantMID, Constants.REQUEST_TERMID)); // todo: user termid off Request
+        reqClientIDType.setAuth(String.format("%s%s|%s", FDRCRequestService.getRcRequest().groupID, FDRCRequestService.getRcRequest().merchantMID, FDRCRequestService.getRcRequest().termID)); // todo: user termid off Request
         /* Set the clientRef value*/
-        reqClientIDType.setClientRef(Utils.getClientRef(""));
+        reqClientIDType.setClientRef(Utils.getClientRef(FDRCRequestService.getRcRequest().tppID));
         /* Set the DID value*/
         reqClientIDType.setDID(FDRCRequestService.getRcRequest().dataWireID);
 
         gmfTransactionRequest.setReqClientID(reqClientIDType);
         /*Set client timeout value*/
-        gmfTransactionRequest.setClientTimeout(new BigInteger("10"));
+        gmfTransactionRequest.setClientTimeout(new BigInteger("35"));
         gmfTransactionRequest.setVersion("3");
 
         //Transform the gmfTransactionRequest object into XML string.
@@ -58,7 +58,6 @@ public class HTTPPostHandler {
         }
         catch (Exception e) {
             throw new RuntimeException(e.getMessage());
-        } finally {
         }
     }
 }

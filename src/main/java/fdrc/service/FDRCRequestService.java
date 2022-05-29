@@ -5,7 +5,6 @@ To call methods that populate common grp, card grp and so on and then get the xm
 *  */
 
 import com.fiserv.merchant.gmfv10.*;
-import fdrc.common.Constants;
 import fdrc.model.RCRequest;
 import fdrc.types.CardCaptCapType;
 import fdrc.types.EncrptTypeType;
@@ -55,17 +54,13 @@ public class FDRCRequestService { // todo name
             cmnGrp.setRefNum(Utils.getOrderRefNum()); // "20200101012"
         /* An ID assigned by Fiserv, for the Third Party Processor or
          * Software Vendor that generated the transaction. */
-        cmnGrp.setTPPID(Constants.REQUEST_TPPID); // ToDo, get from req //
+        cmnGrp.setTPPID(rcRequest.tppID);
         /* A unique ID assigned to a terminal. */
-        cmnGrp.setTermID(Constants.REQUEST_TERMID); // ToDo, get from req
+        cmnGrp.setTermID(rcRequest.termID);
 
         /* A unique ID assigned by Fiserv, to identify the Merchant. */
-        if (Utils.isNotNullOrEmpty(rcRequest.merchantMID)) {
-            cmnGrp.setMerchID(rcRequest.merchantMID);
-        } else {
-            cmnGrp.setMerchID(Constants.REQUEST_MERCHID); // ToDo, get from req
-        }
-        cmnGrp.setGroupID(Utils.isNotNullOrEmpty(rcRequest.groupID) ? rcRequest.groupID : Constants.REQUEST_GROUPID);
+        cmnGrp.setMerchID(rcRequest.merchantMID);
+        cmnGrp.setGroupID(rcRequest.groupID);
         // TATikenRequest don't need the following fields?
         if (Utils.toEnum(TxnTypeType.class, rcRequest.txnType) == TxnTypeType.TA_TOKEN_REQUEST) return cmnGrp;
 
