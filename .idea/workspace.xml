@@ -12,10 +12,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99ded157-bace-4013-8d99-c42b488d6931" name="Changes" comment="Fix for Parsing Rejection response issue: A workaround is provided.">
+    <list default="true" id="99ded157-bace-4013-8d99-c42b488d6931" name="Changes" comment="cosmetic issues">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fdrc/service/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fdrc/service/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/test/TestsMoto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/test/TestsMoto.java" afterDir="false" />
     </list>
     <list id="492508a2-220e-49aa-b011-5c093f4c3a6b" name="Unversioned" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -477,14 +475,8 @@
       <workItem from="1652854003205" duration="5831000" />
       <workItem from="1652883357571" duration="1315000" />
       <workItem from="1653658987952" duration="1383000" />
-      <workItem from="1653825643373" duration="231000" />
-    </task>
-    <task id="LOCAL-00032" summary="Added TestGeneric.java and the cascading changes. &#10;Added EncrptTypeType.java">
-      <created>1639025734203</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1639025734203</updated>
+      <workItem from="1653825643373" duration="1853000" />
+      <workItem from="1653827568471" duration="303000" />
     </task>
     <task id="LOCAL-00033" summary="POM - (ProjectObjectModel) changes to remove un-necessary dependencies.&#10;AdminRequest.java added.">
       <created>1639483690230</created>
@@ -822,7 +814,14 @@
       <option name="project" value="LOCAL" />
       <updated>1652859892412</updated>
     </task>
-    <option name="localTasksCounter" value="81" />
+    <task id="LOCAL-00081" summary="cosmetic issues">
+      <created>1653825993069</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1653825993069</updated>
+    </task>
+    <option name="localTasksCounter" value="82" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -863,7 +862,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="&gt; Renames UnsupportedEnumValueException.java to UnsupportedValueException" />
     <MESSAGE value="&gt; HTTPPostHandler.java: &#10;1. Catch IOException rather than UnknownHostException.&#10;2. User-Agent set to &quot;SUNMI-POS&quot;&#10;3. Timeout to 35 sec from 30" />
     <MESSAGE value="&gt; ServiceUtil: getReversalService -&gt; removed checking trxnType; if reversalInd is present, returning ReversalService.&#10;&gt; SD-175 changes&#10;&gt; getGmfmv: Removed check for null." />
     <MESSAGE value="&gt; Renamed to / introduced  PopulateXXXRequestDetails method to populate respective Request." />
@@ -888,7 +886,8 @@
     <MESSAGE value="HTTPPostHandler.java: removed httpclient and using Util.Upload which uses HttpUrlConenction. Reaason: httpclient not working on Android." />
     <MESSAGE value="Updated tests and json test data files" />
     <MESSAGE value="Fix for Parsing Rejection response issue: A workaround is provided." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix for Parsing Rejection response issue: A workaround is provided." />
+    <MESSAGE value="cosmetic issues" />
+    <option name="LAST_COMMIT_MESSAGE" value="cosmetic issues" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
