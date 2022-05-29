@@ -1,0 +1,20 @@
+{
+  "merchantMID": "RCTST1000094637",
+  "txnCrncy": "840",
+  "termLocInd": "0",
+  "custSvcPhoneNumber": "4048900000",
+  "acctNum": "6011208701111117",
+  "groupID": "10001",
+  "cardType": "Discover",
+  "merchCatCode": "5967",
+  "termCatCode": "01",
+  "pymtType": "Credit",
+  "txnType": "Refund",
+  "refundType": "Online",
+  "cardExpiryDate": "20251231",
+  "posEntryMode": "011",
+  "cardCaptCap": "1",
+  "txnAmt": "21.05",
+  "posCondCode": "00",
+  "termEntryCapablt": "03"
+}

@@ -1,0 +1,21 @@
+{
+  "track2Data": "5424180273333333=25123111000012345678",
+  "cardExpiryDate": "20251231",
+  "cardType": "MasterCard",
+  "posCondCode": "00",
+  "posEntryMode": "901",
+  "pymtType": "Credit",
+  "txnType": "Authorization",
+  "termCatCode": "00",
+  "termEntryCapablt": "00",
+  "txnAmt": "835.41",
+  "txnCrncy": "840",
+  "termLocInd": "0",
+  "cardCaptCap": "1",
+  "merchCatCode": "5812",
+  "partAuthrztnApprvlCapablt": "1",
+  "custSvcPhoneNumber": "4048900000",
+  "merchantMID": "RCTST1000092383",
+  "finAuthInd": "1",
+  "groupID": "10001"
+}
