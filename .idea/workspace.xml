@@ -12,7 +12,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99ded157-bace-4013-8d99-c42b488d6931" name="Changes" comment="cosmetic issues" />
+    <list default="true" id="99ded157-bace-4013-8d99-c42b488d6931" name="Changes" comment="Adding Test scripts (json files)">
+      <change afterPath="$PROJECT_DIR$/Notes.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fdrc/common/Serialization.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fdrc/common/Serialization.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fdrc/http/HTTPPostHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fdrc/http/HTTPPostHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fdrc/service/BaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fdrc/service/BaseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fdrc/service/FDRCRequestService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fdrc/service/FDRCRequestService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/test/TestRetail.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/test/TestRetail.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/test/TestRetailOrRestaurant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/test/TestRetailOrRestaurant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/Retail/Visa-Sale-emv.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/Retail/Visa-Sale-emv.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/RetailOrRestt/Credit-Visa-AuthCompl-swipe-200019960021.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/RetailOrRestt/Credit-Visa-AuthCompl-swipe-200019960021.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/RetailOrRestt/Moto-Verification-NoEncr-4012000000000529.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/RetailOrRestt/Moto-Verification-NoEncr-4012000000000529.json" afterDir="false" />
+    </list>
     <list id="492508a2-220e-49aa-b011-5c093f4c3a6b" name="Unversioned" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,7 +133,7 @@
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
     <property name="create.test.in.the.same.root" value="true" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/java/fdrc" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/test/resources/Retail" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/test/resources/RetailOrRestt" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -137,11 +149,11 @@
       <recent name="fdrc.base" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Java\FDRC-Datawire-SRS\FDRCBuilder\src\test\resources\RetailOrRestt" />
       <recent name="D:\Java\FDRC-Datawire-SRS\FDRCBuilder\src\test\resources\Retail" />
       <recent name="D:\Java\FDRC-Datawire-SRS\FDRCBuilder\lib" />
       <recent name="D:\Java\FDRC-Datawire-SRS\FDRCBuilder\src\test\resources\Restaurant" />
       <recent name="D:\Java\FDRC-Datawire-SRS\FDRCBuilder\src\test\resources\Moto" />
-      <recent name="D:\Java\FDRC-Datawire-SRS\FDRCBuilder" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Java\FDRC-Datawire-SRS\FDRCBuilder\src\test\resources\Retail" />
@@ -176,7 +188,7 @@
       <recent name="fdrc.model" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.TestsMoto">
+  <component name="RunManager" selected="JUnit.TestRetailOrRestaurant">
     <configuration name="DatawireRegistrationServiceTest.testRegistrationRespSerilization" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FDRCBuilder" />
       <extension name="coverage">
@@ -287,9 +299,9 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.TestsMoto" />
         <item itemvalue="JUnit.TestRetailOrRestaurant" />
         <item itemvalue="JUnit.TestRetail" />
+        <item itemvalue="JUnit.TestsMoto" />
         <item itemvalue="JUnit.DatawireRegistrationServiceTest.testactivationRespSerilization" />
         <item itemvalue="JUnit.DatawireRegistrationServiceTest.testRegistrationRespSerilization" />
       </list>
@@ -475,13 +487,8 @@
       <workItem from="1653658987952" duration="1383000" />
       <workItem from="1653825643373" duration="1853000" />
       <workItem from="1653827568471" duration="453000" />
-    </task>
-    <task id="LOCAL-00034" summary="&gt; Refactorings:&#10;1. renaming the request classes to services.&#10;2. And moved them to model package&#10;3. GenericService.java:: Implemented TORRequired functionality.&#10;4. Renamed Request and Response to RCRequest.java, RCResponse.java respectively.">
-      <created>1640605981743</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1640605981743</updated>
+      <workItem from="1653828153918" duration="320000" />
+      <workItem from="1653901427217" duration="4428000" />
     </task>
     <task id="LOCAL-00035" summary="1. GenericService.java: Added WrapperResponse class and load response common methods to avoid it in every subclass.&#10;2. Renamed package model to service.&#10;3. Introduced new pkg model and added RCRequest.java, RCResponse.java classes into it.">
       <created>1640775544759</created>
@@ -819,7 +826,14 @@
       <option name="project" value="LOCAL" />
       <updated>1653827893173</updated>
     </task>
-    <option name="localTasksCounter" value="83" />
+    <task id="LOCAL-00083" summary="Adding Test scripts (json files)">
+      <created>1653828321662</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1653828321662</updated>
+    </task>
+    <option name="localTasksCounter" value="84" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -860,7 +874,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="&gt; HTTPPostHandler.java: &#10;1. Catch IOException rather than UnknownHostException.&#10;2. User-Agent set to &quot;SUNMI-POS&quot;&#10;3. Timeout to 35 sec from 30" />
     <MESSAGE value="&gt; ServiceUtil: getReversalService -&gt; removed checking trxnType; if reversalInd is present, returning ReversalService.&#10;&gt; SD-175 changes&#10;&gt; getGmfmv: Removed check for null." />
     <MESSAGE value="&gt; Renamed to / introduced  PopulateXXXRequestDetails method to populate respective Request." />
     <MESSAGE value="&gt; RCResponse.java: added discPOSEntry&#10;        discPOSData;&#10;        discRespCode&#10;        discProcCode&#10;        motoInd;   &#10;        amExPOSData" />
@@ -885,7 +898,8 @@
     <MESSAGE value="Updated tests and json test data files" />
     <MESSAGE value="Fix for Parsing Rejection response issue: A workaround is provided." />
     <MESSAGE value="cosmetic issues" />
-    <option name="LAST_COMMIT_MESSAGE" value="cosmetic issues" />
+    <MESSAGE value="Adding Test scripts (json files)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding Test scripts (json files)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -902,23 +916,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/fdrc/service/BaseService.java</url>
-          <line>221</line>
-          <option name="timeStamp" value="458" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/fdrc/service/BaseService.java</url>
-          <line>216</line>
-          <option name="timeStamp" value="461" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/fdrc/service/BaseService.java</url>
-          <line>59</line>
-          <option name="timeStamp" value="463" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/fdrc/http/HTTPPostHandler.java</url>
-          <line>56</line>
-          <option name="timeStamp" value="464" />
+          <line>226</line>
+          <option name="timeStamp" value="469" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

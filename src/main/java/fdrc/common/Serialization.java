@@ -29,7 +29,7 @@ public class Serialization {
             mapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
             mapper.registerModule(new JaxbAnnotationModule()); // to follow xml annotations on model classes
             returnValue = mapper.writeValueAsString(gmfmv);
-            returnValue = returnValue.replaceAll(Constants.GMF, Constants.GMF_NS); // since xml not getting namespace
+            returnValue = returnValue.replaceAll(Constants.GMF, Constants.GMF_NS); // since xml not getting expected namespaces
         } catch (JacksonException e) {
             error = e.getMessage();
         } catch (Exception e) {

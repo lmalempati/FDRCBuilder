@@ -1,0 +1,2 @@
+1. Sending empty track2Data can cause rejection response , check with TC: src/test/resources/RetailOrRestt/Moto-Verification-NoEncr-4012000000000529.json
+2. To get time out response, decrease timeout in HttpPost file, to 15 sec.

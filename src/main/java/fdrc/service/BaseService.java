@@ -38,10 +38,13 @@ abstract class BaseService {
     RCResponse processRequest(RCRequest request) {
         FDRCRequestService fdrcRequestService = new FDRCRequestService(request);
         String errorMsg = null;
+        /* Copies request data to Credit or Debit or EBT etc., request and assigns it to gmfmv  which is a GMFMessageVariants */
         errorMsg = buildFDRCRequest(request, fdrcRequestService);
 
         if (Utils.isNotNullOrEmpty(errorMsg))
             return new RCResponse(errorMsg);
+
+        if (Utils.valueOrNothing(gmfmv) == null) throw new InvalidRequest("Empty Request, cannot proceed further.");
         submit();
         // parse the response payload and read into RCResponse
         new ResponseWrapper(request);
