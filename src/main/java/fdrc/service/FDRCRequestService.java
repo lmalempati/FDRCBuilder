@@ -139,6 +139,7 @@ public class FDRCRequestService { // todo name
                 && (Utils.toEnum(EncrptTrgtType.class, rcRequest.encrptTrgt) == EncrptTrgtType.TRACK_2))
             cardGrp.setTrack2Data(null);
         else
+            if (Utils.isNotNullOrEmpty(rcRequest.track2Data))
             cardGrp.setTrack2Data(rcRequest.track2Data);
         return Utils.valueOrNothing(cardGrp);
     }

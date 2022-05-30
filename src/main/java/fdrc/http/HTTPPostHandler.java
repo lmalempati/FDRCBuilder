@@ -6,12 +6,9 @@ import fdrc.service.FDRCRequestService;
 import fdrc.types.HttpMethod;
 import fdrc.utils.Utils;
 import fdrc.xml.*;
-
 import java.math.BigInteger;
 
 public class HTTPPostHandler {
-
-
     /* The below method will take the XML request and returns the XML response received from Data wire.
      * */
     @SuppressWarnings("deprecation")
@@ -49,11 +46,11 @@ public class HTTPPostHandler {
         gmfTransactionRequest.setClientTimeout(new BigInteger("35"));
         gmfTransactionRequest.setVersion("3");
 
-        //Transform the gmfTransactionRequest object into XML string.
+        // Transform the gmfTransactionRequest object into XML string.
         String gmffomattedRequest = Serialization.getXmlFromObj(gmfTransactionRequest, null);
 
         try {
-            /*Call executeMethod to post the data to the designated URL.*/
+            /* Call executeMethod to post the data to the designated URL. */
             return Utils.upload(Constants.STG_POST_URL, gmffomattedRequest, HttpMethod.POST);
         }
         catch (Exception e) {
