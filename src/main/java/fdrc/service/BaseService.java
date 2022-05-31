@@ -45,15 +45,17 @@ abstract class BaseService {
             return new RCResponse(errorMsg);
 
         if (Utils.valueOrNothing(gmfmv) == null) throw new InvalidRequest("Empty Request, cannot proceed further.");
-        submit();
-        // parse the response payload and read into RCResponse
-        new ResponseWrapper(request);
+        if (submit()) // parse the response payload and read into RCResponse
+            new ResponseWrapper(request);
+        else
+            throw new RuntimeException("Transaction submission failed");
         return rcResponse;
     }
 
-    private String submit() {
+    private boolean submit() {
         String requestXml = "";
         String errorMsg = "";
+        boolean result = false;
         requestXml = Serialization.getXmlFromObj(gmfmv, errorMsg);
         /* Jackson does not support */
 //        serialization.validateXMLSchema(requestXml);
@@ -65,7 +67,8 @@ abstract class BaseService {
             logger.log(Level.SEVERE, e.getMessage());
             throw new InvalidRequest(e.getMessage());
         }
-        return responseXml;
+        result = true;
+        return result;
     }
 
     private class ResponseWrapper extends RCResponse {
@@ -222,8 +225,7 @@ abstract class BaseService {
             Response response;
             ObjectFactory factory = null;
             /* TODO: jackson is unable to parse the RejectResponse Because there are two 'CDATA' elements (nested) one for RejectResponse which has other CDATA for the Request submitted. Note: This is a work-around only */
-            if (responseXml.indexOf("<RejectResponse>") > 0)
-            {
+            if (responseXml.indexOf("<RejectResponse>") > 0) {
                 int start = responseXml.lastIndexOf("<![CDATA[<GMF");
                 int end = responseXml.lastIndexOf("</RejectResponse>");
                 if (start > 0 && end > 0 && end > start)
