@@ -40,18 +40,33 @@ public class FDRCRequestService { // todo name
         /* The type of transaction being performed. */
         cmnGrp.setTxnType(Utils.toEnum(TxnTypeType.class, rcRequest.txnType)); //TxnTypeType.SALE
         /* The local date and time in which the transaction was performed. */
-        cmnGrp.setLocalDateTime(Utils.getLocalDateTime());
+        if (Utils.isNotNullOrEmpty(rcRequest.localDateTime))
+            cmnGrp.setLocalDateTime(rcRequest.localDateTime);
+        else
+            cmnGrp.setLocalDateTime(Utils.getLocalDateTime());
         /* The transmission date and time of the transaction (in GMT/UCT). */
-        cmnGrp.setTrnmsnDateTime(Utils.getUTCDateTime());
-        rcRequest.trnsmitDateTime = cmnGrp.getTrnmsnDateTime();
+        if (Utils.isNotNullOrEmpty(rcRequest.trnsmitDateTime))
+            cmnGrp.setTrnmsnDateTime(rcRequest.trnsmitDateTime);
+        else
+            cmnGrp.setTrnmsnDateTime(Utils.getUTCDateTime());
+        rcRequest.trnsmitDateTime = cmnGrp.getTrnmsnDateTime(); // ToDo: Can we remove this now?
         /* A number assigned by the merchant to uniquely reference the transaction.
          * This number must be unique within a day per Merchant ID per Terminal ID. */
-        cmnGrp.setSTAN(Utils.getSTAN());
+        if (Utils.isNotNullOrEmpty(rcRequest.stan))
+            cmnGrp.setSTAN(rcRequest.stan);
+        else
+            cmnGrp.setSTAN(Utils.getSTAN());
         /* A number assigned by the merchant to uniquely reference a set of transactions. */
         if (Utils.isNotNullOrEmpty(rcRequest.refNum))
             cmnGrp.setRefNum(rcRequest.refNum); // "20200101012"
         else if (Utils.toEnum(TxnTypeType.class, rcRequest.txnType) != TxnTypeType.HOST_TOTALS)
             cmnGrp.setRefNum(Utils.getOrderRefNum()); // "20200101012"
+        /* A number assigned by the merchant to uniquely reference a transaction order sequence. */
+        // ToDo, completions should have ordernum, need to validate?
+        if (Utils.isNotNullOrEmpty(rcRequest.orderNum))
+            cmnGrp.setOrderNum(rcRequest.orderNum); // "20200101012"
+        else if (Utils.toEnum(TxnTypeType.class, rcRequest.txnType) != TxnTypeType.HOST_TOTALS)
+            cmnGrp.setOrderNum(Utils.isNotNullOrEmpty(rcRequest.orderNum) ? rcRequest.orderNum : Utils.getOrderRefNum());
         /* An ID assigned by Fiserv, for the Third Party Processor or
          * Software Vendor that generated the transaction. */
         cmnGrp.setTPPID(rcRequest.tppID);
@@ -64,10 +79,6 @@ public class FDRCRequestService { // todo name
         // TATikenRequest don't need the following fields?
         if (Utils.toEnum(TxnTypeType.class, rcRequest.txnType) == TxnTypeType.TA_TOKEN_REQUEST) return cmnGrp;
 
-        /* A number assigned by the merchant to uniquely reference a transaction order sequence. */
-        // ToDo, completions should have ordernum, need to validate?
-        if (Utils.toEnum(TxnTypeType.class, rcRequest.txnType) != TxnTypeType.HOST_TOTALS)
-            cmnGrp.setOrderNum(Utils.isNotNullOrEmpty(rcRequest.orderNum) ? rcRequest.orderNum : Utils.getOrderRefNum());
         /* An identifier used to indicate the terminal’s account number entry mode
          * and authentication capability via the Point-of-Service. */
         cmnGrp.setPOSEntryMode(rcRequest.posEntryMode); //010// 011
@@ -138,8 +149,7 @@ public class FDRCRequestService { // todo name
         if (Utils.isNotNullOrEmpty(rcRequest.encrptTrgt)
                 && (Utils.toEnum(EncrptTrgtType.class, rcRequest.encrptTrgt) == EncrptTrgtType.TRACK_2))
             cardGrp.setTrack2Data(null);
-        else
-            if (Utils.isNotNullOrEmpty(rcRequest.track2Data))
+        else if (Utils.isNotNullOrEmpty(rcRequest.track2Data))
             cardGrp.setTrack2Data(rcRequest.track2Data);
         return Utils.valueOrNothing(cardGrp);
     }

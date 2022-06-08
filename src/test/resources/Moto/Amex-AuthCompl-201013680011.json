@@ -1,5 +1,4 @@
 {
-  "merchantMID": "RCTST1000092382",
   "industrytype": "MOTO",
   "refNum": "1021205215",
   "orderNum": "1021205215",
@@ -9,7 +8,6 @@
   "txnCrncy": "840",
   "termLocInd": "1",
   "acctNum": "371030089111551",
-  "groupID": "20001",
   "TknType": "1175",
   "merchCatCode": "5967",
   "termCatCode": "00",
@@ -29,5 +27,10 @@
   "origLocalDateTime": "20211021205215",
   "origTranDateTime": "20211021152215",
   "firstAuthAmt" : "277.22",
-  "totalAuthAmt" : "277.19"
+  "totalAuthAmt" : "277.19",
+  "merchantMID": "RCTST1000094637",
+  "groupID": "10001",
+  "dataWireID": "00036210301822023952",
+  "termID": "00000003",
+  "tppID": "RSU005"
 }
