@@ -45,7 +45,8 @@ public class Utils {
     }
 
     public static String getSTAN() {
-        return java.time.LocalTime.now().toString().replaceAll(":", "").substring(0, 6);
+        String msTime = java.time.LocalTime.now().toString().replaceAll(":", "").replace(".", "");
+        return msTime.substring(msTime.length()-6);
     }
 
     public static String getOrderRefNum() {
@@ -212,6 +213,7 @@ public class Utils {
         Utils.toEnum(PymtTypeType.class, rcRequest.pymtType);
         if (!Utils.isNotNullOrEmpty(rcRequest.txnType))
             return "Transaction type can't be empty";
+
         Utils.toEnum(TxnTypeType.class, rcRequest.txnType);
         if (!(Utils.toEnum(PymtTypeType.class, rcRequest.pymtType) == PymtTypeType.DEBIT ||
                 Utils.toEnum(PymtTypeType.class, rcRequest.pymtType) == PymtTypeType.EBT)) {
@@ -274,6 +276,7 @@ public class Utils {
     }
 
     public static void main(String[] args) {
-        System.out.println(contains("a;b;c", "d", ';'));
+//        System.out.println(contains("a;b;c", "d", ';'));
+        System.out.println(getSTAN());
     }
 }

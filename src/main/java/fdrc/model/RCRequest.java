@@ -19,6 +19,7 @@ public class RCRequest {
     public String posEntryMode;
     public String pymtType;
     public String trnsmitDateTime;
+    public String localDateTime;
     public String stan;
     public String refNum;
     public String orderNum;
