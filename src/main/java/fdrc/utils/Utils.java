@@ -8,9 +8,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fdrc.Exceptions.InvalidNumber;
 import fdrc.Exceptions.UnsupportedValueException;
-import fdrc.common.Constants;
-import fdrc.types.HttpMethod;
 import fdrc.model.RCRequest;
+import fdrc.types.HttpMethod;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,6 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class Utils {
     public String getPOSCondCode() {
@@ -46,7 +46,7 @@ public class Utils {
 
     public static String getSTAN() {
         String msTime = java.time.LocalTime.now().toString().replaceAll(":", "").replace(".", "");
-        return msTime.substring(msTime.length()-6);
+        return msTime.substring(msTime.length() - 6);
     }
 
     public static String getOrderRefNum() {
@@ -135,7 +135,7 @@ public class Utils {
         throw new UnsupportedValueException(errorMsg);
     }
 
-    public static boolean contains(String data, String toFind, char seperator){
+    public static boolean contains(String data, String toFind, char seperator) {
         if (data == null || data.trim().equals("")) return false;
         String[] elements = data.split(String.valueOf(seperator));
         if (containsInArray(elements, toFind)) return true;
@@ -143,13 +143,7 @@ public class Utils {
     }
 
     public static boolean containsInArray(String[] values, String toFind) {
-
-        for (String s:
-             values) {
-            if (toFind.equalsIgnoreCase(s))
-                return true;
-        }
-        return false;
+        return Stream.of(values).anyMatch(s -> s.equals(toFind));
     }
 
     /* Generate Client Ref Number in the format <STAN>|<TPPID>, right justified and left padded with "0" */
@@ -220,7 +214,8 @@ public class Utils {
 //            if (!Utils.isNotNullOrEmpty(request.cardType))
 //                return "Card type can't be empty";
 //            else
-            Utils.toEnum(CardTypeType.class, rcRequest.cardType);
+            if (Utils.toEnum(TxnTypeType.class, rcRequest.txnType) != TxnTypeType.TA_TOKEN_REQUEST)
+                Utils.toEnum(CardTypeType.class, rcRequest.cardType);
         }
 
         if (!Utils.isNotNullOrEmpty(rcRequest.cardCaptCap)) // todo: this can't be on request as we need to derive it..
@@ -244,7 +239,7 @@ public class Utils {
         URL url;
         StringBuilder response = null;
         try {
-            url = new URL(urlPath); //"https://stg.dw.us.fdcnet.biz/sd/srsxml.rc"
+            url = new URL(urlPath);
 
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod(httpMethod.val);
@@ -276,7 +271,9 @@ public class Utils {
     }
 
     public static void main(String[] args) {
-//        System.out.println(contains("a;b;c", "d", ';'));
-        System.out.println(getSTAN());
+        System.out.println(containsInArray(new String[]{"a", "b", "c"}, "d"));
+        System.out.println(containsInArray(new String[]{"ca", "cb", "c"}, "c"));
+        System.out.println(containsInArray(new String[]{}, "c"));
+//        System.out.println(getSTAN());
     }
 }
