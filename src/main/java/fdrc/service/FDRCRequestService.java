@@ -11,7 +11,6 @@ import fdrc.types.EncrptTypeType;
 import fdrc.types.EnumAllowPartialAuth;
 import fdrc.types.MOTOIndType;
 import fdrc.utils.Utils;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,6 +116,8 @@ public class FDRCRequestService { // todo name
             cmnGrp.setMobileInd(Utils.toEnum(MobileIndType.class, rcRequest.mobileInd));
         if (Utils.isNotNullOrEmpty(rcRequest.plPOSDebitFlg))
             cmnGrp.setPLPOSDebitFlg(rcRequest.plPOSDebitFlg);
+        if (Utils.isNotNullOrEmpty(rcRequest.dfrdAuthInd))
+            cmnGrp.setDfrdAuthInd(Utils.toEnum(Max3ANYes.class, rcRequest.dfrdAuthInd));
         return cmnGrp;
     }
 
@@ -351,6 +352,7 @@ public class FDRCRequestService { // todo name
             ebtType = Utils.toEnum(EBTTypeType.class, rcRequest.ebtType);
         if (ebtType == EBTTypeType.SNAP || ebtType == EBTTypeType.E_WIC)
             ebtGrp.setMerchFNSNum(rcRequest.merchFNSNum);
+
         return Utils.valueOrNothing(ebtGrp);
     }
 
