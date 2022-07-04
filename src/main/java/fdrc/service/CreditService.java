@@ -52,6 +52,7 @@ class CreditService extends BaseService {
         }
         return message;
     }
+
     private CreditRequestDetails populateCreditRequestDetails(RCRequest RCRequest, FDRCRequestService requestService) {
         CreditRequestDetails creditReqDtl = new CreditRequestDetails();
         creditReqDtl.setOrigAuthGrp(requestService.getOrigAuthGrp());
@@ -66,7 +67,7 @@ class CreditService extends BaseService {
         // TA grp
         creditReqDtl.setTAGrp(requestService.getTAGrp());
         creditReqDtl.setSecrTxnGrp(requestService.getSecrTxnGrp());
-
+        creditReqDtl.setPINGrp(requestService.getPINGrp());
         // EMV grp
         creditReqDtl.setEMVGrp(requestService.getEmvGrp());
         return creditReqDtl;

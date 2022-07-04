@@ -11,7 +11,6 @@ import fdrc.types.EncrptTypeType;
 import fdrc.types.EnumAllowPartialAuth;
 import fdrc.types.MOTOIndType;
 import fdrc.utils.Utils;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,8 +64,9 @@ public class FDRCRequestService { // todo name
         // ToDo, completions should have ordernum, need to validate?
         if (Utils.isNotNullOrEmpty(rcRequest.orderNum))
             cmnGrp.setOrderNum(rcRequest.orderNum); // "20200101012"
-        else if (Utils.toEnum(TxnTypeType.class, rcRequest.txnType) != TxnTypeType.HOST_TOTALS)
-            cmnGrp.setOrderNum(Utils.isNotNullOrEmpty(rcRequest.orderNum) ? rcRequest.orderNum : Utils.getOrderRefNum());
+        else if (Utils.toEnum(TxnTypeType.class, rcRequest.txnType) != TxnTypeType.HOST_TOTALS &&
+                Utils.toEnum(TxnTypeType.class, rcRequest.txnType) != TxnTypeType.TA_TOKEN_REQUEST)
+            cmnGrp.setOrderNum(Utils.getOrderRefNum());
         /* An ID assigned by Fiserv, for the Third Party Processor or
          * Software Vendor that generated the transaction. */
         cmnGrp.setTPPID(rcRequest.tppID);
@@ -116,6 +116,8 @@ public class FDRCRequestService { // todo name
             cmnGrp.setMobileInd(Utils.toEnum(MobileIndType.class, rcRequest.mobileInd));
         if (Utils.isNotNullOrEmpty(rcRequest.plPOSDebitFlg))
             cmnGrp.setPLPOSDebitFlg(rcRequest.plPOSDebitFlg);
+        if (Utils.isNotNullOrEmpty(rcRequest.dfrdAuthInd))
+            cmnGrp.setDfrdAuthInd(Utils.toEnum(Max3ANYes.class, rcRequest.dfrdAuthInd));
         return cmnGrp;
     }
 
@@ -333,9 +335,11 @@ public class FDRCRequestService { // todo name
 
     PINGrp getPINGrp() {
         PINGrp pinGrp = new PINGrp();
-        pinGrp.setPINData(String.valueOf(rcRequest.pinData));
-        pinGrp.setKeySerialNumData(String.valueOf(rcRequest.keySerialNumData));
-        return pinGrp;
+        if (Utils.isNotNullOrEmpty(rcRequest.pinData))
+            pinGrp.setPINData(String.valueOf(rcRequest.pinData));
+        if (Utils.isNotNullOrEmpty(rcRequest.keySerialNumData))
+            pinGrp.setKeySerialNumData(String.valueOf(rcRequest.keySerialNumData));
+        return Utils.valueOrNothing(pinGrp);
     }
 
     EbtGrp getEBTGrp() {
@@ -348,6 +352,7 @@ public class FDRCRequestService { // todo name
             ebtType = Utils.toEnum(EBTTypeType.class, rcRequest.ebtType);
         if (ebtType == EBTTypeType.SNAP || ebtType == EBTTypeType.E_WIC)
             ebtGrp.setMerchFNSNum(rcRequest.merchFNSNum);
+
         return Utils.valueOrNothing(ebtGrp);
     }
 

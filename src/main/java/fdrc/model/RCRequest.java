@@ -8,9 +8,7 @@ public class RCRequest {
     public String termID;
     public String merchID;
     public String merchCatCode;
-    public String DigWltProgType;
-    public String MobileInd;
-    public String DfrdAuthInd;
+    public String dfrdAuthInd;
     public String merchFNSNum; // TODO: This has to come from setup
     public String dataWireID;
 

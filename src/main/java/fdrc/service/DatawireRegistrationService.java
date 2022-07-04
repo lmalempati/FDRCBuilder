@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 
 public class DatawireRegistrationService {
     Logger logger = Logger.getLogger(DatawireRegistrationService.class.getName());
+    int retryCtr = 0;
 
     public DatawireSRSResponse doDatawireSRS(DatawireSRSRequest dw) {
         String DID = "";
@@ -23,25 +24,13 @@ public class DatawireRegistrationService {
         DatawireSRSActivationResponse activationResponse;
         DatawireSRSRegistrationResponse regResp;
         DatawireSRSResponse srsResponse = new DatawireSRSResponse("");
-        if (!Utils.isNotNullOrEmpty(new Object[]{dw.stagOrProd, dw.merchantId, dw.terminalId, dw.groupId, dw.tppId}))
-            return new DatawireSRSResponse("All parameters must be provided.");
-        if (dw.groupId.length() + dw.merchantId.length() > 32) {
-            srsResponse.errorMsg = "COMBINED LENGTH OF GROUPID AND MID CANNOT EXCEED 32 CHARACTERS";
-            return srsResponse;
-        }
-        if (dw.terminalId.length() > 8) {
-            srsResponse.errorMsg = "TID CANNOT EXCEED 8 CHARACTERS";
-            return srsResponse;
-        }
-        // validate terminal id.
-        try {
-            Integer.parseInt(dw.terminalId);
-        } catch (Exception e) {
-            srsResponse.errorMsg ="INVALID TERMINAL ID";
+        String validationError = validateDatawireRequest(dw);
+        if (validationError != ""){
+            srsResponse.errorMsg = validationError;
             return srsResponse;
         }
         // 1. check the discovery of the url
-        String discResp = Utils.upload(dw.stagOrProd ? Constants.prodUrl : Constants.stgUrl, "", HttpMethod.GET);
+        String discResp = Utils.upload(dw.stagOrProd ? Constants.SERVICE_RECOVERY_URL_PRD : Constants.SERVICE_RECOVERY_URL_STG, "", HttpMethod.GET);
         if (discResp.indexOf("<URL>") > 0) {
             discoveryResponseUrl = discResp.substring(discResp.indexOf("<URL>") + 5, discResp.indexOf("</URL>"));
         } else {
@@ -51,6 +40,7 @@ public class DatawireRegistrationService {
 
         // 2. register merchant using the discovery url
         xml = getRegistrationRequest(dw.merchantId, dw.terminalId, dw.groupId, dw.tppId);
+        retryCtr=0;
         do {
             logger.log(Level.INFO, "Registration Request" + xml);
             response = Utils.upload(discoveryResponseUrl, xml, HttpMethod.POST);
@@ -73,6 +63,7 @@ public class DatawireRegistrationService {
             return srsResponse;
         }
         xml = getActivationRequest(dw.merchantId, dw.terminalId, dw.groupId, dw.tppId, DID);
+        retryCtr=0;
         do {
             logger.log(Level.INFO, "Activation Request " + xml);
             response = Utils.upload(discoveryResponseUrl, xml, HttpMethod.POST);
@@ -88,10 +79,30 @@ public class DatawireRegistrationService {
         }
     }
 
+    private String validateDatawireRequest(DatawireSRSRequest dw) {
+        if (!Utils.isNotNullOrEmpty(new Object[]{dw.stagOrProd, dw.merchantId, dw.terminalId, dw.groupId, dw.tppId}))
+            return "All parameters must be provided.";
+        if (dw.groupId.length() + dw.merchantId.length() > 32) {
+            return  "COMBINED LENGTH OF GROUPID AND MID CANNOT EXCEED 32 CHARACTERS";
+        }
+        if (dw.terminalId.length() > 8) {
+            return "TID CANNOT EXCEED 8 CHARACTERS";
+        }
+        // validate terminal id.
+        try {
+            Integer.parseInt(dw.terminalId);
+        } catch (Exception e) {
+            return "INVALID TERMINAL ID";
+        }
+        return "";
+    }
+    /* sub-routines */
     private boolean retryNeeded(String StatusCode) {
-        if (Utils.containsInArray(Constants.RetryCodes, StatusCode)) {
+        if (Utils.containsInArray(Constants.RetryCodes, StatusCode) && retryCtr <= 3 ) {
             try {
+                retryCtr++;
                 Thread.sleep(30000);
+                return true;
             } catch (InterruptedException e) {
                 logger.log(Level.SEVERE, e.getMessage());
             }

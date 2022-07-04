@@ -16,8 +16,8 @@ public class Constants {
     public static final String REQUEST_DEBIT_PINDATA = "99A14CA1B65D821B";
     public static final String REQUEST_DEBIT_KEYSERIALNUMDATA = "F8765432100015200578";
 
-    public static final String stgUrl = "https://stg.dw.us.fdcnet.biz/sd/srsxml.rc"; // dev
-    public static final String prodUrl = ""; // prod
+    public static final String SERVICE_RECOVERY_URL_STG = "https://stg.dw.us.fdcnet.biz/sd/srsxml.rc"; // dev
+    public static final String SERVICE_RECOVERY_URL_PRD = "https://prod.dw.us.fdcnet.biz/sd/srsxml.rc"; // prod
     public static final String STG_POST_URL = "https://stg.dw.us.fdcnet.biz/rc";
 
     public static final String APP = "RAPIDCONNECTSRS";
